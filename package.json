@@ -1,0 +1,32 @@
+{
+  "name": "hellosleep",
+  "version": "0.0.0",
+  "description": "The Hello Sleep website",
+  "main": "app.js",
+  "dependencies": {
+    "keystone": "https://github.com/keystonejs/keystone.git",
+    "lodash": "4.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/liming/hellosleep-site.git"
+  },
+  "keywords": [
+    "hellosleep",
+    "insomnia"
+  ],
+  "author": "Ming Li",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/liming/hellosleep-site/issues"
+  },
+  "homepage": "https://github.com/liming/hellosleep-site#readme",
+  "engines": {
+    "node": "~4.1.0",
+    "npm": "~2.14.3"
+  }
+}
