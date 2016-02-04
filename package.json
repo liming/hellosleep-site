@@ -4,6 +4,7 @@
   "description": "The Hello Sleep website",
   "main": "app.js",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "keystone": "https://github.com/keystonejs/keystone.git",
     "lodash": "4.0.1"
   },

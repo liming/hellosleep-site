@@ -14,7 +14,7 @@ keystone.pre('routes', function (req, res, next) {
 		{ label: '主页', key: 'home', href: '/' },
 		{ label: '指南', key: 'book', href: '/books' },
 		{ label: '经验谈', key: 'share', href: '/shares' },
-		{ label: '联系睡吧', key: 'contact', href: 'craig.sharkie+sydjs@gmail.com' },
+		{ label: '联系睡吧', key: 'contact', href: 'hellosleep.site@gmail.com' },
 	];
 
 	res.locals.user = req.user;

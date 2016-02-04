@@ -17,8 +17,11 @@ const filePath = {
 };
 
 gulp.task('less', () => {
-  return gulp.src()
-    .pipe(less(filePath.less.src))
+
+  console.log(filePath.less.src);
+
+  return gulp.src(filePath.less.src)
+    .pipe(less())
     .pipe(gulp.dest(filePath.less.dest));
 });
 

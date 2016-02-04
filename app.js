@@ -1,9 +1,12 @@
 /**
  * Hellosleep 
  */
+
+// Load .env for development environments
+require('dotenv').load();
+
 const keystone = require('keystone');
 const pkg = require('./package.json');
-const conf = require('./config');
 
 keystone.init({
 
@@ -16,11 +19,14 @@ keystone.init({
   'views': 'templates/views',
   'view engine': 'jade',
 
+  'port': process.env.PORT || 3000,
+
+  'session': true,
   'auth': true,
   'user model': 'User',
-  'cookie secret': '--- your secret ---',
+  'cookie secret': '--- insomnia ---',
 
-  'mongo': conf.mongo_uri,
+  'mongo': process.env.MONGO_URI || 'mongodb://localhost/' + pkg.name,
 
   'auto update': true
 });
