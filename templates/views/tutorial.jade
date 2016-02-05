@@ -3,6 +3,12 @@ extends ../layouts/default
 block content
   .row
     .col-sm-3.col-md-2.sidebar
-      p This is side bar 
-    .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+      ul.nav.nav-sidebar
+        li
+          a(href='/tutorial') 介绍
+        each cat in categories
+          li
+            a(href='/tutorial/categories/' + cat.key)
+              =cat.name
+    .col-sm-9.col-md-10.main
       h2 tutorial 正文
