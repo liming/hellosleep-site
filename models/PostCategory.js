@@ -15,7 +15,8 @@ var PostCategory = new keystone.List('PostCategory', {
 });
 
 PostCategory.add({
-	name: { type: String, required: true }
+	name: { type: String, required: true },
+  weight: { type: Types.Number, required: false }
 });
 
 

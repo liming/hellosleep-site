@@ -12,7 +12,7 @@ keystone.pre('routes', function (req, res, next) {
 
 	res.locals.navLinks = [
 		{ label: '主页', key: 'home', href: '/' },
-		{ label: '指南', key: 'book', href: '/books' },
+		{ label: '指南', key: 'tutorial', href: '/tutorial' },
 		{ label: '经验谈', key: 'share', href: '/shares' },
 		{ label: '联系睡吧', key: 'contact', href: 'hellosleep.site@gmail.com' },
 	];
@@ -36,4 +36,5 @@ exports = module.exports = function (app) {
 
 	// Views
 	app.get('/', routes.views.index);
+  app.get('/tutorial/:post?', routes.views.tutorial);
 }

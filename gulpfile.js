@@ -6,29 +6,25 @@
 
 // including plugins
 const gulp = require('gulp');
-const less = require("gulp-less");
+const sass = require('gulp-sass');
 const nodemon = require('gulp-nodemon');
 
 const filePath = {
-  less: {
-    src: './public/less/**/*.less',
+  sass: {
+    src: './public/sass/**/*.scss',
     dest: './public/css'
   }
 };
 
-gulp.task('less', () => {
-
-  console.log(filePath.less.src);
-
-  return gulp.src(filePath.less.src)
-    .pipe(less())
-    .pipe(gulp.dest(filePath.less.dest));
+gulp.task('sass', function () {
+  return gulp.src(filePath.sass.src)
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest(filePath.sass.dest));
 });
 
-gulp.task('watch-less', () => {
-  gulp.watch(filePath.less.src, ['less']);
-  gulp.watch(filePath.less.dest).on('change', file => {
-    console.log("Changed less: " + file.path);
+gulp.task('watch-sass', function () {
+  gulp.watch(filePath.sass.src, ['sass']).on('change', file => {
+    console.log(`The ${file.path} changed`);
   });
 });
 
@@ -47,6 +43,6 @@ gulp.task('nodemon', cb => {
   });
 });
 
-gulp.task('watch', ['watch-less']);
+gulp.task('watch', ['watch-sass']);
 
 gulp.task('default', ['watch', 'nodemon']);
