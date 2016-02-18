@@ -29,12 +29,19 @@ keystone.set('404', function (req, res, next) {
 
 // Load Routes
 var routes = {
-	views: importRoutes('./views')
+	views: importRoutes('./views'),
+  api: importRoutes('./api')
 };
 
 exports = module.exports = function (app) {
 
+  app.all('/api*', keystone.middleware.api);
+
 	// Views
 	app.get('/', routes.views.index);
-  app.get('/tutorial/:post?', routes.views.tutorial);
+  // app.get('/tutorial/:post?', routes.views.tutorial);
+
+  // api
+  app.get('/api/post/categories', routes.api.posts.listCategories);
+
 }

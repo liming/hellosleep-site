@@ -8,11 +8,13 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass');
 const nodemon = require('gulp-nodemon');
+const env = require('gulp-env');
 
 const filePath = {
+  main: './src/app.js',
   sass: {
-    src: './public/sass/**/*.scss',
-    dest: './public/css'
+    src: './src/public/sass/**/*.scss',
+    dest: './src/public/css'
   }
 };
 
@@ -33,7 +35,8 @@ gulp.task('nodemon', cb => {
   let started = false;
 
   return nodemon({
-    script: 'app.js'
+    exec: 'babel-node',
+    script: filePath.main
   }).on('start', function () {
     // to avoid nodemon being started multiple times
     if (!started) {
@@ -43,6 +46,14 @@ gulp.task('nodemon', cb => {
   });
 });
 
+gulp.task('set-env', function () {
+  env({
+    vars: {
+      NODE_PATH: 'src'
+    }
+  });
+});
+
 gulp.task('watch', ['watch-sass']);
 
-gulp.task('default', ['watch', 'nodemon']);
+gulp.task('default', ['set-env', 'watch', 'nodemon']);

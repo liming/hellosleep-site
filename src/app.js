@@ -6,7 +6,8 @@
 require('dotenv').load();
 
 const keystone = require('keystone');
-const pkg = require('./package.json');
+
+import componentRoutes from 'routes/component-routes';
 
 keystone.init({
 
@@ -19,6 +20,8 @@ keystone.init({
   'views': 'templates/views',
   'view engine': 'jade',
 
+  'react routes': componentRoutes,
+
   'port': process.env.PORT || 3000,
 
   'session': true,
@@ -26,7 +29,7 @@ keystone.init({
   'user model': 'User',
   'cookie secret': '--- insomnia ---',
 
-  'mongo': process.env.MONGO_URI || 'mongodb://localhost/' + pkg.name,
+  'mongo': process.env.MONGO_URI || 'mongodb://localhost/hellosleep',
 
   'auto update': true
 });
