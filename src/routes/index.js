@@ -39,7 +39,7 @@ exports = module.exports = function (app) {
 
 	// Views
 	app.get('/', routes.views.index);
-  // app.get('/tutorial/:post?', routes.views.tutorial);
+  app.get('/tutorial/:post?', routes.views.tutorial);
 
   // api
   app.get('/api/post/categories', routes.api.posts.listCategories);

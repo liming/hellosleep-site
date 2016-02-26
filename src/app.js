@@ -20,7 +20,7 @@ keystone.init({
   'views': 'templates/views',
   'view engine': 'jade',
 
-  'react routes': componentRoutes,
+  // 'react routes': componentRoutes,
 
   'port': process.env.PORT || 3000,
 

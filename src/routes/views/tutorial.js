@@ -3,6 +3,8 @@
 
 const keystone = require('keystone');
 const PostCategory = keystone.list('PostCategory');
+const Indice = keystone.list('Indice');
+const Post = keystone.list('Post');
 
 exports = module.exports = function (req, res) {
   const view = new keystone.View(req, res);
@@ -10,16 +12,91 @@ exports = module.exports = function (req, res) {
 
   locals.section = 'tutorial';
 
-  // local the categories
-  view.on('init', next => {
-    PostCategory.model.find().sort('name').exec((err, results) => {
-      if (err) return next(err);
+  const key = locals.key = req.params.post;
 
-      locals.categories = results;
-      next();
+  // load the indices
+  view.on('init', function(next) {
+    Indice.model.find({})
+      .sort('weight')
+      .populate('postSelect', 'title key')
+      .populate('categorySelect', 'name key')
+      .exec((err, results) => {
+        if (err) return next(err);
+
+        locals.indices = results;
+        next();
     });
+  });
+
+  // load the post
+  view.on('init', function (next) {
+
+    if (!key) return next();
+
+    // 1. find the post in the posts collection.
+    // 2. find the post in the categories collection
+
+    Post.model.count({key: key}).exec()
+      .then(count => {
+        if (count) return Promise.resolve('post');
+
+        return PostCategory.model.count({key: key}).exec()
+          .then(count => {
+            if (count) return Promise.resolve('category');
+            else return Promise.reject(new Error(`Cannot find the key ${key}`));
+          });
+      })
+      .then(type => {
+        if (type == 'post') {
+          locals.type = 'post';
+          return findPost(key, next);
+        }
+
+        // if it's category. we need find a list of posts belong to this category
+        return Post.model.find({}, {'title': 1, 'key': 1})
+          .sort('weight')
+          .where('state', 'published')
+          .where('categories').in([key])
+          .exec();
+      })
+      .then(results => {
+        locals.posts = results;
+
+        if (!results.length) return next();
+
+        return findPost(results[0].key, next);
+      })
+      .catch(err => {
+        err || console.log(err);
+        next(err);
+      });
+	});
+
+  // find the default post
+  view.on('init', function(next) {
+    if (key) return next();
+
+    Indice.model.findOne({weight: 0}).exec()
+      .then(result => {
+        if (result.type !== 'post') return Promise.reject(new Error('The first indice should be a post'));
+        return Post.model.findOne({ key: result.postSelect }).exec();
+      })
+      .then(result => {
+        locals.post = result;
+        cb();
+      }).catch(err => cb(err));
   });
 
   // Render the view
 	view.render('tutorial');
+
+  function findPost(key, cb) {
+    Post.model.findOne({
+		  state: 'published',
+		  key: key
+	  }).populate('author categories').exec(function (err, result) {
+		  locals.post = result;
+		  cb(err);
+	  });
+  }
 };

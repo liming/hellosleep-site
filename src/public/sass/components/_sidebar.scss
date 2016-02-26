@@ -11,5 +11,13 @@
     overflow-y: auto;
     border-right: 1px solid #eee;
   }
+
+  .hs-nav-sidebar {
+    .nav > .active > a {
+      padding-left: 18px;
+      font-weight: 700;
+      border-left: 2px solid #563d7c;
+    }
+  }
 }
 
