@@ -15,7 +15,7 @@ block content
                 a(href='/tutorial/' + indice.categorySelect.key)
                   =indice.categorySelect.name
                 if indice.categorySelect.key == key && posts && posts.length
-                  ul
+                  ul.nav
                     each p in posts
                       li
                         a(href='/tutorial/' + p.key)

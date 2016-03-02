@@ -32,6 +32,7 @@ exports = module.exports = function (req, res) {
   view.on('init', function (next) {
 
     if (!key) return next();
+    let type;
 
     // 1. find the post in the posts collection.
     // 2. find the post in the categories collection
@@ -46,10 +47,12 @@ exports = module.exports = function (req, res) {
             else return Promise.reject(new Error(`Cannot find the key ${key}`));
           });
       })
-      .then(type => {
+      .then(_type => {
+        type = _type;
+
         if (type == 'post') {
           locals.type = 'post';
-          return findPost(key, next);
+          return findPost(key);
         }
 
         // if it's category. we need find a list of posts belong to this category
@@ -60,14 +63,23 @@ exports = module.exports = function (req, res) {
           .exec();
       })
       .then(results => {
+        if (type == 'post') {
+          // pass through the post
+          return results;
+        }
+
         locals.posts = results;
 
-        if (!results.length) return next();
+        if (!results.length) return null;
 
-        return findPost(results[0].key, next);
+        return findPost(results[0].key);
+      })
+      .then(post => {
+        locals.post = post;
+        return next();
       })
       .catch(err => {
-        err || console.log(err);
+        err || console.error(err);
         next(err);
       });
 	});
@@ -90,13 +102,10 @@ exports = module.exports = function (req, res) {
   // Render the view
 	view.render('tutorial');
 
-  function findPost(key, cb) {
-    Post.model.findOne({
+  function findPost(key) {
+    return Post.model.findOne({
 		  state: 'published',
 		  key: key
-	  }).populate('author categories').exec(function (err, result) {
-		  locals.post = result;
-		  cb(err);
-	  });
+	  }).populate('author categories').exec();
   }
 };
