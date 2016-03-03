@@ -1,0 +1,19 @@
+
+article.real-content {
+  h1 {
+    color: $title-color;
+    margin-bottom: 1em;
+  }
+
+  h2 {
+    border-top: 1px solid #e1e1e1;
+    padding-top: 0.8em;
+    margin-bottom: 0.8em;
+  }
+
+  .article-index > li {
+    list-style: none;
+    font-size: 120%
+  }
+}
+

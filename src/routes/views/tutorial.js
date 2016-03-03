@@ -41,17 +41,20 @@ exports = module.exports = function (req, res) {
       .then(count => {
         if (count) return Promise.resolve('post');
 
-        return PostCategory.model.count({key: key}).exec()
-          .then(count => {
-            if (count) return Promise.resolve('category');
+        return PostCategory.model.findOne({key: key}).exec()
+          .then(result => {
+            if (result) {
+              locals.category = result;
+              return Promise.resolve('category');
+            }
             else return Promise.reject(new Error(`Cannot find the key ${key}`));
           });
       })
       .then(_type => {
         type = _type;
+        locals.type = type;
 
         if (type == 'post') {
-          locals.type = 'post';
           return findPost(key);
         }
 
@@ -64,18 +67,16 @@ exports = module.exports = function (req, res) {
       })
       .then(results => {
         if (type == 'post') {
-          // pass through the post
-          return results;
+          locals.post = results;
+
+          // current post's category. some post don't have category
+          if (results.categories.length > 0) {
+            locals.category = results.categories[0];
+          }
+        } else {
+          locals.posts = results;
         }
 
-        locals.posts = results;
-
-        if (!results.length) return null;
-
-        return findPost(results[0].key);
-      })
-      .then(post => {
-        locals.post = post;
         return next();
       })
       .catch(err => {

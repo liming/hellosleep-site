@@ -27,8 +27,8 @@ html
               li(class=(section === link.key ? 'active' : null)): a(href=link.href)= link.label
           ul.nav.navbar-nav.navbar-right
             if user
-              li: a(href='/keystone') Admin UI
-              li: a(href='/keystone/signout') Sign Out
+              li: a(href='/keystone') 管理
+              li: a(href='/keystone/signout') 登出
             else
               li: a(href='/keystone/signin') 登录
     .container
@@ -39,9 +39,9 @@ html
       //- content
       block content
       //- footer
-      .site-footer: .container.text-center
-        p Copyright &copy; 2016 Hello Sleep. All rights reserved.
-        
+    footer.site-footer: .container.text-center
+      p Copyright &copy; 2016 睡吧. All rights reserved.
+
     if user && user.canAccessKeystone
       script(src='/keystone/js/content/editor.js')
       

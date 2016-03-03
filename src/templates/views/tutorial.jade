@@ -1,5 +1,7 @@
 extends ../layouts/default
 
+include ../mixins/post
+
 block content
   .row
     .col-sm-3.col-md-2.sidebar
@@ -7,21 +9,17 @@ block content
         ul.nav.nav-sidebar
           each indice in indices
             if indice.type == 'post'
-              li(class=(post.key == indice.postSelect.key ? 'active': ''))
+              li(class=(post && post.key == indice.postSelect.key ? 'active': ''))
                 a(href='/tutorial/' + indice.postSelect.key)
                   =indice.postSelect.title
             else if indice.type == 'category'
-              li
+              li(class=(category && category.key == indice.categorySelect.key ? 'active': ''))
                 a(href='/tutorial/' + indice.categorySelect.key)
                   =indice.categorySelect.name
-                if indice.categorySelect.key == key && posts && posts.length
-                  ul.nav
-                    each p in posts
-                      li
-                        a(href='/tutorial/' + p.key)
-                        =p.title
     .col-sm-9.col-md-10.main
-      if !post
-        h2 无效的内容
+      if post
+        +content-post(post)
+      else if posts
+        +content-posts(category, posts)
       else
-        != post.content.extended
+        h2 无效的内容
