@@ -25,6 +25,7 @@ html
           ul.nav.navbar-nav
             each link in navLinks
               li(class=(section === link.key ? 'active' : null)): a(href=link.href)= link.label
+            li: a(href='mailto:liming.dl@gmail.com') 联系睡吧
           ul.nav.navbar-nav.navbar-right
             if user
               li: a(href='/keystone') 管理

@@ -1,25 +1,22 @@
-extends ../layouts/default
+extends ../layouts/page
 
 include ../mixins/post
 
-block content
-  .row
-    .col-sm-3.col-md-2.sidebar
-      nav.hidden-print.hidden-xs.hidden-sm.affix.hs-nav-sidebar
-        ul.nav.nav-sidebar
-          each indice in indices
-            if indice.type == 'post'
-              li(class=(post && post.key == indice.postSelect.key ? 'active': ''))
-                a(href='/tutorial/' + indice.postSelect.key)
-                  =indice.postSelect.title
-            else if indice.type == 'category'
-              li(class=(category && category.key == indice.categorySelect.key ? 'active': ''))
-                a(href='/tutorial/' + indice.categorySelect.key)
-                  =indice.categorySelect.name
-    .col-sm-9.col-md-10.main
-      if post
-        +content-post(post)
-      else if posts
-        +content-posts(category, posts)
-      else
-        h2 无效的内容
+block article-nav
+  ul.nav.nav-sidebar
+    each indice in indices
+      if indice.type == 'post'
+        li(class=(post && post.key == indice.postSelect.key ? 'active': ''))
+          a(href='/tutorial/' + indice.postSelect.key)
+            =indice.postSelect.title
+      else if indice.type == 'category'
+        li(class=(category && category.key == indice.categorySelect.key ? 'active': ''))
+          a(href='/tutorial/' + indice.categorySelect.key)
+            =indice.categorySelect.name
+block article
+  if post
+    +content-post(post)
+  else if posts
+    +content-posts(category, posts)
+  else
+    h2 无效的内容

@@ -10,7 +10,7 @@ const Types = keystone.Field.Types;
 var Share = new keystone.List('Share', {
 	map: { name: 'title' },
 	track: true,
-	autokey: { path: 'slug', from: 'title', unique: true }
+	autokey: { path: 'key', from: 'title', unique: true }
 });
 
 Share.add({
@@ -21,6 +21,7 @@ Share.add({
   // the original url
   url: { type: Types.Url, required: true, initial: true },
 	publishedDate: { type: Types.Date, index: true },
+  categories: { type: Types.Relationship, ref: 'ShareCategory', many: true },
 	content: {
 		brief: { type: Types.Html, wysiwyg: true, height: 150 },
 		extended: { type: Types.Html, wysiwyg: true, height: 400 }

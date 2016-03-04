@@ -9,10 +9,10 @@ const Post = keystone.list('Post');
 exports = module.exports = function (req, res) {
   const view = new keystone.View(req, res);
   const locals = res.locals;
-
+  const key = locals.key = req.params.post;
   locals.section = 'tutorial';
 
-  const key = locals.key = req.params.post;
+  let type;
 
   // load the indices
   view.on('init', function(next) {
@@ -28,62 +28,53 @@ exports = module.exports = function (req, res) {
     });
   });
 
-  // load the post
+  // check if this is post
+  // this is for the page will display a post
   view.on('init', function (next) {
-
     if (!key) return next();
-    let type;
 
-    // 1. find the post in the posts collection.
-    // 2. find the post in the categories collection
+    Post.model.findOne({
+		  state: 'published',
+		  key: key
+	  }).populate('author categories')
+      .exec((err, result) => {
+        if (err) return next(err);
+        if (!result) return next();
 
-    Post.model.count({key: key}).exec()
-      .then(count => {
-        if (count) return Promise.resolve('post');
+        type = 'post';
+        locals.post = result;
 
-        return PostCategory.model.findOne({key: key}).exec()
-          .then(result => {
-            if (result) {
-              locals.category = result;
-              return Promise.resolve('category');
-            }
-            else return Promise.reject(new Error(`Cannot find the key ${key}`));
-          });
-      })
-      .then(_type => {
-        type = _type;
-        locals.type = type;
-
-        if (type == 'post') {
-          return findPost(key);
+        // current post's category. some post don't have category
+        if (result.categories.length > 0) {
+          locals.category = result.categories[0];
         }
-
-        // if it's category. we need find a list of posts belong to this category
-        return Post.model.find({}, {'title': 1, 'key': 1})
-          .sort('weight')
-          .where('state', 'published')
-          .where('categories').in([key])
-          .exec();
-      })
-      .then(results => {
-        if (type == 'post') {
-          locals.post = results;
-
-          // current post's category. some post don't have category
-          if (results.categories.length > 0) {
-            locals.category = results.categories[0];
-          }
-        } else {
-          locals.posts = results;
-        }
-
-        return next();
-      })
-      .catch(err => {
-        err || console.error(err);
-        next(err);
       });
-	});
+  });
+
+  // check the category
+  view.on('init', function(next) {
+    if (!key) return next();
+    if (type == 'post') return next();
+
+    PostCategory.model.findOne({key: key}).exec((err, category) => {
+      if (err) return next(err);
+
+      locals.category = category;
+      type = 'category';
+
+      // load the posts based on a category
+      Post.model.find({}, {'title': 1, 'key': 1})
+        .sort('weight')
+        .where('state', 'published')
+        .where('categories').in([key])
+        .exec((err, posts) => {
+          if (err) return next(err);
+
+          locals.posts = posts;
+          return next();
+        });
+    });
+  });
 
   // find the default post
   view.on('init', function(next) {
@@ -96,17 +87,10 @@ exports = module.exports = function (req, res) {
       })
       .then(result => {
         locals.post = result;
-        cb();
-      }).catch(err => cb(err));
+        return next();
+      }).catch(next);
   });
 
   // Render the view
 	view.render('tutorial');
-
-  function findPost(key) {
-    return Post.model.findOne({
-		  state: 'published',
-		  key: key
-	  }).populate('author categories').exec();
-  }
 };
