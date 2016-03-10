@@ -17,3 +17,26 @@ mixin content-posts(category, posts)
         li
           a(href='/tutorial/' + p.key)
             =p.title
+
+mixin brief-post(post)
+  article
+    h3
+      a(href='/share/' + post.key)
+        =post.title
+    != post.content.brief
+    
+mixin home-post(post)
+  li.single-post
+    .post-title
+      =post.title
+    p
+      != post.content.brief
+    small
+      =post._.publishedDate.format('MMMM Do, YYYY')
+    .expand
+      a.btn.btn-default(href='/' + post.type + '/' + post.key) 展开 >
+    
+mixin home-tip(tip)
+  li.single-post
+    p.a-tip
+      =tip.content

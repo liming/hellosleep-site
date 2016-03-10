@@ -3,16 +3,18 @@ extends ../layouts/page
 include ../mixins/post
 
 block article-nav
-  ul.nav.nav-sidebar
-    each indice in indices
-      if indice.type == 'post'
-        li(class=(post && post.key == indice.postSelect.key ? 'active': ''))
-          a(href='/tutorial/' + indice.postSelect.key)
-            =indice.postSelect.title
-      else if indice.type == 'category'
-        li(class=(category && category.key == indice.categorySelect.key ? 'active': ''))
-          a(href='/tutorial/' + indice.categorySelect.key)
-            =indice.categorySelect.name
+  nav.hidden-print.hidden-xs.hidden-sm.affix.hs-nav-sidebar
+    ul.nav.nav-sidebar
+      each indice in indices
+        if !indice.tutorialCount
+          li(class=(post && post.key == indice.key ? 'active': ''))
+            a(href='/tutorial/' + indice.key)
+              =indice.title
+        else if indice.tutorialCount > 0
+          li(class=(category && category.key == indice.key ? 'active': ''))
+            a(href='/tutorial/categories/' + indice.key)
+              =indice.name
+
 block article
   if post
     +content-post(post)

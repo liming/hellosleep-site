@@ -1,7 +1,20 @@
 extends ../layouts/page
 
+include ../mixins/post
+
 block article-nav
+  nav.hidden-print.hidden-xs.hidden-sm.affix.hs-nav-sidebar
+    .lead 经验谈分类
+    ul.nav.nav-sidebar
+      each cat in categories
+        li(class=(category && category.key == cat.key ? 'active': ''))
+          a(href='/share/categories/' + cat.key)
+            =cat.name
 
 block article
-
-
+  if post
+    +content-post(post)
+  else
+    each post in posts.results
+      +brief-post(post)
+  

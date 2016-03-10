@@ -5818,6 +5818,8 @@ button.close {
     display: none !important; } }
 
 @media all {
+  .jumbotron p {
+    font-size: 16px; }
   footer.site-footer {
     position: absolute;
     height: 65px;
@@ -5827,7 +5829,25 @@ button.close {
     margin-top: 80px;
     padding: 20px;
     background: #F0F1F2;
-    border-top: 1px solid #dedede; } }
+    border-top: 1px solid #dedede; }
+  .single-post {
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    margin: 15px 0;
+    background: #fff;
+    padding: 20px;
+    list-style: none; }
+  .single-post .post-title {
+    font-size: 120%;
+    color: #4E5264; }
+  .single-post .expand {
+    position: absolute;
+    right: 10px;
+    bottom: 28px;
+    width: 12%; }
+  .single-post p.a-tip::first-letter {
+    font-size: 200%;
+    color: #4E5264; } }
 
 @media (min-width: 25vw) {
   .sidebar {

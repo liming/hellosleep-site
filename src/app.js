@@ -7,8 +7,6 @@ require('dotenv').load();
 
 const keystone = require('keystone');
 
-import componentRoutes from 'routes/component-routes';
-
 keystone.init({
 
   'name': 'Hello Sleep',
@@ -19,8 +17,6 @@ keystone.init({
 
   'views': 'templates/views',
   'view engine': 'jade',
-
-  // 'react routes': componentRoutes,
 
   'port': process.env.PORT || 3000,
 

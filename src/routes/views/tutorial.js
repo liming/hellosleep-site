@@ -3,70 +3,90 @@
 
 const keystone = require('keystone');
 const PostCategory = keystone.list('PostCategory');
-const Indice = keystone.list('Indice');
 const Post = keystone.list('Post');
 
 exports = module.exports = function (req, res) {
   const view = new keystone.View(req, res);
   const locals = res.locals;
-  const key = locals.key = req.params.post;
+  const postKey = req.params.post;
+  const catKey = req.params.category;
   locals.section = 'tutorial';
+  let indices = [];
 
   let type;
 
   // load the indices
+  // The tutorial indices contain 2 parts:
+  // 1. the tutorial posts without categories
+  // 2. the categories contain tutorial posts.
+
+  // load posts in indices
   view.on('init', function(next) {
-    Indice.model.find({})
+
+    Post.model.find({type: 'tutorial'}, {'title': 1, 'key': 1})
+      .where('categories', {$size: 0})
       .sort('weight')
-      .populate('postSelect', 'title key')
-      .populate('categorySelect', 'name key')
       .exec((err, results) => {
         if (err) return next(err);
 
-        locals.indices = results;
-        next();
-    });
+        indices = indices.concat(results);
+        return next();
+      });
+  });
+
+  // load categories in indices
+  view.on('init', function(next) {
+    PostCategory.model.find({}, {'name': 1, 'key': 1, 'tutorialCount': 1})
+      .where('tutorialCount', {$gt: 0})
+      .sort('weight')
+      .exec((err, results) => {
+        if (err) return next(err);
+
+        indices = indices.concat(results);
+        locals.indices = indices;
+
+        return next();
+      });
   });
 
   // check if this is post
   // this is for the page will display a post
   view.on('init', function (next) {
-    if (!key) return next();
+    if (!postKey) return next();
 
     Post.model.findOne({
 		  state: 'published',
-		  key: key
+		  key: postKey
 	  }).populate('author categories')
       .exec((err, result) => {
         if (err) return next(err);
         if (!result) return next();
 
-        type = 'post';
         locals.post = result;
 
         // current post's category. some post don't have category
         if (result.categories.length > 0) {
           locals.category = result.categories[0];
         }
+
+        next();
       });
   });
 
   // check the category
   view.on('init', function(next) {
-    if (!key) return next();
-    if (type == 'post') return next();
+    if (!catKey) return next();
 
-    PostCategory.model.findOne({key: key}).exec((err, category) => {
+    PostCategory.model.findOne({key: catKey}).exec((err, category) => {
       if (err) return next(err);
 
       locals.category = category;
-      type = 'category';
 
       // load the posts based on a category
       Post.model.find({}, {'title': 1, 'key': 1})
         .sort('weight')
         .where('state', 'published')
-        .where('categories').in([key])
+        .where('categories').in([catKey])
         .exec((err, posts) => {
           if (err) return next(err);
 
@@ -78,17 +98,17 @@ exports = module.exports = function (req, res) {
 
   // find the default post
   view.on('init', function(next) {
-    if (key) return next();
+    if (postKey || catKey) return next();
 
-    Indice.model.findOne({weight: 0}).exec()
-      .then(result => {
-        if (result.type !== 'post') return Promise.reject(new Error('The first indice should be a post'));
-        return Post.model.findOne({ key: result.postSelect }).exec();
-      })
-      .then(result => {
+    Post.model.findOne({type: 'tutorial'})
+      .sort('weight')
+      .where('categories', {$size: 0})
+      .exec((err, result) => {
+        if (err) return next(err);
+
         locals.post = result;
         return next();
-      }).catch(next);
+      });
   });
 
   // Render the view

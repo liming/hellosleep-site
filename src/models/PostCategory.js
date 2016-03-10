@@ -17,7 +17,11 @@ var PostCategory = new keystone.List('PostCategory', {
 PostCategory.add({
 	name: { type: String, required: true },
   description: { type: Types.Html, wysiwyg: true, height: 150 },
-  weight: { type: Types.Number, required: true, initial: true, default: 99 }
+  weight: { type: Types.Number, required: true, initial: true, default: 99, index: true },
+  // the count of share posts
+  shareCount: { type: Types.Number, default: 0, noedit: true, index: true },
+  tutorialCount: { type: Types.Number, default: 0, noedit: true, index: true },
+  blogCount: { type: Types.Number, default: 0, noedit: true, index: true }
 });
 
 

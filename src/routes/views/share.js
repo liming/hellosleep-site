@@ -1,66 +1,64 @@
 'use strict';
 
 const keystone = require('keystone');
-const Share = keystone.list('Share');
-const ShareCategory = keystone.list('ShareCategory');
+const Post = keystone.list('Post');
+const PostCategory = keystone.list('PostCategory');
 
 exports = module.exports = function(req, res) {
   const view = new keystone.View(req, res);
   const locals = res.locals;
 
-  locals.section = 'shares';
+  locals.section = 'share';
 
-  // load all share categories
   // Load all categories
 	view.on('init', function (next) {
 
-		ShareCategory.model.find().sort('name').exec(function (err, results) {
+		PostCategory.model.find()
+      .where('shareCount', {$gt: 0})
+      .sort('weight').exec((err, results) => {
+			  if (err) return next(err);
 
-			if (err || !results.length) {
-				return next(err);
-			}
-
-			locals.categories = results;
-
-			// Load the counts for each category
-			async.each(locals.categories, function (category, next) {
-
-				keystone.list('Share').model.count().where('state', 'published').where('categories').in([category.id]).exec(function (err, count) {
-					category.shareCount = count;
-					next(err);
-				});
-
-			}, function (err) {
-				next(err);
-			});
-
+			  locals.categories = results;
+        return next();
 		});
-
 	});
+
+  view.on('init', function (next) {
+    if (!req.params.share) return next();
+
+    Post.model.findOne({key: req.params.share}).exec((err, result) => {
+      locals.post = result;
+      next(err);
+    });
+  });
+
 
   // Load the current category filter
 	view.on('init', function (next) {
 
-		if (req.params.category) {
-			ShareCategory.model.findOne({ key: locals.filters.category }).exec(function (err, result) {
-				locals.category = result;
-				next(err);
-			});
-		} else {
-			next();
-		}
+    if (!req.params.category) return next();
+    if (req.params.share) return next();
+
+		PostCategory.model.findOne({ key: req.params.category }).exec(function (err, result) {
+			locals.category = result;
+			next(err);
+		});
 	});
 
-  // load all the shares
+  // load all the posts
   view.on('init', function(next) {
 
-    let query = Share.paginate({
+    if (req.params.share) return next();
+
+    let query = Post.paginate({
       page: req.query.page || 1,
  			perPage: 10,
- 			maxPages: 10})
-      .where('state', 'published')
-			.sort('-publishedDate')
-			.populate('author categories');
+ 			maxPages: 10
+    })
+          .where('type', 'share')
+          .where('state', 'published')
+			    .sort('-publishedDate')
+			    .populate('categories');
 
 		if (locals.category) {
 		  query.where('categories').in([locals.category]);

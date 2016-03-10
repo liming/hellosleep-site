@@ -1,6 +1,6 @@
 'use strict';
 
-import keystone from 'keystone';
+const keystone = require('keystone');
 const PostCategory = keystone.list('PostCategory');
 
 exports.listCategories = function(req, res) {
