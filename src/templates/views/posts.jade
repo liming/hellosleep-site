@@ -1,0 +1,9 @@
+extends ../layouts/page
+
+include ../mixins/post
+
+block article-nav
+
+block article
+  each post in posts.results
+    +content-post(post)

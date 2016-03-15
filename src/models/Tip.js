@@ -17,7 +17,10 @@ Tip.add({
   author: { type: String, index: true },
   originUrl: { type: Types.Url },
   publishedDate: { type: Types.Date, index: true },
-  content: { type: Types.Textarea, initial: true }
+  content: { type: Types.Textarea, initial: true },
+
+  // tip also has relation with category. 
+  categories: { type: Types.Relationship, ref: 'PostCategory', many: true }
 });
 
 Tip.defaultSort = '-publishedDate';

@@ -19,6 +19,7 @@ Post.add({
     { value: 'tutorial', label: '指南'},
     { value: 'share', label: '分享'},
     { value: 'blog', label: '文章'},
+    { value: 'question', label: '常见问题'},
   ]},
 
   // about sharing
@@ -56,7 +57,8 @@ Post.schema.pre('save', function(next) {
     const typeMap = {
       'tutorial': 'tutorialCount',
       'share': 'shareCount',
-      'blog': 'blogCount'
+      'blog': 'blogCount',
+      'question': 'questionCount'
     };
 
     const _originTypeCount = typeMap[this._originType];

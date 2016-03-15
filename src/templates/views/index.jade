@@ -25,10 +25,10 @@ block content
     .col-md-8
       h4 推荐文章
       ul
-      each post in posts.results
+      each post in posts
         +home-post(post)
     .col-md-4
       h4 小提示
       ul
-      each tip in tips.results
+      each tip in tips
         +home-tip(tip)

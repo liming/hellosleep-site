@@ -21,7 +21,8 @@ PostCategory.add({
   // the count of share posts
   shareCount: { type: Types.Number, default: 0, noedit: true, index: true },
   tutorialCount: { type: Types.Number, default: 0, noedit: true, index: true },
-  blogCount: { type: Types.Number, default: 0, noedit: true, index: true }
+  blogCount: { type: Types.Number, default: 0, noedit: true, index: true },
+  questionCount: { type: Types.Number, default: 0, noedit: true, index: true }
 });
 
 

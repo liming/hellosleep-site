@@ -65,8 +65,10 @@ exports = module.exports = function(req, res) {
 		}
 
 		query.exec(function (err, results) {
+      if (err) return next(err);
+
 			locals.posts = results;
-			next(err);
+			next();
 		});
 
   });

@@ -11,29 +11,41 @@ exports = module.exports = function (req, res) {
 
   // load recommended articles
   view.on('init', function (next) {
-    Post.paginate({
-      page: req.query.postpage || 1,
- 			perPage: 5,
- 			maxPages: 10
-    })
+    Post.model.find({}, {'title': 1, 'key': 1, 'type': 1})
       .where('state', 'published')
       .where('recommended', 'true')
+      .limit(10)
 			.sort('-publishedDate')
 			.populate('categories')
       .exec((err, results) => {
         if (err) return next(err);
 
+        console.log(results);
         locals.posts = results;
         return next();
       });
   });
 
+  // load frequently asked questions
+  view.on('init', function (next) {
+    Post.model.find({type: 'question'}, {'title': 1, 'key': 1, 'type': 1})
+      .where('state', 'published')
+      .limit(10)
+			.sort('-publishedDate')
+			.populate('categories')
+      .exec((err, results) => {
+        if (err) return next(err);
+
+        locals.questions = results;
+        return next();
+      });
+  });
+
   view.on('init', function(next) {
-    Tip.paginate({
-      page: req.query.tippage || 1,
- 			perPage: 5,
- 			maxPages: 10
-    }).sort('-publishedDate').exec((err, results) => {
+    Tip.model.find()
+      .limit(10)
+      .sort('-publishedDate')
+      .exec((err, results) => {
       if (err) return next(err);
 
       locals.tips = results;

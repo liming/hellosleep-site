@@ -12,7 +12,9 @@ module.exports = {
     res.locals.navLinks = [
 		  { label: '主页', key: 'home', href: '/' },
 		  { label: '指南', key: 'tutorial', href: '/tutorial' },
-		  { label: '经验谈', key: 'share', href: '/share' }
+		  { label: '经验谈', key: 'share', href: '/share' },
+      { label: '常见问题', key: 'question', href: '/question' },
+      { label: '小提示', key: 'tip', href: '/tip' }
 	  ];
 
 	  res.locals.user = req.user;
