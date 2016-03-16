@@ -5887,4 +5887,7 @@ button.close {
     margin-right: 0.25em;
     vertical-align: -0.4em; }
   .posts-list blockquote p {
-    display: inline; } }
+    display: inline; }
+  .meta {
+    margin-bottom: 10px;
+    font-size: 80%; } }

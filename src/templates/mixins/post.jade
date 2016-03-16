@@ -28,6 +28,12 @@ mixin brief-post(post)
     h3
       a(href='/share/' + post.key)
         =post.title
+    .meta
+      span #{post.authorname} 发表于 
+      span #{post.formatedPublishedDate} 
+      if post.originUrl
+        span
+          a(href=post.originUrl) 原文连接
     != post.content.brief
 
 mixin home-post(post)
@@ -35,13 +41,11 @@ mixin home-post(post)
     .post-title
       a(href='/' + post.type + '/' + post.key)
         =post.title
-    small.meta
+    div.meta
       span #{post.authorname} 发表于 
       span #{post.formatedPublishedDate}
-        // =post._.publishedDate.format('MMMM Do, YYYY')
     p
       != post.content.brief
-    
     
 mixin home-tip(tip)
   li.single-post
