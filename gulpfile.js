@@ -35,7 +35,7 @@ gulp.task('nodemon', cb => {
   let started = false;
 
   return nodemon({
-    exec: 'babel-node',
+    exec: 'node',
     script: filePath.main
   }).on('start', function () {
     // to avoid nodemon being started multiple times
@@ -57,3 +57,5 @@ gulp.task('set-env', function () {
 gulp.task('watch', ['watch-sass']);
 
 gulp.task('default', ['set-env', 'watch', 'nodemon']);
+
+gulp.task('build', ['sass']);

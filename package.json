@@ -4,16 +4,11 @@
   "description": "The Hello Sleep website",
   "main": "app.js",
   "dependencies": {
-    "babel-core": "6.5.1",
-    "babel-plugin-object-assign": "1.2.1",
     "dotenv": "^2.0.0",
     "gulp-env": "^0.4.0",
     "history": "2.0.0",
     "keystone": "https://github.com/keystonejs/keystone.git",
     "lodash": "4.0.1",
-    "react": "0.14.7",
-    "react-dom": "0.14.7",
-    "react-router": "1.0.3",
     "xhr": "^2.2.0"
   },
   "devDependencies": {
