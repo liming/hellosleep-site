@@ -7,5 +7,5 @@ block content
     each post in posts.results
       if section == 'tip'
         +content-tip(post)
-      else if section == 'question'
+      else
         +content-post(post)

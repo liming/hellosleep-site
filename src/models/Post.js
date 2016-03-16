@@ -18,8 +18,7 @@ Post.add({
   type: { type: Types.Select, initial: true, index: true, default: 'tutorial', options: [
     { value: 'tutorial', label: '指南'},
     { value: 'share', label: '分享'},
-    { value: 'blog', label: '文章'},
-    { value: 'question', label: '常见问题'},
+    { value: 'blog', label: '文章'}
   ]},
 
   // about sharing
