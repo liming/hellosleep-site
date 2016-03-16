@@ -2,8 +2,10 @@ extends ../layouts/page
 
 include ../mixins/post
 
-block article-nav
-
-block article
-  each post in posts.results
-    +content-post(post)
+block content
+  .posts-list
+    each post in posts.results
+      if section == 'tip'
+        +content-tip(post)
+      else if section == 'question'
+        +content-post(post)

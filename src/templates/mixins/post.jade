@@ -4,6 +4,11 @@ mixin content-post(post)
       =post.title
     p
       !=post.content.extended
+      
+mixin content-tip(tip)
+  blockquote
+    p
+      !=tip.content
 
 mixin content-posts(category, posts)
   article.real-content
@@ -24,19 +29,21 @@ mixin brief-post(post)
       a(href='/share/' + post.key)
         =post.title
     != post.content.brief
-    
+
 mixin home-post(post)
   li.single-post
     .post-title
-      =post.title
+      a(href='/' + post.type + '/' + post.key)
+        =post.title
+    small.meta
+      span #{post.authorname} 发表于 
+      span #{post.formatedPublishedDate}
+        // =post._.publishedDate.format('MMMM Do, YYYY')
     p
       != post.content.brief
-    small
-      =post._.publishedDate.format('MMMM Do, YYYY')
-    .expand
-      a.btn.btn-default(href='/' + post.type + '/' + post.key) 展开 >
+    
     
 mixin home-tip(tip)
   li.single-post
-    p.a-tip
+    blockquote
       =tip.content

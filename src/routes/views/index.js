@@ -11,16 +11,15 @@ exports = module.exports = function (req, res) {
 
   // load recommended articles
   view.on('init', function (next) {
-    Post.model.find({}, {'title': 1, 'key': 1, 'type': 1})
+    Post.model.find({}, {'content.extended': 0})
       .where('state', 'published')
       .where('recommended', 'true')
       .limit(10)
 			.sort('-publishedDate')
-			.populate('categories')
+			.populate('author categories')
       .exec((err, results) => {
         if (err) return next(err);
 
-        console.log(results);
         locals.posts = results;
         return next();
       });

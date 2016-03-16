@@ -3,6 +3,7 @@
 const keystone = require('keystone');
 const Types = keystone.Field.Types;
 const async = require('async');
+const moment = require('moment');
 
 var Post = new keystone.List('Post', {
 	map: { name: 'title' },
@@ -35,6 +36,15 @@ Post.add({
 	categories: { type: Types.Relationship, ref: 'PostCategory', many: true },
   weight: { type: Types.Number, required: true, default: 99 },
   recommended: { type: Types.Boolean, default: false, index: true, label: '推荐到主页' }
+});
+
+Post.schema.virtual('authorname').get(function () {
+  if (this.type == 'share') return this.sharer;
+  else if (this.author.name) return this.author.name.full;
+});
+
+Post.schema.virtual('formatedPublishedDate').get(function () {
+  return moment(this.publishedDate).locale('zh-cn').format('ll');
 });
 
 // FIXME: what if we delete a post? need remove the track from category

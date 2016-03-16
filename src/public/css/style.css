@@ -5821,33 +5821,15 @@ button.close {
   .jumbotron p {
     font-size: 16px; }
   footer.site-footer {
-    position: absolute;
+    position: relative;
     height: 65px;
     bottom: 0;
     left: 0;
     width: 100%;
-    margin-top: 80px;
-    padding: 20px;
-    background: #F0F1F2;
-    border-top: 1px solid #dedede; }
-  .single-post {
-    border: 1px solid #e1e1e1;
-    border-radius: 4px;
-    margin: 15px 0;
-    background: #fff;
-    padding: 20px;
-    list-style: none; }
-  .single-post .post-title {
-    font-size: 120%;
-    color: #4E5264; }
-  .single-post .expand {
-    position: absolute;
-    right: 10px;
-    bottom: 28px;
-    width: 12%; }
-  .single-post p.a-tip::first-letter {
-    font-size: 200%;
-    color: #4E5264; } }
+    margin-top: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    border-top: 1px solid #dedede; } }
 
 @media (min-width: 25vw) {
   .sidebar {
@@ -5866,15 +5848,43 @@ button.close {
     font-weight: 700;
     border-left: 2px solid #563d7c; } }
 
-article.real-content h1 {
-  color: #4E5264;
-  margin-bottom: 1em; }
-
-article.real-content h2 {
-  border-top: 1px solid #e1e1e1;
-  padding-top: 0.8em;
-  margin-bottom: 0.8em; }
-
-article.real-content .article-index > li {
-  list-style: none;
-  font-size: 120%; }
+@media all {
+  article.real-content h1 {
+    color: #4E5264;
+    margin-bottom: 1em; }
+  article.real-content h2 {
+    border-top: 1px solid #e1e1e1;
+    padding-top: 0.8em;
+    margin-bottom: 0.8em; }
+  article.real-content .article-index > li {
+    list-style: none;
+    font-size: 120%; }
+  .single-post {
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    margin: 15px 0;
+    background: #fff;
+    padding: 10px 20px;
+    list-style: none; }
+  .single-post .post-title {
+    font-size: 120%;
+    color: #4E5264; }
+  .single-post blockquote {
+    quotes: "“" "”" "‘" "’";
+    font-size: 100%;
+    margin: 0px; }
+  .posts-list blockquote {
+    background: #f9f9f9;
+    border-left: 10px solid #ccc;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    quotes: "“" "”" "‘" "’"; }
+  .posts-list blockquote:before {
+    color: #ccc;
+    content: open-quote;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em; }
+  .posts-list blockquote p {
+    display: inline; } }
