@@ -2,7 +2,6 @@
 
 const keystone = require('keystone');
 const Types = keystone.Field.Types;
-const async = require('async');
 const moment = require('moment');
 
 var Post = new keystone.List('Post', {
