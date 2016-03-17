@@ -9,12 +9,17 @@ const gulp = require('gulp');
 const sass = require('gulp-sass');
 const nodemon = require('gulp-nodemon');
 const env = require('gulp-env');
+const cleanCSS = require('gulp-clean-css');
 
 const filePath = {
   main: './src/app.js',
   sass: {
     src: './src/public/sass/**/*.scss',
     dest: './src/public/css'
+  },
+  css: {
+    src: './src/public/css/*.css',
+    dest: './src/public/css/dist'
   }
 };
 
@@ -24,8 +29,15 @@ gulp.task('sass', function () {
     .pipe(gulp.dest(filePath.sass.dest));
 });
 
+gulp.task('minify-css', function() {
+  return gulp.src(filePath.css.src)
+    .pipe(cleanCSS({compatibility: 'ie8'}))
+    .pipe(gulp.dest(filePath.css.dest));
+});
+
+
 gulp.task('watch-sass', function () {
-  gulp.watch(filePath.sass.src, ['sass']).on('change', file => {
+  gulp.watch(filePath.sass.src, ['sass', 'minify-css']).on('change', file => {
     console.log(`The ${file.path} changed`);
   });
 });
@@ -58,4 +70,4 @@ gulp.task('watch', ['watch-sass']);
 
 gulp.task('default', ['set-env', 'watch', 'nodemon']);
 
-gulp.task('build', ['sass']);
+gulp.task('build', ['sass', 'minify-css']);
