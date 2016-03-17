@@ -14,7 +14,7 @@ var Tip = new keystone.List('Tip', {
 });
 
 Tip.add({
-  author: { type: String, index: true },
+  author: { type: String, index: true, default: 'match' },
   originUrl: { type: Types.Url },
   publishedDate: { type: Types.Date, index: true },
   content: { type: Types.Textarea, initial: true },
