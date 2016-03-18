@@ -15,7 +15,7 @@ html
     nav.navbar.navbar-default.navbar-static-top
       .container
         .navbar-header
-          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar-collapse', aria-expanded='false', aria-controls='navbar')
             span.sr-only Toggle navigation
             span.icon-bar
             span.icon-bar
@@ -42,6 +42,10 @@ html
       //- footer
     .container.text-center: footer.site-footer
       p Copyright &copy; 2016 睡吧. All rights reserved.
+      
+    script(src='/js/libs/jquery-1.12.2.min.js')
+    script(src='/js/libs/bootstrap/collapse.js')
+    script(src='/js/libs/bootstrap/dropdown.js')
 
     if user && user.canAccessKeystone
       script(src='/keystone/js/content/editor.js')

@@ -37,7 +37,7 @@ gulp.task('minify-css', function() {
 
 
 gulp.task('watch-sass', function () {
-  gulp.watch(filePath.sass.src, ['sass', 'minify-css']).on('change', file => {
+  gulp.watch(filePath.sass.src, ['sass']).on('change', file => {
     console.log(`The ${file.path} changed`);
   });
 });
@@ -66,7 +66,11 @@ gulp.task('set-env', function () {
   });
 });
 
-gulp.task('watch', ['watch-sass']);
+gulp.task('watch', function() {
+  gulp.watch(filePath.sass.src, ['build']).on('change', file => {
+    console.log(`The ${file.path} changed. Rebuild`);
+  });
+});
 
 gulp.task('default', ['set-env', 'watch', 'nodemon']);
 
