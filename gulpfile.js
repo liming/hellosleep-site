@@ -29,7 +29,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest(filePath.sass.dest));
 });
 
-gulp.task('minify-css', function() {
+gulp.task('minify-css', ['sass'], function() {
   return gulp.src(filePath.css.src)
     .pipe(cleanCSS({compatibility: 'ie8'}))
     .pipe(gulp.dest(filePath.css.dest));

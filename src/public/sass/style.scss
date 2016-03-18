@@ -2,9 +2,10 @@
 // import bootstrap
 @import "bootstrap.scss";
 
+@import "fontawesome/font-awesome.scss";
+
 // from components
 @import "components/variables.scss";
 @import "components/page.scss";
 @import "components/sidebar.scss";
 @import "components/content.scss";
-

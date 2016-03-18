@@ -29,9 +29,11 @@ html
           ul.nav.navbar-nav.navbar-right
             if user
               li: a(href='/keystone') 管理
-              li: a(href='/keystone/signout') 登出
+              li: a(href='/keystone/signout')
+                i.fa.fa-sign-out
             else
-              li: a(href='/keystone/signin') 登录
+              li: a(href='/keystone/signin') 
+                i.fa.fa-sign-in &nbsp; 登录
     .container
       //- intro
       block intro

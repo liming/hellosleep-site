@@ -1,8 +1,26 @@
 
 @media all {
 
+  .jumbotron {
+    background-color: #F0F1F2;
+  }
+
+  .jumbotron h1 {
+    color: $title-color;
+  }
+
   .jumbotron p {
     font-size: 16px;
+  }
+
+  .jumbotron .fa {
+    color: $icon-color;
+    font-size: 400%;
+  }
+
+  .jumbotron .introduction {
+    padding-left: 25px;
+    padding-right: 25px;
   }
 
   footer.site-footer {
