@@ -34,9 +34,11 @@ html
             else
               li: a(href='/keystone/signin') 
                 i.fa.fa-sign-in &nbsp; 登录
+                
+    //- intro
+    block intro
+    
     .container
-      //- intro
-      block intro
       //- messages
       +flash-messages(messages)
       //- content

@@ -1,7 +1,22 @@
 
 @media all {
 
-  .jumbotron {
+  .navbar {
+    margin-bottom: 0px;
+  }
+
+  .navbar-default {
+    background-color: $nav-bg;
+
+    .navbar-nav {
+      > .active > a {
+        background-color: $nav-bg;
+        color: #fff;
+      }
+    }
+  }
+
+  .jumbotron { 
     background-color: #F0F1F2;
   }
 

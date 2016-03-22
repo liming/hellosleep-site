@@ -5457,6 +5457,13 @@ button.close {
   content: ""; }
 
 @media all {
+  .navbar {
+    margin-bottom: 0px; }
+  .navbar-default {
+    background-color: #B3CEDA; }
+    .navbar-default .navbar-nav > .active > a {
+      background-color: #B3CEDA;
+      color: #fff; }
   .jumbotron {
     background-color: #F0F1F2; }
   .jumbotron h1 {
@@ -5497,6 +5504,8 @@ button.close {
     border-left: 2px solid #563d7c; } }
 
 @media all {
+  .content {
+    margin-top: 30px; }
   article.real-content h1 {
     color: #4E5264;
     margin-bottom: 1em; }
