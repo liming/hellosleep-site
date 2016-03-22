@@ -27,7 +27,25 @@ keystone.init({
 
   'mongo': process.env.MONGO_URI || 'mongodb://localhost/hellosleep',
 
-  'auto update': true
+  'auto update': true,
+
+
+  // editor configuration
+  'wysiwyg override toolbar': false,
+  'wysiwyg menubar': false,
+  'wysiwyg additional buttons': 'styleselect, blockquote, searchreplace ,'
+    + ' forecolor backcolor,  media, preview print ',
+  'wysiwyg additional plugins': 'example, anchor,'
+    + ' autolink, autosave, bbcode, charmap, contextmenu, '
+    + ' directionality, emoticons, fullpage, hr, media, '
+    + ' paste, preview, print, searchreplace, textcolor'
+  /*'wysiwyg additional options': {
+    external_plugins: {
+      relative_urls: false,
+      visualblocks_default_state: true,
+      'stylebuttons':'public/js/tinymce/plugins/stylebuttons/plugin.js'
+    }
+  }*/
 });
 
 keystone.import('models');

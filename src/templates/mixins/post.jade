@@ -6,9 +6,14 @@ mixin content-post(post)
       !=post.content.extended
       
 mixin content-tip(tip)
-  blockquote
-    p
-      !=tip.content
+  .single-post
+    blockquote
+      p
+        !=tip.content
+    .meta(style="padding-left: 0.5em")
+      span
+        a(href=tip.url target='_blank') 引用原文
+    
 
 mixin content-posts(category, posts)
   article.real-content
@@ -37,17 +42,21 @@ mixin brief-post(post)
     != post.content.brief
 
 mixin home-post(post)
-  li.single-post
+  .single-post
     .post-title
       a(href='/' + post.type + '/' + post.key)
         =post.title
-    div.meta
+    .meta
       span #{post.authorname} 发表于 
-      span #{post.formatedPublishedDate}
+      span #{post.formatedPublishedDate} 
+      span
+        a(href='/' + post.type)
+          =post.typename
     p
       != post.content.brief
-    
+      
+
 mixin home-tip(tip)
-  li.single-post
+  .single-tip
     blockquote
       =tip.content

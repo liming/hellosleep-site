@@ -45,6 +45,12 @@ Post.schema.virtual('formatedPublishedDate').get(function () {
   return moment(this.publishedDate).locale('zh-cn').format('ll');
 });
 
+Post.schema.virtual('typename').get(function () {
+  if (this.type == 'share') return '经验谈';
+  else if (this.type == 'tutorial') return '指南';
+  else if (this.type == 'blog') return '博客';
+});
+
 // FIXME: what if we delete a post? need remove the track from category
 
 Post.schema.post('init', function() {

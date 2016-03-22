@@ -4,7 +4,7 @@ include ../mixins/post
 
 block intro
   div(style="padding-left: 5vw; padding-right: 5vw;").jumbotron
-    h2 用行动走出失眠
+    h2(style="letter-spacing: 5px;") 用行动走出失眠
     p.lead 失眠只是一个结果，造成这个结果的原因来自于每个人自身存在的问题。想要走出失眠，我们要做的就是找到这些问题并加以改善。
     .row
       .col-md-4.introduction
@@ -15,7 +15,7 @@ block intro
       .col-md-4.introduction
         i.fa.fa-share-alt
         h4 
-          a(href='/shares') 经验谈
+          a(href='/share') 经验谈
         p 经验谈中收集了吧友走出失眠后的分享。你可以从这些文章中看到和自己类似的情况，这些分享会带给你足够的勇气和信心。然而走出失眠需要依靠自己的行动。
       .col-md-4.introduction
         .fa.fa-group
@@ -27,11 +27,11 @@ block content
   .row
     .col-md-8
       h4 推荐文章
-      ul
       each post in posts
         +home-post(post)
     .col-md-4
       h4 小提示
-      ul
       each tip in tips
         +home-tip(tip)
+      .read-more
+        a(href='/tip') 阅读更多
