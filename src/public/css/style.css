@@ -5461,9 +5461,13 @@ button.close {
     margin-bottom: 0px; }
   .navbar-default {
     background-color: #B3CEDA; }
-    .navbar-default .navbar-nav > .active > a {
+    .navbar-default .navbar-header {
+      color: #46485A; }
+    .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
       background-color: #B3CEDA;
       color: #fff; }
+    .navbar-default .navbar-nav > li > a {
+      color: #337ab7; }
   .jumbotron {
     background-color: #F0F1F2; }
   .jumbotron h1 {

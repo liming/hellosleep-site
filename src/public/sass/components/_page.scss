@@ -8,10 +8,22 @@
   .navbar-default {
     background-color: $nav-bg;
 
+    .navbar-header {
+      color: $logo-color;
+    }
+
     .navbar-nav {
       > .active > a {
-        background-color: $nav-bg;
-        color: #fff;
+        &,
+        &:hover,
+        &:focus {
+          background-color: $nav-bg;
+          color: #fff;
+        }
+      }
+
+      > li > a {
+        color: $link-color;
       }
     }
   }
