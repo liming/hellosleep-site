@@ -1,53 +1,93 @@
 
 @media all {
 
+  body {
+    color: $primary-text-color;
+  }
+
   .navbar {
     margin-bottom: 0px;
   }
 
   .navbar-default {
+
     background-color: $nav-bg;
 
-    .navbar-header {
-      color: $logo-color;
+    .navbar-brand {
+
+      letter-spacing: 3px;
+
+      margin-top: 5px;
+      margin-bottom: 5px;
+
+      .shui {
+        font-size: 200%;
+        color: $primary-color;
+      }
+
+      .ba {
+        font-size: 120%;
+        color: $secondary-color;
+      }
+    }
+
+    .nav {
+      margin-top: 10px;
     }
 
     .navbar-nav {
+      > li > a {
+        color: $primary-link-color;
+      }
+
       > .active > a {
         &,
         &:hover,
         &:focus {
           background-color: $nav-bg;
-          color: #fff;
+          color: $primary-color;
         }
-      }
-
-      > li > a {
-        color: $link-color;
       }
     }
   }
 
-  .jumbotron { 
-    background-color: #F0F1F2;
+  .jumbotron {
+
+    margin-top: 40px;
+    background: linear-gradient(to bottom,#fff 10%,#f5f5f5 100%);
+
+    p {
+      font-size: 16px;
+    }
+
+    .introduction {
+      padding-left: 25px;
+      padding-right: 25px;
+
+      .fa {
+        color: $primary-color;
+        font-size: 400%;
+      }
+
+      > h4 > a {
+        color: $primary-link-color;
+      }
+    }
   }
 
-  .jumbotron h1 {
-    color: $title-color;
-  }
+  .page-404 {
 
-  .jumbotron p {
-    font-size: 16px;
-  }
+    .error-info {
+      margin-top: 20px;
+    }
 
-  .jumbotron .fa {
-    color: $icon-color;
-    font-size: 400%;
-  }
+    .search {
+      padding: 20px 0px;
 
-  .jumbotron .introduction {
-    padding-left: 25px;
-    padding-right: 25px;
+      form {
+        width: 20%;
+      }
+    }
   }
 
   footer.site-footer {

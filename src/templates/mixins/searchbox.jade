@@ -1,0 +1,8 @@
+
+mixin search-box()
+  form(role="search" action="/search")
+    .input-group
+      input.form-control(type="text" placeholder="想要搜索..." name="q")
+      span.input-group-btn
+        button.btn.btn-default(type="submit")
+          i.fa.fa-search
