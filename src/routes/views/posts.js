@@ -29,26 +29,6 @@ exports = module.exports = function(req, res) {
       });
   });
 
-  view.on('init', function(next) {
-    if (locals.section !== 'question') return next();
-
-    Post.paginate({
-      page: req.query.page || 1,
- 		  perPage: 10,
- 		  maxPages: 10
-    })
-      .where('type', 'question')
-      .where('state', 'published')
-			.sort('-publishedDate')
-      .populate('categories')
-      .exec((err, results) => {
-        if (err) return next(err);
-
-        locals.posts = results;
-        next();
-      });
-  });
-
   // render question view
   view.render('posts');
 };

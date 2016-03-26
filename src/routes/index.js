@@ -38,6 +38,9 @@ exports = module.exports = function (app) {
   // display a post
   app.get('/post/:id', routes.views.post);
 
+  // handle search
+  app.post('/search', routes.views.search);
+
   // api
   app.get('/api/post/categories', routes.api.posts.listCategories);
 }
