@@ -8,23 +8,26 @@ exports = module.exports = function(req, res) {
   const locals = res.locals;
   const q = req.query.q;
 
-  view.on('init', function(next) {
-
-    console.log(q);
+  view.on('get', function(next) {
 
     if (!q) return next();
 
-    var postsQuery = Post.model.find();
     var regex = new RegExp(q, 'i');
-    postsQuery.where( 'name', regex );
 
-    q.exec((err, results) => {
-      if (err) return next(err);
+    Post.paginate({
+      page: req.query.page || 1,
+ 		  perPage: 10,
+ 		  maxPages: 10
+    })
+			.sort('-publishedDate')
+      .where( 'title', regex )
+      .exec((err, results) => {
+        if (err) return next(err);
 
-      locals.posts = results;
-      next();
-    });
-
-    view.render('posts');
+        locals.posts = results;
+        next();
+      });
   });
+
+  view.render('posts');
 };

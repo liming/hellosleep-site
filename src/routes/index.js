@@ -39,7 +39,7 @@ exports = module.exports = function (app) {
   app.get('/post/:id', routes.views.post);
 
   // handle search
-  app.post('/search', routes.views.search);
+  app.get('/search', routes.views.search);
 
   // api
   app.get('/api/post/categories', routes.api.posts.listCategories);

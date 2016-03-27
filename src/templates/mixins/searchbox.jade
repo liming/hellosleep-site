@@ -1,6 +1,6 @@
 
 mixin search-box()
-  form(role="search" action="/search")
+  form(role="search" action="/search" method="get")
     .input-group
       input.form-control(type="text" placeholder="想要搜索..." name="q")
       span.input-group-btn
