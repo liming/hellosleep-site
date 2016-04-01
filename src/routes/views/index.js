@@ -20,36 +20,41 @@ exports = module.exports = function (req, res) {
       .exec((err, results) => {
         if (err) return next(err);
 
-        locals.posts = results;
+        locals.recommends = results;
         return next();
       });
   });
 
-  // load frequently asked questions
+  // load latest content
   view.on('init', function (next) {
-    Post.model.find({type: 'question'}, {'title': 1, 'key': 1, 'type': 1})
-      .where('state', 'published')
-      .limit(10)
+    Post.paginate({
+      page: req.query.page || 1,
+ 		  perPage: 10,
+ 		  maxPages: 10
+    })
 			.sort('-publishedDate')
-			.populate('categories')
+      .populate('author categories')
       .exec((err, results) => {
         if (err) return next(err);
 
-        locals.questions = results;
-        return next();
+        locals.posts = results;
+        next();
       });
   });
 
   view.on('init', function(next) {
-    Tip.model.find()
-      .limit(10)
-      .sort('-publishedDate')
-      .exec((err, results) => {
+
+    Tip.model.count((err, count) => {
       if (err) return next(err);
 
-      locals.tips = results;
-      return next();
-    });
+      var rand = Math.floor(Math.random() * count);
+      Tip.model.findOne().skip(rand).exec((err, result) => {
+        if (err) return next(err);
+
+        locals.tip = result;
+        next();
+      });
+    })
   });
 
 	view.render('index');

@@ -45,6 +45,10 @@ Post.schema.virtual('formatedPublishedDate').get(function () {
   return moment(this.publishedDate).locale('zh-cn').format('ll');
 });
 
+Post.schema.virtual('content.short').get(function () {
+  return this.content.brief || this.content.extended;
+});
+
 Post.schema.virtual('typename').get(function () {
   if (this.type == 'share') return '经验谈';
   else if (this.type == 'tutorial') return '指南';

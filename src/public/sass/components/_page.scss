@@ -53,6 +53,10 @@
 
   .jumbotron {
 
+    .motto {
+      padding-left: 15px;
+    }
+
     background: linear-gradient(to bottom,#fff 10%,#f5f5f5 100%);
 
     p {
@@ -65,7 +69,8 @@
 
       .fa {
         color: $primary-color;
-        font-size: 400%;
+        margin-right: 1em;
+        font-size: 150%;
       }
 
       > h4 > a {
