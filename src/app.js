@@ -39,7 +39,8 @@ keystone.set('routes', require('./routes'));
 
 keystone.set('locals', {
   property: process.env.GA_SITE_PROPERTY,
-  domain: process.env.GA_SITE_DOMAIN
+  domain: process.env.GA_SITE_DOMAIN,
+  env: process.env.NODE_ENV || "development"
 });
 
 keystone.start();
