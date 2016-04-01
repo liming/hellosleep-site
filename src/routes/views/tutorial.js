@@ -103,6 +103,7 @@ exports = module.exports = function (req, res) {
     Post.model.findOne({type: 'tutorial'})
       .sort('weight')
       .where('categories', {$size: 0})
+      .populate('author categories')
       .exec((err, result) => {
         if (err) return next(err);
 
