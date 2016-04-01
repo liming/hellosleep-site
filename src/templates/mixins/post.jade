@@ -1,7 +1,20 @@
+
+mixin post-meta(post)
+  .post-meta
+    i.fa.fa-user
+    span #{post.authorname}
+    i.fa.fa-clock-o
+    span #{post.formatedPublishedDate} 
+    if post.originUrl
+      i.fa.fa-external-link
+      span
+        a(href=post.originUrl) 原文连接
+
 mixin content-post(post)
-  article.real-content
+  article
     h1
       =post.title
+    +post-meta(post)
     p
       !=post.content.extended
       
@@ -28,17 +41,12 @@ mixin content-posts(category, posts)
           a(href='/tutorial/' + p.key)
             =p.title
 
-mixin brief-post(post)
+mixin brief-post-share(post)
   article
     h3
       a(href='/share/' + post.key)
         =post.title
-    .meta
-      span #{post.authorname} 发表于 
-      span #{post.formatedPublishedDate} 
-      if post.originUrl
-        span
-          a(href=post.originUrl) 原文连接
+    +post-meta(post)
     != post.content.brief
 
 mixin home-post(post)

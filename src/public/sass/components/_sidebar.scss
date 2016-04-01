@@ -12,14 +12,17 @@
   }
 
   .hs-nav-sidebar {
-    .nav > li > .nav > li > a {
-      padding-left: 30px;
+    .nav > li > a {
+      padding-left: 0px;
     }
 
     .nav > .active > a {
-      padding-left: 18px;
-      font-weight: 700;
-      border-left: 2px solid #563d7c;
+      color: $primary-color;
+    }
+
+    .nav > li > a:focus,
+    .nav > li > a:hover {
+      background-color: inherit;
     }
   }
 }

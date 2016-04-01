@@ -1,5 +1,23 @@
 
 @media all {
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.7em;
+  }
+
+  h3 {
+    font-size: 1.4em;
+  }
+
+  h1, h2, h3 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
   .content {
     margin-top: 30px;
   }
@@ -7,11 +25,11 @@
   article.real-content {
     h1 {
       color: $title-color;
-      margin-bottom: 1em;
+      margin-bottom: 0.6em;
     }
 
     h2 {
-      border-top: 1px solid #e1e1e1;
+      border-top: 1px solid #f2f2f2;
       padding-top: 0.8em;
       margin-bottom: 0.8em;
     }
@@ -65,9 +83,15 @@
     }
   }
 
-  .meta {
-    margin: 10px 0px;
+  .post-meta {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     font-size: 90%;
     color: #ccc;
+
+    span {
+      margin-left: 3px;
+      margin-right: 6px;
+    }
   }
 }
