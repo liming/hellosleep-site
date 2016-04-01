@@ -37,4 +37,9 @@ keystone.import('models');
 
 keystone.set('routes', require('./routes'));
 
+keystone.set('locals', {
+  property: process.env.GA_SITE_PROPERTY,
+  domain: process.env.GA_SITE_DOMAIN
+});
+
 keystone.start();
