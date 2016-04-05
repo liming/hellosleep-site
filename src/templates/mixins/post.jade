@@ -21,8 +21,10 @@ mixin content-post(post)
     h1
       =post.title
     +post-meta(post)
+    // TODO: add editor quick link
     p
       !=post.content.extended
+    #post-tools
       
 mixin content-tip(tip)
   .single-post

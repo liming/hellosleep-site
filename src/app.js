@@ -3,7 +3,7 @@
  */
 
 // Load .env for development environments
-require('dotenv').load();
+(process.env.NODE_ENV !== 'production') && require('dotenv').load();
 
 const keystone = require('keystone');
 

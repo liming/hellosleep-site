@@ -8,6 +8,10 @@ html
     title= title || '睡吧-和失眠说再见'
     link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
     link(href="/css/dist/style.css", rel="stylesheet")
+    
+    if user && user.canAccessKeystone
+      link(href="/keystone/styles/content/editor.min.css", rel="stylesheet")
+
     block css
     block head
     
@@ -55,6 +59,10 @@ html
 
     if user && user.canAccessKeystone
       script(src='/keystone/js/content/editor.js')
+      
+    // The scripts using react
+    if section == "tutorial" || section == "share"
+      script(src='/js/dist.js')
       
     if env == 'production' && ga && ga.property && ga.domain
       script.

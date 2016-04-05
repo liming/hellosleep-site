@@ -10,6 +10,11 @@ const sass = require('gulp-sass');
 const nodemon = require('gulp-nodemon');
 const env = require('gulp-env');
 const cleanCSS = require('gulp-clean-css');
+const browserify = require('browserify');
+const watchify = require('watchify');
+const babelify = require('babelify');
+const gutil = require('gulp-util');
+const source = require('vinyl-source-stream');
 
 const filePath = {
   main: './src/app.js',
@@ -20,6 +25,11 @@ const filePath = {
   css: {
     src: './src/public/css/*.css',
     dest: './src/public/css/dist'
+  },
+  js: {
+    src: './src/client/scripts/main.js',
+    destFile: 'dist.js',
+    destFolder: './src/public/js'
   }
 };
 
@@ -48,7 +58,15 @@ gulp.task('nodemon', cb => {
 
   return nodemon({
     exec: 'node',
-    script: filePath.main
+    script: filePath.main,
+    watch: [
+      'src/routes/',
+      'src/models/'
+    ],
+    ignore: [
+      'src/client/**',
+      'src/public/**'
+    ]
   }).on('start', function () {
     // to avoid nodemon being started multiple times
     if (!started) {
@@ -66,12 +84,42 @@ gulp.task('set-env', function () {
   });
 });
 
-gulp.task('watch', function() {
+// add custom browserify options here
+var customOpts = {
+  entries: [filePath.js.src],
+  debug: false
+};
+var opts = Object.assign({}, watchify.args, customOpts);
+var b = watchify(browserify(opts)); 
+
+// add transformations here
+// i.e. b.transform(coffeeify);
+b.transform(babelify.configure({
+	presets: ['es2015', 'react']
+}));
+
+gulp.task('js', bundle); // so you can run `gulp js` to build the file
+b.on('update', bundle); // on any dep update, runs the bundler
+b.on('log', gutil.log); // output build logs to terminal
+
+function bundle() {
+  return b.bundle()
+  // log errors if they happen
+    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+    .pipe(source(filePath.js.destFile))
+  // optional, remove if you dont want sourcemaps
+//    .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+  // Add transformation tasks to the pipeline here.
+//    .pipe(sourcemaps.write('./')) // writes .map file
+    .pipe(gulp.dest(filePath.js.destFolder));
+}
+
+gulp.task('watchcss', function() {
   gulp.watch(filePath.sass.src, ['build']).on('change', file => {
     console.log(`The ${file.path} changed. Rebuild`);
   });
 });
 
-gulp.task('default', ['set-env', 'watch', 'nodemon']);
+gulp.task('default', ['set-env', 'watchcss', 'js', 'nodemon']);
 
 gulp.task('build', ['sass', 'minify-css']);

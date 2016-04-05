@@ -7,6 +7,7 @@
 const keystone = require('keystone');
 const middleware = require('./middleware');
 const importRoutes = keystone.importer(__dirname);
+const babelify = require('babelify');
 
 keystone.pre('routes', middleware.initLocals);
 keystone.pre('render', middleware.flashMessages);

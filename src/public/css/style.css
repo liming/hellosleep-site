@@ -6355,6 +6355,20 @@ button.close {
     margin-bottom: 20px; }
   .content {
     margin-top: 30px; }
+    .content .main article #post-tools {
+      border-top: 1px solid #e5e5e5;
+      padding-top: 5px; }
+      .content .main article #post-tools a {
+        color: #7f7f7f; }
+      .content .main article #post-tools .like-button {
+        margin-left: 0px;
+        padding-left: 0px; }
+        .content .main article #post-tools .like-button .fa {
+          margin-right: 2px; }
+        .content .main article #post-tools .like-button .badge {
+          padding: 0px;
+          color: inherit;
+          background-color: inherit; }
   article.real-content h1 {
     color: #4E5264;
     margin-bottom: 0.6em; }
