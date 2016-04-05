@@ -3,7 +3,6 @@ const React = require('react');
 var LikeButton = React.createClass({
 
   onToggle() {
-    
   },
 
   render() {
