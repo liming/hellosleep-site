@@ -34,3 +34,5 @@ node_modules
 
 # the ternjs file
 .tern-port
+
+.env
