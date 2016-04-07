@@ -3,13 +3,16 @@ extends ../layouts/page
 include ../mixins/post
 
 block article-nav
-  nav.hidden-print.hidden-xs.hidden-sm.affix.hs-nav-sidebar
-    .lead 经验谈分类
-    ul.nav.nav-sidebar
+  .card
+    .card-block
+      .card-title
+        i.fa.fa-share.m-r-1
+        span 经验谈导航
+    .list-group.list-group-flush
       each cat in categories
-        li(class=(category && category.key == cat.key ? 'active': ''))
-          a(href='/share/categories/' + cat.key)
-            =cat.name
+        a.list-group-item(href='/share/categories/' + cat.key, class=(category && category.key == cat.key ? 'active': ''))
+          i.fa.fa-tag.m-r-1
+          =cat.name
 
 block article
   if post
@@ -17,4 +20,5 @@ block article
   else
     each post in posts.results
       +brief-post(post)
+    +pagination(posts)
   

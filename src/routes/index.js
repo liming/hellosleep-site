@@ -36,6 +36,7 @@ exports = module.exports = function (app) {
   // list of the post
   app.get('/tip', routes.views.posts);
   app.get('/recommend', routes.views.posts);
+  app.get('/posts', routes.views.posts);
 
   // display a post
   app.get('/post/:id', routes.views.post);
