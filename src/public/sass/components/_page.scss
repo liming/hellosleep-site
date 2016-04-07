@@ -1,51 +1,52 @@
 
 @media all {
 
+  html {
+    position: relative;
+    min-height: 100%;
+  }
+
   body {
+    margin-bottom: 60px;
     color: $primary-text-color;
+    font-size: 14px;
   }
 
-  .navbar {
-    margin-bottom: 0px;
-  }
+  header {
+    border-bottom: 1px solid #e7e7e7;
+    .navbar {
 
-  .navbar-default {
+      background-color: $nav-bg;
 
-    background-color: $nav-bg;
+      .navbar-brand {
 
-    .navbar-brand {
+        letter-spacing: 0.25rem;
+        margin-right: 2rem;
 
-      letter-spacing: 3px;
-
-      margin-top: 5px;
-      margin-bottom: 5px;
-
-      .shui {
-        font-size: 200%;
-        color: $primary-color;
-      }
-
-      .ba {
-        font-size: 120%;
-        color: $secondary-color;
-      }
-    }
-
-    .nav {
-      margin-top: 10px;
-    }
-
-    .navbar-nav {
-      > li > a {
-        color: $primary-link-color;
-      }
-
-      > .active > a {
-        &,
-        &:hover,
-        &:focus {
-          background-color: $nav-bg;
+        .shui {
+          font-size: 2rem;
           color: $primary-color;
+        }
+
+        .ba {
+          font-size: 1.2rem;
+          color: $secondary-color;
+        }
+      }
+
+      .navbar-nav {
+        > li > a {
+          color: $primary-link-color;
+          line-height: 60px;
+        }
+
+        > .active > a {
+          &,
+          &:hover,
+          &:focus {
+            background-color: $nav-bg;
+            color: $primary-color;
+          }
         }
       }
     }
@@ -53,15 +54,17 @@
 
   .jumbotron {
 
+    font-size: 1.05rem;
+    font-weight: 200;
+
+    padding: 2em 2em;
+
     .motto {
       padding-left: 15px;
+      margin-bottom: 1em;
     }
 
     background: linear-gradient(to bottom,#fff 10%,#f5f5f5 100%);
-
-    p {
-      font-size: 16px;
-    }
 
     .introduction {
       padding-left: 25px;
@@ -69,12 +72,17 @@
 
       .fa {
         color: $primary-color;
-        margin-right: 1em;
-        font-size: 150%;
+        margin-right: 0.5rem;
+        font-size: 1.5rem;
       }
 
-      > h4 > a {
-        color: $primary-link-color;
+      h4{
+
+        font-size: 1.2rem;
+
+        a {
+          color: $primary-link-color;
+        }
       }
     }
   }
@@ -95,14 +103,17 @@
   }
 
   footer.site-footer {
-    position: relative;
-    height: 65px;
+    position: absolute;
     bottom: 0;
-    left: 0;
     width: 100%;
-    margin-top: 40px;
-    padding-top: 40px;
-    padding-bottom: 40px;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    line-height: 60px; /* Vertically center the text there */
+    background-color: #f5f5f5;
     border-top: 1px solid #dedede;
+
+    p {
+      font-size: 0.75rem;
+    }
   }
 }

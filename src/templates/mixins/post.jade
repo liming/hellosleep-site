@@ -2,16 +2,19 @@
 mixin post-meta(post, page)
   .post-meta
     i.fa.fa-user
-    span #{post.authorname}
-    i.fa.fa-clock-o
-    span #{post.formatedPublishedDate} 
+    span.m-r-1 #{post.authorname}
+    i.fa.fa-calendar
+    span.m-r-1 #{post.formatedPublishedDate} 
     if page != 'home'
       if post.originUrl
         i.fa.fa-external-link
         span
           a(href=post.originUrl) 原文连接
     else
-      i.fa.fa-link
+      if post.type == "tutorial"
+        i.fa.fa-road
+      else if post.type == "share"
+        i.fa.fa-share-alt
       span
         a(href='/' + post.type)
           =post.typename
@@ -21,18 +24,21 @@ mixin content-post(post)
     h1
       =post.title
     +post-meta(post)
+    // TODO: add editor quick link
     p
       !=post.content.extended
+//    #post-tools
       
 mixin content-tip(tip)
-  .single-post
-    blockquote
-      p
-        !=tip.content
-    .meta(style="padding-left: 0.5em")
-      span
-        a(href=tip.url target='_blank') 引用原文
-    
+  .card.tip
+    .card-block
+      blockquote.blockquote
+        p.m-b-0
+          !=tip.content
+        footer.blockquote-footer
+          span #{tip.author}在
+            a(href=tip.url target='_blank') 这里
+          span 提到
 
 mixin content-posts(category, posts)
   article.real-content
@@ -41,20 +47,23 @@ mixin content-posts(category, posts)
     p
       != category.description
     h2 文章列表
-    ul.article-index
+    ul.article-index.fa-ul
       each p in posts
         li
+          i.fa-li.fa.fa-file-text-o
           a(href='/tutorial/' + p.key)
             =p.title
-
+            
 mixin brief-post(post, page)
-  article.single-post
-    .post-title
-      a(href='/' + post.type + '/' + post.key)
+  .card
+    .card-block
+      .card-title.post-heading
         =post.title
-    +post-meta(post, page)
-    .content-brief
-      != post.content.short
+      .card-text
+        +post-meta(post, page)
+      .card-text.content-brief
+        != post.content.short
+      a.btn.btn-secondary-outline.btn-sm(href='/' + post.type + '/' + post.key, role="button") 阅读更多
 
 mixin home-tip(tip)
   .single-tip
@@ -65,13 +74,13 @@ mixin pagination(posts)
   if posts.totalPages > 1
     ul.pagination
       if posts.previous
-        li: a(href='?page=' + posts.previous): i.fa.fa-angle-left
+        li.page-item: a.page-link(href='?page=' + posts.previous): i.fa.fa-angle-left
       else
-        li.disabled: a(href='?page=' + 1): i.fa.fa-angle-left
+        li.page-item.disabled: a.page-link(href='?page=' + 1): i.fa.fa-angle-left
       each p, i in posts.pages
-        li(class=posts.currentPage === p ? 'active' : null)
-          a(href='?page=' + (p === '...' ? (i ? posts.totalPages : 1) : p ))= p
+        li.page-item(class=posts.currentPage === p ? 'active' : null)
+          a.page-link(href='?page=' + (p === '...' ? (i ? posts.totalPages : 1) : p ))= p
       if posts.next
-        li: a(href='?page=' + posts.next): i.fa.fa-angle-right
+        li.page-item: a.page-link(href='?page=' + posts.next): i.fa.fa-angle-right
       else
-        li.disabled: a(href='?page=' + posts.totalPages): i.fa.fa-angle-right
+        li.page-item.disabled: a.page-link(href='?page=' + posts.totalPages): i.fa.fa-angle-right

@@ -1,0 +1,21 @@
+
+header
+  nav.navbar.navbar-light.navbar-faded
+    .container
+      button.navbar-toggler.hidden-sm-up(type='button', data-toggle='collapse', data-target='#navbar-header', aria-controls='navbar-header') &#9776;
+      #navbar-header.collapse.navbar-toggleable-xs
+        a.navbar-brand(href='/')
+          span.shui 睡
+          span.ba 吧
+        ul.nav.navbar-nav
+          each link in navLinks
+            li.nav-item(class=(section === link.key ? 'active' : null)): a(href=link.href)= link.label
+          li.nav-item: a(href='mailto:liming.dl@gmail.com') 联系睡吧
+        ul.nav.navbar-nav.pull-xs-right
+          if user
+            li: a(href='/keystone') 管理
+            li: a(href='/keystone/signout')
+              i.fa.fa-sign-out
+          else
+            li: a(href='/keystone/signin') 
+              i.fa.fa-sign-in &nbsp; 登录

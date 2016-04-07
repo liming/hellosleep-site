@@ -8,34 +8,15 @@ html
     title= title || '睡吧-和失眠说再见'
     link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
     link(href="/css/dist/style.css", rel="stylesheet")
+    
+    if user && user.canAccessKeystone
+      link(href="/keystone/styles/content/editor.min.css", rel="stylesheet")
+
     block css
     block head
     
   body
-    nav.navbar.navbar-default.navbar-static-top
-      .container
-        .navbar-header
-          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
-            span.sr-only Toggle navigation
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.navbar-brand(href='/') 
-            span.shui 睡
-            span.ba 吧
-        .collapse.navbar-collapse#navbar
-          ul.nav.navbar-nav
-            each link in navLinks
-              li(class=(section === link.key ? 'active' : null)): a(href=link.href)= link.label
-            li: a(href='mailto:liming.dl@gmail.com') 联系睡吧
-          ul.nav.navbar-nav.navbar-right
-            if user
-              li: a(href='/keystone') 管理
-              li: a(href='/keystone/signout')
-                i.fa.fa-sign-out
-            else
-              li: a(href='/keystone/signin') 
-                i.fa.fa-sign-in &nbsp; 登录
+    include ../includes/header
                 
     //- intro
     block intro
@@ -46,15 +27,23 @@ html
       //- content
       block content
       //- footer
-    .container.text-center: footer.site-footer
-      p Copyright &copy; 2016 睡吧. All rights reserved.
+
+    footer.site-footer.text-xs-center
+      .container
+        p Copyright &copy; 2016 睡吧. All rights reserved. 睡吧内容按照以下许可发布: 
+          i.fa.fa-globe  
+            a(href="http://creativecommons.org/licenses/by-sa/3.0/deed.zh") CC Attribution-Share Alike 3.0 Unported
       
     script(src='/js/libs/jquery-1.12.2.min.js')
-    script(src='/js/libs/bootstrap/collapse.js')
-    script(src='/js/libs/bootstrap/dropdown.js')
+    script(src='/js/libs/tether.min.js')
+    script(src='/js/libs/bootstrap.min.js')
 
     if user && user.canAccessKeystone
       script(src='/keystone/js/content/editor.js')
+      
+    // The scripts using react
+    if section == "tutorial" || section == "share"
+      script(src='/js/dist.js')
       
     if env == 'production' && ga && ga.property && ga.domain
       script.

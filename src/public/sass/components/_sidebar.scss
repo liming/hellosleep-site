@@ -1,13 +1,22 @@
 
 @media (min-width: 25vw) {
   .sidebar {
-    bottom: 0;
-    left: 0;
-    //    z-index: 1000;
     display: block;
     padding: 20px;
     overflow-x: hidden;
     overflow-y: auto;
+
+    a.active {
+      color: $primary-color;
+      background-color: inherit;
+      border-color: #ddd;
+    }
+
+    a.active:focus,
+    a.active:hover {
+      color: inherit;
+      background-color: inherit;
+    }
   }
 
   .hs-nav-sidebar {

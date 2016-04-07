@@ -1,25 +1,57 @@
 
 @media all {
-
-  h1 {
-    font-size: 2em;
+  a {
+    color: #249cea;
   }
 
-  h2 {
-    font-size: 1.7em;
-  }
-
-  h3 {
-    font-size: 1.4em;
-  }
-
-  h1, h2, h3 {
-    margin-top: 20px;
-    margin-bottom: 20px;
+  .post-heading {
+    font-size: 1.2rem
   }
 
   .content {
     margin-top: 30px;
+
+    .main {
+
+      article {
+
+        #post-tools {
+          border-top: 1px solid #e5e5e5;
+          padding-top: 5px;
+
+          a {
+            color: #7f7f7f;
+          }
+
+          .like-button {
+            margin-left: 0px;
+            padding-left: 0px;
+
+            .fa {
+              margin-right: 2px;
+            }
+
+            .badge {
+              padding: 0px;
+              color: inherit;
+              background-color: inherit;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .posts-list {
+    .tip {
+      footer {
+        margin-top: 0.5rem;
+        a {
+          font-size: 1rem;
+          color: inherit;
+        }
+      }
+    }
   }
 
   article.real-content {
@@ -35,19 +67,7 @@
     }
 
     .article-index > li {
-      list-style: none;
-      font-size: 120%
-    }
-  }
-
-  .single-tip {
-    background: #fff;
-    padding: 10px 0px;
-
-    blockquote {
-      quotes: "\201C""\201D""\2018""\2019";
-      font-size: 100%;
-      margin: 0px;
+      padding-bottom: 5px;
     }
   }
 
@@ -83,14 +103,13 @@
   }
 
   .post-meta {
-    margin-top: 3px;
-    margin-bottom: 3px;
-    font-size: 90%;
-    color: #ccc;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    color: #6a6a6a;
 
     span {
-      margin-left: 3px;
-      margin-right: 6px;
+      margin-left: 5px;
     }
 
     a {
@@ -100,21 +119,20 @@
 
   .home-content {
     .latest-content {
-      padding-right: 50px;
+      padding-right: 3rem;
+      padding-bottom: 2rem;
+
+      h5 {
+        margin-bottom: 2rem;
+      }
+
+      .card {
+        flex-basis: 40%;
+      }
     }
 
     .recommend-post {
       margin: 15px 0px;
-    }
-
-    .color-block {
-      float: left;
-      width: 3em;
-      height: 3em;
-      margin-right: 5px;
-      border-width: 1px;
-      border-style: solid;
-      border-color: rgba(0,0,0,.2);
     }
   }
 }

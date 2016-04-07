@@ -3,17 +3,21 @@ extends ../layouts/page
 include ../mixins/post
 
 block article-nav
-  nav.hidden-print.hidden-xs.hidden-sm.hs-nav-sidebar
-    ul.nav.nav-sidebar
+  .card
+    .card-block
+      .card-title
+        i.fa.fa-road.m-r-1
+        span 睡吧指南导航
+    .list-group.list-group-flush
       each indice in indices
         if !indice.tutorialCount
-          li(class=(post && post.key == indice.key ? 'active': ''))
-            a(href='/tutorial/' + indice.key)
-              =indice.title
+          a.list-group-item(href='/tutorial/' + indice.key, class=(post && post.key == indice.key ? 'active': ''))
+            i.fa.fa-file-text-o.m-r-1
+            =indice.title
         else if indice.tutorialCount > 0
-          li(class=(category && category.key == indice.key ? 'active': ''))
-            a(href='/tutorial/categories/' + indice.key)
-              =indice.name
+          a.list-group-item(href='/tutorial/categories/' + indice.key, class=(category && category.key == indice.key ? 'active': ''))
+            i.fa.fa-tag.m-r-1
+            =indice.name
 
 block article
   if post

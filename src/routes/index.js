@@ -7,6 +7,7 @@
 const keystone = require('keystone');
 const middleware = require('./middleware');
 const importRoutes = keystone.importer(__dirname);
+const babelify = require('babelify');
 
 keystone.pre('routes', middleware.initLocals);
 keystone.pre('render', middleware.flashMessages);
@@ -35,6 +36,7 @@ exports = module.exports = function (app) {
   // list of the post
   app.get('/tip', routes.views.posts);
   app.get('/recommend', routes.views.posts);
+  app.get('/posts', routes.views.posts);
 
   // display a post
   app.get('/post/:id', routes.views.post);
