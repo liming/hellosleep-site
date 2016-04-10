@@ -13,7 +13,17 @@
 
     .main {
 
-      article {
+      .post {
+
+        h1 {
+          font-size: 2rem;
+          margin-bottom: 1.5rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+          margin: 1.5rem 0 0.75rem 0;
+        }
 
         #post-tools {
           border-top: 1px solid #e5e5e5;

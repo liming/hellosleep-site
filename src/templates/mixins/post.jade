@@ -20,7 +20,7 @@ mixin post-meta(post, page)
           =post.typename
 
 mixin content-post(post)
-  article
+  article.post
     h1
       =post.title
     +post-meta(post)
