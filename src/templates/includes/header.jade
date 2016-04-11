@@ -13,9 +13,9 @@ header
           li.nav-item: a(href='mailto:liming.dl@gmail.com') 联系睡吧
         ul.nav.navbar-nav.pull-xs-right
           if user
-            li: a(href='/keystone') 管理
-            li: a(href='/keystone/signout')
+            li.nav-item: a(href='/keystone') 管理
+            li.nav-item: a(href='/keystone/signout')
               i.fa.fa-sign-out
           else
-            li: a(href='/keystone/signin') 
+            li.nav-item: a(href='/keystone/signin') 
               i.fa.fa-sign-in &nbsp; 登录
