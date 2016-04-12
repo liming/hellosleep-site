@@ -19041,6 +19041,14 @@ var React = require('react');
 
 var LikeButton = React.createClass({
   displayName: "LikeButton",
+
+
+  getInitialState: function getInitialState() {
+    return {
+      count: 4
+    };
+  },
+
   onToggle: function onToggle() {},
   render: function render() {
     return React.createElement(

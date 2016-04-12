@@ -1,20 +1,26 @@
-const React = require('react');
+const React, { Component, PropTypes } = require('react');
 
-var LikeButton = React.createClass({
+export default class LikeButton extends Component {
 
-  onToggle() {
-  },
+  constructor(props) {
+    super(props);
+  }
 
   render() {
+
+    const { onClick, count } = this.props;
+
     return (
-      <span className="like-button" onClick="{this.onToggle.bind(this)}">
+      <span className="like-button" onClick={onClick}>
         <a className="btn btn-link">
-          <i className="fa fa-thumbs-up"></i>有用 <span className="badge">4</span>
+          <i className="fa fa-thumbs-up"></i>有用 <span className="badge">{count}</span>
         </a>
       </span>
     );
   }
+};
 
-});
-
-module.exports = LikeButton;
+LikeButton.propTypes = {
+  count: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
+};

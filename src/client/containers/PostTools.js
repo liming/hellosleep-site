@@ -1,15 +1,29 @@
-const React = require('react');
-const LikeButton = require('../components/LikeButton');
+import React, { Component } from 'react';
+import LikeButton from '../components/LikeButton';
 
-var PostTools = React.createClass({
+class PostTools extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    // ready to fetch the post meta data
+  }
+
+  onLikeChange() {
+    this.props.dispatch(clickChange());
+  }
 
   render() {
     return (
       <div>
-        <LikeButton />
+        <LikeButton
+          count={count}
+          onClick={this.onLikeChange} />
       </div>
     );
   }
-});
+};
 
 module.exports = PostTools;
