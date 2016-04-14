@@ -1,4 +1,4 @@
-const React, { Component, PropTypes } = require('react');
+import React, { Component, PropTypes } from 'react';
 
 export default class LikeButton extends Component {
 
@@ -21,6 +21,6 @@ export default class LikeButton extends Component {
 };
 
 LikeButton.propTypes = {
-  count: PropTypes.string.isRequired,
+  count: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired
 };

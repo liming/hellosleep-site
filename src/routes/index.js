@@ -46,4 +46,5 @@ exports = module.exports = function (app) {
 
   // api
   app.get('/api/post/categories', routes.api.posts.listCategories);
+  app.get('/api/post/:id', routes.api.posts.getPost);
 }

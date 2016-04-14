@@ -27,7 +27,7 @@ mixin content-post(post)
     // TODO: add editor quick link
     p
       !=post.content.extended
-    #post-tools
+    #post-meta(post_id=post.key, post_likes=post.likes)
       
 mixin content-tip(tip)
   .card.tip

@@ -3,11 +3,22 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import configureStore from '../stores/configureStore';
+import PostMetaApp from '../containers/PostMeta.js';
 
-import PostToolsApp from '../containers/PostTools.js';
-const postToolsTarget = document.getElementById('post-tools');
+const postMetaTarget = document.getElementById('post-meta');
 
-if (postToolsTarget) {
-  ReactDOM.render(<PostToolsApp />, postToolsTarget);
+const store = configureStore();
+
+if (postMetaTarget) {
+  render(
+    <Provider store={store}>
+      <PostMetaApp
+        postId={postMetaTarget.getAttribute('post_id')}
+        likes={postMetaTarget.getAttribute('post_likes')} />
+    </Provider>,
+    postMetaTarget
+  );
 }

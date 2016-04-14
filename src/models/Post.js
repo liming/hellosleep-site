@@ -33,7 +33,8 @@ Post.add({
 	},
 	categories: { type: Types.Relationship, ref: 'PostCategory', many: true },
   weight: { type: Types.Number, required: true, default: 99 },
-  recommended: { type: Types.Boolean, default: false, index: true, label: '推荐到主页' }
+  recommended: { type: Types.Boolean, default: false, index: true, label: '推荐到主页' },
+  likes: {type: Types.Number, noedit: true, default: 0, index: true}
 });
 
 Post.schema.virtual('authorname').get(function () {

@@ -12,3 +12,13 @@ exports.listCategories = function(req, res) {
 		});
   });
 };
+
+exports.getPost = function(req, res) {
+  PostCategory.model.findOne().exec((err, results) => {
+    if (err) return res.apiError('database error', err);
+
+    res.apiResponse({
+			posts: results
+		});
+  });
+};

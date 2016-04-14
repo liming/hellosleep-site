@@ -95,7 +95,7 @@ var b = watchify(browserify(opts));
 // add transformations here
 // i.e. b.transform(coffeeify);
 b.transform(babelify.configure({
-	presets: ['es2015', 'react', 'react-dom', 'react-redux']
+	presets: ['es2015', 'react']
 }));
 
 gulp.task('js', bundle); // so you can run `gulp js` to build the file

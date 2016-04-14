@@ -2,7 +2,7 @@ import request from 'superagent';
 
 export const RECEIVE_META = 'RECEIVE_META';
 
-export function clickChange() {
+export function likePost() {
   
 }
 
@@ -15,10 +15,10 @@ function receivePostMeta(id, result) {
   };
 }
 
-export function fetchPostMeta(id) {
+function requestPostMeta(id) {
   return dispatch => {
     return request
-      .get(`/api/posts/{id}`)
+      .get(`/api/posts/{id}/meta`)
       .end((err, res) => {
         if (err) console.error(err);
 
@@ -26,5 +26,11 @@ export function fetchPostMeta(id) {
           dispatch(receivePostMeta(id, res.body));
         }
       });
+  };
+}
+
+export function fetchPostMeta(id) {
+  return dispatch => {
+    return dispatch(requestPostMeta(id));
   };
 }
