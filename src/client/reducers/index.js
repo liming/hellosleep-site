@@ -3,7 +3,7 @@ import {
   RECEIVE_META
 } from '../actions/post';
 
-function postMeta(state = {}, action) {
+function post(state = {}, action) {
   switch(action.type) {
 
   case RECEIVE_META:
@@ -16,7 +16,7 @@ function postMeta(state = {}, action) {
 }
 
 const rootReducer = combineReducers({
-  postMeta
+  post
 });
 
 export default rootReducer;

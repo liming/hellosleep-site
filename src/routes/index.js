@@ -45,6 +45,7 @@ exports = module.exports = function (app) {
   app.get('/search', routes.views.search);
 
   // api
-  app.get('/api/post/categories', routes.api.posts.listCategories);
-  app.get('/api/post/:id', routes.api.posts.getPost);
+  app.get('/api/posts/categories', routes.api.posts.listCategories);
+  app.get('/api/posts/:id', routes.api.posts.getPost);
+  app.post('/api/posts/:id/like', routes.api.posts.likePost);
 }

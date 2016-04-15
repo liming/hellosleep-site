@@ -22150,7 +22150,7 @@ Emitter.prototype.hasListeners = function(event){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.RECEIVE_META = undefined;
+exports.RESPONSE_ERROR = exports.RECEIVE_META = undefined;
 exports.likePost = likePost;
 exports.fetchPostMeta = fetchPostMeta;
 
@@ -22161,8 +22161,50 @@ var _superagent2 = _interopRequireDefault(_superagent);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var RECEIVE_META = exports.RECEIVE_META = 'RECEIVE_META';
+var RESPONSE_ERROR = exports.RESPONSE_ERROR = 'RESPONSE_ERROR';
 
-function likePost() {}
+function likePost(id) {
+  return function (dispatch) {
+
+    var postStatus = void 0;
+    try {
+      postStatus = JSON.parse(localStorage.getItem(id));
+    } catch (e) {
+      return dispatch({
+        // this means nothing change
+        type: RESPONSE_ERROR,
+        message: e.message
+      });
+    }
+
+    var query = postStatus && postStatus.like ? '?method=delete' : '';
+
+    return _superagent2.default.post('/api/posts/' + id + '/like' + query).end(function (err, res) {
+      if (err) {
+        console.error(err);
+        return dispatch({
+          // this means nothing change
+          type: RESPONSE_ERROR,
+          message: err.message
+        });
+      }
+
+      if (res.body) {
+
+        if (!postStatus) postStatus = { like: true };else if (!postStatus.like) postStatus.like = true;else if (postStatus.like) postStatus.like = false;
+
+        localStorage.setItem(id, JSON.stringify(postStatus));
+
+        return dispatch({
+          type: RECEIVE_META,
+          id: id,
+          meta: { likes: res.body.data },
+          receivedAt: Date.now()
+        });
+      }
+    });
+  };
+}
 
 function receivePostMeta(id, result) {
   return {
@@ -22304,9 +22346,9 @@ var PostMeta = function (_Component) {
     value: function onLikeChange() {
       var _props = this.props;
       var dispatch = _props.dispatch;
-      var postId = _props.postId;
+      var id = _props.id;
 
-      this.props.dispatch((0, _post.likePost)(postId));
+      this.props.dispatch((0, _post.likePost)(id));
     }
   }, {
     key: 'render',
@@ -22330,7 +22372,8 @@ var PostMeta = function (_Component) {
 
 function mapStateToProps(state) {
   return {
-    meta: state.meta || { likeCount: 0 }
+    id: state.post.id,
+    likes: state.post.meta && state.post.meta.likes ? state.post.meta.likes : 0
   };
 };
 
@@ -22347,7 +22390,7 @@ var _redux = require('redux');
 
 var _post = require('../actions/post');
 
-function postMeta() {
+function post() {
   var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
   var action = arguments[1];
 
@@ -22363,7 +22406,7 @@ function postMeta() {
 }
 
 var rootReducer = (0, _redux.combineReducers)({
-  postMeta: postMeta
+  post: post
 });
 
 exports.default = rootReducer;
@@ -22393,15 +22436,21 @@ var postMetaTarget = document.getElementById('post-meta'); /**
                                                             * The file is used for post related manipulation
                                                             */
 
-var store = (0, _configureStore2.default)();
-
 if (postMetaTarget) {
+
+  var initialState = {
+    post: {
+      id: postMetaTarget.getAttribute('post_id'),
+      meta: { likes: postMetaTarget.getAttribute('post_likes') }
+    }
+  };
+
+  var store = (0, _configureStore2.default)(initialState);
+
   (0, _reactDom.render)(_react2.default.createElement(
     _reactRedux.Provider,
     { store: store },
-    _react2.default.createElement(_PostMeta2.default, {
-      postId: postMetaTarget.getAttribute('post_id'),
-      likes: postMetaTarget.getAttribute('post_likes') })
+    _react2.default.createElement(_PostMeta2.default, null)
   ), postMetaTarget);
 }
 

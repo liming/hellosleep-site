@@ -10,14 +10,20 @@ import PostMetaApp from '../containers/PostMeta.js';
 
 const postMetaTarget = document.getElementById('post-meta');
 
-const store = configureStore();
-
 if (postMetaTarget) {
+
+  const initialState = {
+    post: {
+      id: postMetaTarget.getAttribute('post_id'),
+      meta: {likes: postMetaTarget.getAttribute('post_likes')}
+    }
+  };
+
+  const store = configureStore(initialState);
+
   render(
     <Provider store={store}>
-      <PostMetaApp
-        postId={postMetaTarget.getAttribute('post_id')}
-        likes={postMetaTarget.getAttribute('post_likes')} />
+      <PostMetaApp />
     </Provider>,
     postMetaTarget
   );
