@@ -22276,7 +22276,7 @@ var LikeButton = function (_Component) {
         { className: "like-button", onClick: onClick },
         _react2.default.createElement(
           "a",
-          { className: "btn btn-link" },
+          { className: "btn btn-default" },
           _react2.default.createElement("i", { className: "fa fa-thumbs-up" }),
           "有用 ",
           _react2.default.createElement(

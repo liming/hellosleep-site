@@ -6549,6 +6549,8 @@ a.bg-danger:focus, a.bg-danger:hover {
     color: #249cea; }
   .post-heading {
     font-size: 1.2rem; }
+    .post-heading a {
+      color: #555; }
   .content {
     margin-top: 30px; }
     .content .main .post h1 {
@@ -6604,15 +6606,16 @@ a.bg-danger:focus, a.bg-danger:hover {
       vertical-align: -0.4em; }
     .posts-list blockquote p {
       display: inline; }
-  .post-meta {
+  #post-meta {
+    text-align: center;
     margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
-    color: #6a6a6a; }
-    .post-meta span {
-      margin-left: 5px; }
-    .post-meta a {
-      color: #ccc; }
+    margin-bottom: 0.5rem; }
+    #post-meta .btn {
+      font-size: 0.85rem; }
+    #post-meta span {
+      margin-left: 2px; }
+    #post-meta a {
+      color: #555; }
   .home-content .latest-content {
     padding-bottom: 2rem; }
     .home-content .latest-content h5 {

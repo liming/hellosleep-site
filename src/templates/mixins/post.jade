@@ -58,7 +58,8 @@ mixin brief-post(post, page)
   .card
     .card-block
       .card-title.post-heading
-        =post.title
+        a(href='/' + post.type + '/' + post.key)
+          =post.title
       .card-text
         +post-meta(post, page)
       .card-text.content-brief

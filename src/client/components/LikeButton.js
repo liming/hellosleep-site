@@ -12,7 +12,7 @@ export default class LikeButton extends Component {
 
     return (
       <span className="like-button" onClick={onClick}>
-        <a className="btn btn-link">
+        <a className="btn btn-default">
           <i className="fa fa-thumbs-up"></i>有用 <span className="badge">{count}</span>
         </a>
       </span>
