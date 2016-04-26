@@ -134,6 +134,28 @@
     }
   }
 
+  #post-comment {
+    h2 {
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid #f2f2f2;
+    }
+
+    .card {
+      background-color: #eee;
+    }
+
+    .comment-reply {
+      margin-top: 0.7rem;
+    }
+
+    #comment-form {
+
+      h4 {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
   .home-content {
     .latest-content {
       padding-bottom: 2rem;

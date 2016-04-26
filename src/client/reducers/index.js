@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
 import {
-  RECEIVE_META
+  RECEIVE_META,
+  TOGGLE_SUBMIT
 } from '../actions/post';
 
-function post(state = {}, action) {
+function postMeta(state = {}, action) {
   switch(action.type) {
 
   case RECEIVE_META:
@@ -15,8 +16,21 @@ function post(state = {}, action) {
   }
 }
 
+function postComment(state = {}, action) {
+  switch(action.type) {
+  case TOGGLE_SUBMIT:
+    const newState = Object.assign({}, state, {
+      enabledSubmit: action.enabledSubmit
+    });
+    return newState;
+  default:
+    return state;
+  }
+}
+
 const rootReducer = combineReducers({
-  post
+  postMeta,
+  postComment
 });
 
 export default rootReducer;

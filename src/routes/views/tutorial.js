@@ -4,6 +4,7 @@
 const keystone = require('keystone');
 const PostCategory = keystone.list('PostCategory');
 const Post = keystone.list('Post');
+const listComments = require('./common').listComments;
 
 exports = module.exports = function (req, res) {
   const view = new keystone.View(req, res);
@@ -108,8 +109,18 @@ exports = module.exports = function (req, res) {
         if (err) return next(err);
 
         locals.post = result;
+        postKey = result.key;
         return next();
       });
+  });
+
+  view.on('init', function(next) {
+    listComments(postKey, function(err, comments) {
+      if (err) return next(err);
+
+      locals.comments = comments || [];
+      return next();
+    });
   });
 
   // Render the view

@@ -2,6 +2,7 @@ import request from 'superagent';
 
 export const RECEIVE_META = 'RECEIVE_META';
 export const RESPONSE_ERROR = 'RESPONSE_ERROR';
+export const TOGGLE_SUBMIT = 'TOGGLE_SUBMIT';
 
 export function likePost(id) {
   return dispatch => {
@@ -75,5 +76,12 @@ function requestPostMeta(id) {
 export function fetchPostMeta(id) {
   return dispatch => {
     return dispatch(requestPostMeta(id));
+  };
+}
+
+export function toggleSubmit(checked) {
+  return {
+    type: TOGGLE_SUBMIT,
+    enabledSubmit: checked
   };
 }

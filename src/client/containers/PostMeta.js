@@ -13,7 +13,7 @@ class PostMeta extends Component {
 
   onLikeChange() {
     const { dispatch, id } = this.props;
-    this.props.dispatch(likePost(id));
+    dispatch(likePost(id));
   }
 
   render() {
@@ -29,9 +29,10 @@ class PostMeta extends Component {
 };
 
 function mapStateToProps(state) {
+  const postMeta = state.postMeta;
   return {
-    id: state.post.id,
-    likes: state.post.meta && state.post.meta.likes ? state.post.meta.likes : 0
+    id: postMeta.id,
+    likes: postMeta.meta && postMeta.meta.likes ? postMeta.meta.likes : 0
   };
 };
 

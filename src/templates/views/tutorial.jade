@@ -21,7 +21,7 @@ block article-nav
 
 block article
   if post
-    +content-post(post)
+    +content-post(post, comments)
   else if posts
     +content-posts(category, posts)
   else
