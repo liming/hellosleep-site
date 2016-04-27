@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CommentForm from '../components/CommentForm';
-import { toggleSubmit } from '../actions/post';
+import { toggleSubmit, submitComment } from '../actions/post';
 
 class PostComment extends Component {
 
@@ -12,13 +12,12 @@ class PostComment extends Component {
     this.onToggleSubmit = this.onToggleSubmit.bind(this);
   }
 
-  onFormSubmit() {
+  onFormSubmit(comment) {
     const { dispatch, id } = this.props;
-    dispatch(submitComment(id));
+    dispatch(submitComment(id, comment));
   }
 
   onToggleSubmit(checked) {
-    console.log('-------- click is the checkbox checked? ', checked);
     const { dispatch } = this.props;
     dispatch(toggleSubmit(checked));
   }
@@ -28,6 +27,7 @@ class PostComment extends Component {
       <CommentForm
         enabledSubmit={this.props.enabledSubmit}
         onToggleSubmit={this.onToggleSubmit}
+        errors={this.props.errors}
         onFormSubmit={this.onFormSubmit}/>
     );
   }
@@ -38,7 +38,8 @@ function mapStateToProps(state) {
   return {
     id: postComment.id,
     enabledSubmit: postComment.enabledSubmit,
-    commentIds: postComment.commentIds && postComment.commentIds ? postComment.commentIds : []
+    commentIds: postComment.commentIds && postComment.commentIds ? postComment.commentIds : [],
+    errors: postComment.errors || {}
   };
 };
 

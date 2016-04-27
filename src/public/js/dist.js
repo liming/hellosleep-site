@@ -36584,10 +36584,11 @@ Emitter.prototype.hasListeners = function(event){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.TOGGLE_SUBMIT = exports.RESPONSE_ERROR = exports.RECEIVE_META = undefined;
+exports.COMMENT_INVALID = exports.TOGGLE_SUBMIT = exports.RESPONSE_ERROR = exports.RECEIVE_META = undefined;
 exports.likePost = likePost;
 exports.fetchPostMeta = fetchPostMeta;
 exports.toggleSubmit = toggleSubmit;
+exports.submitComment = submitComment;
 
 var _superagent = require('superagent');
 
@@ -36598,6 +36599,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var RECEIVE_META = exports.RECEIVE_META = 'RECEIVE_META';
 var RESPONSE_ERROR = exports.RESPONSE_ERROR = 'RESPONSE_ERROR';
 var TOGGLE_SUBMIT = exports.TOGGLE_SUBMIT = 'TOGGLE_SUBMIT';
+var COMMENT_INVALID = exports.COMMENT_INVALID = 'COMMENT_INVALID';
 
 function likePost(id) {
   return function (dispatch) {
@@ -36676,6 +36678,49 @@ function toggleSubmit(checked) {
   };
 }
 
+function validateComment(comment) {
+  var errors = {};
+
+  if (!comment.author || !comment.author.length) {
+    errors.author = '请填写用户名';
+  }
+
+  if (!comment.email || !comment.email.length) {
+    errors.email = '请填写邮箱';
+  }
+
+  if (comment.email) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if (!regex.test(comment.email)) {
+      errors.email = '请填写正确的邮箱格式';
+    }
+  }
+
+  if (!comment.content || !comment.content.length) {
+    errors.content = '请填写回复内容';
+  }
+
+  var invalid = false;
+  for (var error in errors) {
+    invalid = true;
+    break;
+  }
+
+  if (!invalid) return true;
+
+  return {
+    type: COMMENT_INVALID,
+    errors: errors
+  };
+}
+
+function submitComment(id, comment) {
+  var result = validateComment(comment);
+  if (result == true) {} else {
+    return result;
+  }
+}
+
 },{"superagent":185}],191:[function(require,module,exports){
 'use strict';
 
@@ -36705,7 +36750,7 @@ var CommentForm = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CommentForm).call(this, props));
 
-    _this.onToggle = _this.onToggle.bind(_this);
+    _this.onSubmit = _this.onSubmit.bind(_this);
     return _this;
   }
 
@@ -36716,32 +36761,39 @@ var CommentForm = function (_Component) {
       var email = document.getElementById('comment_email').value;
       var content = document.getElementById('comment_content').value;
 
-      // TODO: validate email
-      // var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-      // regex.test(email);
-    }
-  }, {
-    key: 'onToggle',
-    value: function onToggle(e) {
-      var onToggleSubmit = this.props.onToggleSubmit;
-
-
-      e.preventDefault();
-
-      console.log('e.target.checked ' + e.target.checked);
-
-      onToggleSubmit(e.target.checked);
+      this.props.onFormSubmit({ author: author, email: email, content: content });
     }
   }, {
     key: 'render',
     value: function render() {
       var _props = this.props;
-      var onFormSubmit = _props.onFormSubmit;
       var onToggleSubmit = _props.onToggleSubmit;
       var enabledSubmit = _props.enabledSubmit;
+      var errors = _props.errors;
 
       var submitClass = 'btn btn-secondary';
       if (!enabledSubmit) submitClass += ' disabled';
+
+      var authorString = '* 用户名';
+      var authorClass = 'form-group';
+      if (errors.author) {
+        authorString += ' ( ' + errors.author + ' )';
+        authorClass += ' has-warning';
+      }
+
+      var emailString = '* 邮箱';
+      var emailClass = 'form-group';
+      if (errors.email) {
+        emailString += ' ( ' + errors.email + ' )';
+        emailClass += ' has-warning';
+      }
+
+      var contentString = '* 回复内容';
+      var contentClass = 'form-group';
+      if (errors.content) {
+        contentString += ' ( ' + errors.content + ' )';
+        contentClass += ' has-warning';
+      }
 
       return _react2.default.createElement(
         'div',
@@ -36763,21 +36815,21 @@ var CommentForm = function (_Component) {
             null,
             _react2.default.createElement(
               'fieldset',
-              { className: 'form-group' },
+              { className: authorClass },
               _react2.default.createElement(
                 'label',
                 { htmlFor: 'comment_author' },
-                '名字'
+                authorString
               ),
               _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'comment_author', placeholder: '输入名字' })
             ),
             _react2.default.createElement(
               'fieldset',
-              { className: 'form-group' },
+              { className: emailClass },
               _react2.default.createElement(
                 'label',
                 { htmlFor: 'comment_email' },
-                '邮件地址'
+                emailString
               ),
               _react2.default.createElement('input', { type: 'email', className: 'form-control', id: 'comment_email', placeholder: '输入邮件地址' }),
               _react2.default.createElement(
@@ -36788,11 +36840,11 @@ var CommentForm = function (_Component) {
             ),
             _react2.default.createElement(
               'fieldset',
-              { className: 'form-group' },
+              { className: contentClass },
               _react2.default.createElement(
                 'label',
                 { htmlFor: 'comment_content' },
-                '回复内容'
+                contentString
               ),
               _react2.default.createElement('textarea', { className: 'form-control', id: 'comment_content', rows: '3' })
             ),
@@ -36803,8 +36855,9 @@ var CommentForm = function (_Component) {
                 'label',
                 null,
                 _react2.default.createElement('input', {
-                  checked: enabledSubmit,
-                  onChange: this.onToggle, type: 'checkbox' }),
+                  onChange: function onChange(e) {
+                    return onToggleSubmit(e.target.checked);
+                  }, type: 'checkbox' }),
                 ' 我不是机器人'
               )
             ),
@@ -36826,7 +36879,8 @@ exports.default = CommentForm;
 ;
 
 CommentForm.propTypes = {
-  onFormSubmit: _react.PropTypes.func.isRequired
+  onFormSubmit: _react.PropTypes.func.isRequired,
+  onToggleSubmit: _react.PropTypes.func.isRequired
 };
 
 },{"react":171}],192:[function(require,module,exports){
@@ -36940,17 +36994,16 @@ var PostComment = function (_Component) {
 
   _createClass(PostComment, [{
     key: 'onFormSubmit',
-    value: function onFormSubmit() {
+    value: function onFormSubmit(comment) {
       var _props = this.props;
       var dispatch = _props.dispatch;
       var id = _props.id;
 
-      dispatch(submitComment(id));
+      dispatch((0, _post.submitComment)(id, comment));
     }
   }, {
     key: 'onToggleSubmit',
     value: function onToggleSubmit(checked) {
-      console.log('-------- click is the checkbox checked? ', checked);
       var dispatch = this.props.dispatch;
 
       dispatch((0, _post.toggleSubmit)(checked));
@@ -36961,6 +37014,7 @@ var PostComment = function (_Component) {
       return _react2.default.createElement(_CommentForm2.default, {
         enabledSubmit: this.props.enabledSubmit,
         onToggleSubmit: this.onToggleSubmit,
+        errors: this.props.errors,
         onFormSubmit: this.onFormSubmit });
     }
   }]);
@@ -36975,7 +37029,8 @@ function mapStateToProps(state) {
   return {
     id: postComment.id,
     enabledSubmit: postComment.enabledSubmit,
-    commentIds: postComment.commentIds && postComment.commentIds ? postComment.commentIds : []
+    commentIds: postComment.commentIds && postComment.commentIds ? postComment.commentIds : [],
+    errors: postComment.errors || {}
   };
 };
 
@@ -37093,10 +37148,13 @@ function postComment() {
 
   switch (action.type) {
     case _post.TOGGLE_SUBMIT:
-      var newState = Object.assign({}, state, {
+      return Object.assign({}, state, {
         enabledSubmit: action.enabledSubmit
       });
-      return newState;
+    case _post.COMMENT_INVALID:
+      return Object.assign({}, state, {
+        errors: action.errors
+      });
     default:
       return state;
   }

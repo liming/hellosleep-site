@@ -3,6 +3,7 @@ import request from 'superagent';
 export const RECEIVE_META = 'RECEIVE_META';
 export const RESPONSE_ERROR = 'RESPONSE_ERROR';
 export const TOGGLE_SUBMIT = 'TOGGLE_SUBMIT';
+export const COMMENT_INVALID = 'COMMENT_INVALID';
 
 export function likePost(id) {
   return dispatch => {
@@ -84,4 +85,49 @@ export function toggleSubmit(checked) {
     type: TOGGLE_SUBMIT,
     enabledSubmit: checked
   };
+}
+
+function validateComment(comment) {
+  let errors = {};
+
+  if (!comment.author || !comment.author.length) {
+    errors.author = '请填写用户名';
+  }
+
+  if (!comment.email || !comment.email.length) {
+    errors.email = '请填写邮箱';
+  }
+
+  if (comment.email) {
+    const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if (!regex.test(comment.email)) {
+      errors.email = '请填写正确的邮箱格式';
+    }
+  }
+
+  if (!comment.content || !comment.content.length) {
+    errors.content = '请填写回复内容';
+  }
+
+  let invalid = false;
+  for (let error in errors) {
+    invalid = true;
+    break;
+  }
+
+  if (!invalid) return true;
+
+  return {
+    type: COMMENT_INVALID,
+    errors: errors
+  };
+}
+
+export function submitComment(id, comment) {
+  const result = validateComment(comment);
+  if (result == true) {
+
+  } else {
+    return result;
+  }
 }

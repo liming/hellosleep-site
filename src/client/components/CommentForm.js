@@ -5,7 +5,7 @@ export default class CommentForm extends Component {
   constructor(props) {
     super(props);
 
-    this.onToggle = this.onToggle.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSubmit() {
@@ -13,26 +13,35 @@ export default class CommentForm extends Component {
     const email = document.getElementById('comment_email').value;
     const content = document.getElementById('comment_content').value;
 
-    // TODO: validate email
-    // var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    // regex.test(email);
-  }
-
-  onToggle(e) {
-    const { onToggleSubmit } = this.props;
-
-    e.preventDefault();
-
-    console.log(`e.target.checked ${e.target.checked}`);
-
-    onToggleSubmit(e.target.checked);
+    this.props.onFormSubmit({author, email, content});
   }
 
   render() {
 
-    const { onFormSubmit, onToggleSubmit, enabledSubmit } = this.props;
+    const { onToggleSubmit, enabledSubmit, errors } = this.props;
     let submitClass = 'btn btn-secondary';
     if (!enabledSubmit) submitClass += ' disabled';
+
+    let authorString = '* 用户名';
+    let authorClass = 'form-group';
+    if (errors.author) {
+      authorString += ` ( ${errors.author} )`;
+      authorClass += ' has-warning';
+    }
+
+    let emailString = '* 邮箱';
+    let emailClass = 'form-group';
+    if (errors.email) {
+      emailString += ` ( ${errors.email} )`;
+      emailClass += ' has-warning';
+    }
+
+    let contentString = '* 回复内容';
+    let contentClass = 'form-group';
+    if (errors.content) {
+      contentString += ` ( ${errors.content} )`;
+      contentClass += ' has-warning';
+    }
 
     return (
       <div className="card-block">
@@ -41,27 +50,26 @@ export default class CommentForm extends Component {
         </div>
         <div className="card-text">
           <form>
-            <fieldset className="form-group">
-              <label htmlFor="comment_author">名字</label>
+            <fieldset className={authorClass}>
+              <label htmlFor="comment_author">{authorString}</label>
               <input type="text" className="form-control" id="comment_author" placeholder="输入名字" />
             </fieldset>
 
-            <fieldset className="form-group">
-              <label htmlFor="comment_email">邮件地址</label>
+            <fieldset className={emailClass}>
+              <label htmlFor="comment_email">{emailString}</label>
               <input type="email" className="form-control" id="comment_email" placeholder="输入邮件地址" />
               <small className="text-muted">你的邮件地址不会显示。</small>
             </fieldset>
 
-            <fieldset className="form-group">
-              <label htmlFor="comment_content">回复内容</label>
+            <fieldset className={contentClass}>
+              <label htmlFor="comment_content">{contentString}</label>
               <textarea className="form-control" id="comment_content" rows="3"></textarea>
             </fieldset>
 
             <div className="checkbox">
               <label>
                 <input
-                  checked={enabledSubmit}
-                  onChange={this.onToggle} type="checkbox" /> 我不是机器人
+                  onChange={e => onToggleSubmit(e.target.checked)} type="checkbox" /> 我不是机器人
               </label>
             </div>
 
@@ -74,5 +82,6 @@ export default class CommentForm extends Component {
 };
 
 CommentForm.propTypes = {
-  onFormSubmit: PropTypes.func.isRequired
+  onFormSubmit: PropTypes.func.isRequired,
+  onToggleSubmit: PropTypes.func.isRequired
 };
