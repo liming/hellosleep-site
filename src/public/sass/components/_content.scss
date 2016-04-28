@@ -28,30 +28,14 @@
           font-size: 1.5rem;
           margin: 1.5rem 0 0.75rem 0;
         }
+      }
+    }
+  }
 
-        #post-tools {
-          border-top: 1px solid #e5e5e5;
-          padding-top: 5px;
-
-          a {
-            color: #7f7f7f;
-          }
-
-          .like-button {
-            margin-left: 0px;
-            padding-left: 0px;
-
-            .fa {
-              margin-right: 2px;
-            }
-
-            .badge {
-              padding: 0px;
-              color: inherit;
-              background-color: inherit;
-            }
-          }
-        }
+  #post {
+    .post-meta {
+      .fa {
+        margin-right: 0.2rem;
       }
     }
   }
@@ -116,7 +100,7 @@
     }
   }
 
-  #post-meta {
+  #post-tools {
     text-align: center;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
@@ -135,9 +119,9 @@
   }
 
   #post-comment {
-    h2 {
+    h4 {
       padding-bottom: 0.8rem;
-      border-bottom: 1px solid #f2f2f2;
+      border-bottom: 2px solid #f2f2f2;
     }
 
     .card {

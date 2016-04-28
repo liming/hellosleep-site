@@ -14,7 +14,7 @@ const postTarget = document.getElementById('post');
 const postId = postTarget.getAttribute('post_id');
 
 function renderPostMeta() {
-  const postMetaTarget = document.getElementById('post-meta');
+  const postMetaTarget = document.getElementById('post-tools');
 
   const initialState = {
     postMeta: {
@@ -35,14 +35,11 @@ function renderPostMeta() {
 
 function renderPostComment() {
 
-  const elems = document.getElementsByClassName("a-comment");
-  let commentIds = map(elems, elem => elem.getAttribute('comment_id'));
-
   const initialState = {
     postComment: {
       id: postId,
-      commentIds: commentIds,
-      enabledSubmit: false
+      enabledSubmit: false,
+      comments: []
     }
   };
 
@@ -52,7 +49,7 @@ function renderPostComment() {
     <Provider store={commentStore}>
       <PostCommentApp />
     </Provider>,
-    document.getElementById('comment-form')
+    document.getElementById('post-comment')
   );
 }
 

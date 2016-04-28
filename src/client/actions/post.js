@@ -4,6 +4,8 @@ export const RECEIVE_META = 'RECEIVE_META';
 export const RESPONSE_ERROR = 'RESPONSE_ERROR';
 export const TOGGLE_SUBMIT = 'TOGGLE_SUBMIT';
 export const COMMENT_INVALID = 'COMMENT_INVALID';
+export const ADD_COMMENT = 'ADD_COMMENT';
+export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 
 export function likePost(id) {
   return dispatch => {
@@ -80,6 +82,52 @@ export function fetchPostMeta(id) {
   };
 }
 
+function fetchComments(id) {
+  return dispatch => {
+    // TODO: dispatch the action of request
+    return request
+      .get(`/api/posts/${id}/comments`)
+      .end((err, res) => {
+        if (err) {
+          console.error(err);
+
+          return dispatch({
+            type: COMMENT_INVALID,
+            errors: { request: err.message }
+          });
+        }
+
+        dispatch({
+          type: RECEIVE_COMMENTS,
+          comments: res.body.data
+        });
+
+      });
+
+
+    return fetch(`https://www.reddit.com/r/${reddit}.json`)
+      .then(response => response.json())
+      .then(json => dispatch(receivePosts(reddit, json)))
+  }
+}
+
+function shouldFetchComments(state, id) {
+  const comment = state.postComment.comments[id];
+  if (!comment) {
+    return true;
+  }
+
+  return false;
+}
+
+export function fetchCommentsIfNeeded(id) {
+  return (dispatch, getState) => {
+    if (shouldFetchComments(getState(), id)) {
+      return dispatch(fetchComments(id));
+    }
+  }
+}
+
 export function toggleSubmit(checked) {
   return {
     type: TOGGLE_SUBMIT,
@@ -125,9 +173,26 @@ function validateComment(comment) {
 
 export function submitComment(id, comment) {
   const result = validateComment(comment);
-  if (result == true) {
+  if (result !== true) return result;
 
-  } else {
-    return result;
+  return dispatch => {
+    return request
+      .post(`/api/posts/${id}/comments`)
+      .send(comment)
+      .end((err, res) => {
+        if (err) console.error(err);
+
+        if (err) return dispatch({
+          type: COMMENT_INVALID,
+          errors: { request: err.message }
+        });
+
+        if (res.body) {
+          dispatch({
+            type: ADD_COMMENT,
+            newComment: res.body.data
+          });
+        }
+      });
   }
 }

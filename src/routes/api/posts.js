@@ -2,7 +2,9 @@
 
 const keystone = require('keystone');
 const PostCategory = keystone.list('PostCategory');
+const PostComment = keystone.list('PostComment');
 const Post = keystone.list('Post');
+const moment = require('moment');
 
 exports.listCategories = function(req, res) {
   PostCategory.model.find().sort('name').exec((err, results) => {
@@ -40,5 +42,48 @@ exports.likePost = function(req, res) {
 			  data: post.likes
 		  });
     });
+  });
+};
+
+exports.listComments = function(req, res) {
+
+  PostComment.model.find()
+		.where('post', req.params.id)
+		.where('author').ne(null)
+		.populate('replyTo', 'author')
+		.sort('publishedDate')
+		.exec((err, comments) => {
+      if (err) return res.apiError('database error', err);
+
+      res.apiResponse({
+			  data: comments.map(comment => {
+          return {
+            id: comment._id,
+            author: comment.author,
+            formatedDate: comment.format.date,
+            content: comment.content
+          };
+        })
+		  });
+    });
+};
+
+exports.postComment = function(req, res) {
+
+  const newComment = new PostComment.model(Object.assign({
+    post: req.params.id
+  }, req.body));
+
+  newComment.save((err, comment) => {
+    if (err) return res.apiError('database error', err);
+
+    res.apiResponse({
+			data: {
+        id: comment._id,
+        author: comment.author,
+        formatedDate: comment.format.date,
+        content: comment.content
+      }
+		});
   });
 };

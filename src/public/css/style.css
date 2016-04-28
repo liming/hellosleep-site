@@ -6559,20 +6559,8 @@ a.bg-danger:focus, a.bg-danger:hover {
     .content .main .post h2 {
       font-size: 1.5rem;
       margin: 1.5rem 0 0.75rem 0; }
-    .content .main .post #post-tools {
-      border-top: 1px solid #e5e5e5;
-      padding-top: 5px; }
-      .content .main .post #post-tools a {
-        color: #7f7f7f; }
-      .content .main .post #post-tools .like-button {
-        margin-left: 0px;
-        padding-left: 0px; }
-        .content .main .post #post-tools .like-button .fa {
-          margin-right: 2px; }
-        .content .main .post #post-tools .like-button .badge {
-          padding: 0px;
-          color: inherit;
-          background-color: inherit; }
+  #post .post-meta .fa {
+    margin-right: 0.2rem; }
   .posts-list .tip footer {
     margin-top: 0.5rem; }
     .posts-list .tip footer a {
@@ -6606,19 +6594,19 @@ a.bg-danger:focus, a.bg-danger:hover {
       vertical-align: -0.4em; }
     .posts-list blockquote p {
       display: inline; }
-  #post-meta {
+  #post-tools {
     text-align: center;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem; }
-    #post-meta .btn {
+    #post-tools .btn {
       font-size: 0.85rem; }
-    #post-meta span {
+    #post-tools span {
       margin-left: 2px; }
-    #post-meta a {
+    #post-tools a {
       color: #555; }
-  #post-comment h2 {
+  #post-comment h4 {
     padding-bottom: 0.8rem;
-    border-bottom: 1px solid #f2f2f2; }
+    border-bottom: 2px solid #f2f2f2; }
   #post-comment .card {
     background-color: #eee; }
   #post-comment .comment-reply {

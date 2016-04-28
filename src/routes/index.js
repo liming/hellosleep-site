@@ -48,4 +48,6 @@ exports = module.exports = function (app) {
   app.get('/api/posts/categories', routes.api.posts.listCategories);
   app.get('/api/posts/:id', routes.api.posts.getPost);
   app.post('/api/posts/:id/like', routes.api.posts.likePost);
+  app.get('/api/posts/:id/comments', routes.api.posts.listComments);
+  app.post('/api/posts/:id/comments', routes.api.posts.postComment);
 }

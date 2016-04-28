@@ -44,37 +44,39 @@ export default class CommentForm extends Component {
     }
 
     return (
-      <div className="card-block">
-        <div className="card-title">
-          <h4>添加评论</h4>
-        </div>
-        <div className="card-text">
-          <form>
-            <fieldset className={authorClass}>
-              <label htmlFor="comment_author">{authorString}</label>
-              <input type="text" className="form-control" id="comment_author" placeholder="输入名字" />
-            </fieldset>
+      <div className="card comment-form">
+        <div className="card-block">
+          <div className="card-title">
+            <h4>添加评论</h4>
+          </div>
+          <div className="card-text">
+            <form>
+              <fieldset className={authorClass}>
+                <label htmlFor="comment_author">{authorString}</label>
+                <input type="text" className="form-control" id="comment_author" placeholder="输入名字" />
+              </fieldset>
 
-            <fieldset className={emailClass}>
-              <label htmlFor="comment_email">{emailString}</label>
-              <input type="email" className="form-control" id="comment_email" placeholder="输入邮件地址" />
-              <small className="text-muted">你的邮件地址不会显示。</small>
-            </fieldset>
+              <fieldset className={emailClass}>
+                <label htmlFor="comment_email">{emailString}</label>
+                <input type="email" className="form-control" id="comment_email" placeholder="输入邮件地址" />
+                <small className="text-muted">你的邮件地址不会显示。</small>
+              </fieldset>
 
-            <fieldset className={contentClass}>
-              <label htmlFor="comment_content">{contentString}</label>
-              <textarea className="form-control" id="comment_content" rows="3"></textarea>
-            </fieldset>
+              <fieldset className={contentClass}>
+                <label htmlFor="comment_content">{contentString}</label>
+                <textarea className="form-control" id="comment_content" rows="3"></textarea>
+              </fieldset>
 
-            <div className="checkbox">
-              <label>
-                <input
-                  onChange={e => onToggleSubmit(e.target.checked)} type="checkbox" /> 我不是机器人
-              </label>
-            </div>
+              <div className="checkbox">
+                <label>
+                  <input
+                    onChange={e => onToggleSubmit(e.target.checked)} type="checkbox" /> 我不是机器人
+                </label>
+              </div>
 
-            <a onClick={this.onSubmit} className={submitClass}>提交</a>
-          </form>
+              <a onClick={this.onSubmit} className={submitClass}>提交</a>
+            </form>
+          </div>
         </div>
       </div>
     );

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CommentForm from '../components/CommentForm';
-import { toggleSubmit, submitComment } from '../actions/post';
+import CommentList from '../components/CommentList';
+import { fetchCommentsIfNeeded, toggleSubmit, submitComment } from '../actions/post';
 
 class PostComment extends Component {
 
@@ -10,6 +11,11 @@ class PostComment extends Component {
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onToggleSubmit = this.onToggleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    const { dispatch, id } = this.props;
+    dispatch(fetchCommentsIfNeeded(id));
   }
 
   onFormSubmit(comment) {
@@ -23,12 +29,25 @@ class PostComment extends Component {
   }
 
   render() {
+    const { comments, enabledSubmit, errors } = this.props;
+
     return (
-      <CommentForm
-        enabledSubmit={this.props.enabledSubmit}
-        onToggleSubmit={this.onToggleSubmit}
-        errors={this.props.errors}
-        onFormSubmit={this.onFormSubmit}/>
+      <div>
+
+        <h4>
+          {comments.length}个回应
+        </h4>
+
+        <CommentList
+          comments={comments}/>
+
+        <CommentForm
+          key={comments.length}
+          enabledSubmit={enabledSubmit}
+          onToggleSubmit={this.onToggleSubmit}
+          errors={errors}
+          onFormSubmit={this.onFormSubmit}/>
+      </div>
     );
   }
 };
@@ -38,7 +57,7 @@ function mapStateToProps(state) {
   return {
     id: postComment.id,
     enabledSubmit: postComment.enabledSubmit,
-    commentIds: postComment.commentIds && postComment.commentIds ? postComment.commentIds : [],
+    comments: postComment.comments || [],
     errors: postComment.errors || {}
   };
 };

@@ -36584,9 +36584,10 @@ Emitter.prototype.hasListeners = function(event){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.COMMENT_INVALID = exports.TOGGLE_SUBMIT = exports.RESPONSE_ERROR = exports.RECEIVE_META = undefined;
+exports.RECEIVE_COMMENTS = exports.ADD_COMMENT = exports.COMMENT_INVALID = exports.TOGGLE_SUBMIT = exports.RESPONSE_ERROR = exports.RECEIVE_META = undefined;
 exports.likePost = likePost;
 exports.fetchPostMeta = fetchPostMeta;
+exports.fetchCommentsIfNeeded = fetchCommentsIfNeeded;
 exports.toggleSubmit = toggleSubmit;
 exports.submitComment = submitComment;
 
@@ -36600,6 +36601,8 @@ var RECEIVE_META = exports.RECEIVE_META = 'RECEIVE_META';
 var RESPONSE_ERROR = exports.RESPONSE_ERROR = 'RESPONSE_ERROR';
 var TOGGLE_SUBMIT = exports.TOGGLE_SUBMIT = 'TOGGLE_SUBMIT';
 var COMMENT_INVALID = exports.COMMENT_INVALID = 'COMMENT_INVALID';
+var ADD_COMMENT = exports.ADD_COMMENT = 'ADD_COMMENT';
+var RECEIVE_COMMENTS = exports.RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
 
 function likePost(id) {
   return function (dispatch) {
@@ -36671,6 +36674,50 @@ function fetchPostMeta(id) {
   };
 }
 
+function fetchComments(id) {
+  return function (dispatch) {
+    // TODO: dispatch the action of request
+    return _superagent2.default.get('/api/posts/' + id + '/comments').end(function (err, res) {
+      if (err) {
+        console.error(err);
+
+        return dispatch({
+          type: COMMENT_INVALID,
+          errors: { request: err.message }
+        });
+      }
+
+      dispatch({
+        type: RECEIVE_COMMENTS,
+        comments: res.body.data
+      });
+    });
+
+    return fetch('https://www.reddit.com/r/' + reddit + '.json').then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      return dispatch(receivePosts(reddit, json));
+    });
+  };
+}
+
+function shouldFetchComments(state, id) {
+  var comment = state.postComment.comments[id];
+  if (!comment) {
+    return true;
+  }
+
+  return false;
+}
+
+function fetchCommentsIfNeeded(id) {
+  return function (dispatch, getState) {
+    if (shouldFetchComments(getState(), id)) {
+      return dispatch(fetchComments(id));
+    }
+  };
+}
+
 function toggleSubmit(checked) {
   return {
     type: TOGGLE_SUBMIT,
@@ -36716,12 +36763,76 @@ function validateComment(comment) {
 
 function submitComment(id, comment) {
   var result = validateComment(comment);
-  if (result == true) {} else {
-    return result;
-  }
+  if (result !== true) return result;
+
+  return function (dispatch) {
+    return _superagent2.default.post('/api/posts/' + id + '/comments').send(comment).end(function (err, res) {
+      if (err) console.error(err);
+
+      if (err) return dispatch({
+        type: COMMENT_INVALID,
+        errors: { request: err.message }
+      });
+
+      if (res.body) {
+        dispatch({
+          type: ADD_COMMENT,
+          newComment: res.body.data
+        });
+      }
+    });
+  };
 }
 
 },{"superagent":185}],191:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Comment = function Comment(_ref) {
+  var author = _ref.author;
+  var formatedDate = _ref.formatedDate;
+  var content = _ref.content;
+  return _react2.default.createElement(
+    "div",
+    { className: "card a-comment" },
+    _react2.default.createElement(
+      "div",
+      { className: "card-block" },
+      _react2.default.createElement(
+        "div",
+        { className: "card-title" },
+        _react2.default.createElement(
+          "span",
+          { className: "m-r-1 font-weight-bold" },
+          author
+        ),
+        _react2.default.createElement(
+          "span",
+          { className: "m-r-1 pull-xs-right text-muted" },
+          formatedDate
+        )
+      ),
+      _react2.default.createElement(
+        "div",
+        { className: "card-text" },
+        content
+      )
+    )
+  );
+};
+
+exports.default = Comment;
+
+},{"react":171}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36797,74 +36908,78 @@ var CommentForm = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'card-block' },
+        { className: 'card comment-form' },
         _react2.default.createElement(
           'div',
-          { className: 'card-title' },
+          { className: 'card-block' },
           _react2.default.createElement(
-            'h4',
-            null,
-            '添加评论'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'card-text' },
+            'div',
+            { className: 'card-title' },
+            _react2.default.createElement(
+              'h4',
+              null,
+              '添加评论'
+            )
+          ),
           _react2.default.createElement(
-            'form',
-            null,
+            'div',
+            { className: 'card-text' },
             _react2.default.createElement(
-              'fieldset',
-              { className: authorClass },
+              'form',
+              null,
               _react2.default.createElement(
-                'label',
-                { htmlFor: 'comment_author' },
-                authorString
+                'fieldset',
+                { className: authorClass },
+                _react2.default.createElement(
+                  'label',
+                  { htmlFor: 'comment_author' },
+                  authorString
+                ),
+                _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'comment_author', placeholder: '输入名字' })
               ),
-              _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'comment_author', placeholder: '输入名字' })
-            ),
-            _react2.default.createElement(
-              'fieldset',
-              { className: emailClass },
               _react2.default.createElement(
-                'label',
-                { htmlFor: 'comment_email' },
-                emailString
+                'fieldset',
+                { className: emailClass },
+                _react2.default.createElement(
+                  'label',
+                  { htmlFor: 'comment_email' },
+                  emailString
+                ),
+                _react2.default.createElement('input', { type: 'email', className: 'form-control', id: 'comment_email', placeholder: '输入邮件地址' }),
+                _react2.default.createElement(
+                  'small',
+                  { className: 'text-muted' },
+                  '你的邮件地址不会显示。'
+                )
               ),
-              _react2.default.createElement('input', { type: 'email', className: 'form-control', id: 'comment_email', placeholder: '输入邮件地址' }),
               _react2.default.createElement(
-                'small',
-                { className: 'text-muted' },
-                '你的邮件地址不会显示。'
+                'fieldset',
+                { className: contentClass },
+                _react2.default.createElement(
+                  'label',
+                  { htmlFor: 'comment_content' },
+                  contentString
+                ),
+                _react2.default.createElement('textarea', { className: 'form-control', id: 'comment_content', rows: '3' })
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'checkbox' },
+                _react2.default.createElement(
+                  'label',
+                  null,
+                  _react2.default.createElement('input', {
+                    onChange: function onChange(e) {
+                      return onToggleSubmit(e.target.checked);
+                    }, type: 'checkbox' }),
+                  ' 我不是机器人'
+                )
+              ),
+              _react2.default.createElement(
+                'a',
+                { onClick: this.onSubmit, className: submitClass },
+                '提交'
               )
-            ),
-            _react2.default.createElement(
-              'fieldset',
-              { className: contentClass },
-              _react2.default.createElement(
-                'label',
-                { htmlFor: 'comment_content' },
-                contentString
-              ),
-              _react2.default.createElement('textarea', { className: 'form-control', id: 'comment_content', rows: '3' })
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'checkbox' },
-              _react2.default.createElement(
-                'label',
-                null,
-                _react2.default.createElement('input', {
-                  onChange: function onChange(e) {
-                    return onToggleSubmit(e.target.checked);
-                  }, type: 'checkbox' }),
-                ' 我不是机器人'
-              )
-            ),
-            _react2.default.createElement(
-              'a',
-              { onClick: this.onSubmit, className: submitClass },
-              '提交'
             )
           )
         )
@@ -36883,7 +36998,76 @@ CommentForm.propTypes = {
   onToggleSubmit: _react.PropTypes.func.isRequired
 };
 
-},{"react":171}],192:[function(require,module,exports){
+},{"react":171}],193:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Comment = require('./Comment');
+
+var _Comment2 = _interopRequireDefault(_Comment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CommentList = function (_Component) {
+  _inherits(CommentList, _Component);
+
+  function CommentList(props) {
+    _classCallCheck(this, CommentList);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(CommentList).call(this, props));
+  }
+
+  _createClass(CommentList, [{
+    key: 'render',
+    value: function render() {
+      var comments = this.props.comments;
+
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'card-columns comments-list' },
+        comments.map(function (comment) {
+          return _react2.default.createElement(_Comment2.default, _extends({
+            key: comment.id
+          }, comment));
+        })
+      );
+    }
+  }]);
+
+  return CommentList;
+}(_react.Component);
+
+exports.default = CommentList;
+
+
+CommentList.propTypes = {
+  comments: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+    author: _react.PropTypes.string.isRequired,
+    id: _react.PropTypes.string.isRequired,
+    formatedDate: _react.PropTypes.string.isRequired,
+    content: _react.PropTypes.string.isRequired
+  }).isRequired).isRequired
+};
+
+},{"./Comment":191,"react":171}],194:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36950,7 +37134,7 @@ LikeButton.propTypes = {
   onClick: _react.PropTypes.func.isRequired
 };
 
-},{"react":171}],193:[function(require,module,exports){
+},{"react":171}],195:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36968,6 +37152,10 @@ var _reactRedux = require('react-redux');
 var _CommentForm = require('../components/CommentForm');
 
 var _CommentForm2 = _interopRequireDefault(_CommentForm);
+
+var _CommentList = require('../components/CommentList');
+
+var _CommentList2 = _interopRequireDefault(_CommentList);
 
 var _post = require('../actions/post');
 
@@ -36993,11 +37181,20 @@ var PostComment = function (_Component) {
   }
 
   _createClass(PostComment, [{
-    key: 'onFormSubmit',
-    value: function onFormSubmit(comment) {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
       var _props = this.props;
       var dispatch = _props.dispatch;
       var id = _props.id;
+
+      dispatch((0, _post.fetchCommentsIfNeeded)(id));
+    }
+  }, {
+    key: 'onFormSubmit',
+    value: function onFormSubmit(comment) {
+      var _props2 = this.props;
+      var dispatch = _props2.dispatch;
+      var id = _props2.id;
 
       dispatch((0, _post.submitComment)(id, comment));
     }
@@ -37011,11 +37208,30 @@ var PostComment = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(_CommentForm2.default, {
-        enabledSubmit: this.props.enabledSubmit,
-        onToggleSubmit: this.onToggleSubmit,
-        errors: this.props.errors,
-        onFormSubmit: this.onFormSubmit });
+      var _props3 = this.props;
+      var comments = _props3.comments;
+      var enabledSubmit = _props3.enabledSubmit;
+      var errors = _props3.errors;
+
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'h4',
+          null,
+          comments.length,
+          '个回应'
+        ),
+        _react2.default.createElement(_CommentList2.default, {
+          comments: comments }),
+        _react2.default.createElement(_CommentForm2.default, {
+          key: comments.length,
+          enabledSubmit: enabledSubmit,
+          onToggleSubmit: this.onToggleSubmit,
+          errors: errors,
+          onFormSubmit: this.onFormSubmit })
+      );
     }
   }]);
 
@@ -37029,14 +37245,14 @@ function mapStateToProps(state) {
   return {
     id: postComment.id,
     enabledSubmit: postComment.enabledSubmit,
-    commentIds: postComment.commentIds && postComment.commentIds ? postComment.commentIds : [],
+    comments: postComment.comments || [],
     errors: postComment.errors || {}
   };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostComment);
 
-},{"../actions/post":190,"../components/CommentForm":191,"react":171,"react-redux":35}],194:[function(require,module,exports){
+},{"../actions/post":190,"../components/CommentForm":192,"../components/CommentList":193,"react":171,"react-redux":35}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37116,7 +37332,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostMeta);
 
-},{"../actions/post":190,"../components/LikeButton":192,"react":171,"react-redux":35}],195:[function(require,module,exports){
+},{"../actions/post":190,"../components/LikeButton":194,"react":171,"react-redux":35}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37146,15 +37362,31 @@ function postComment() {
   var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
   var action = arguments[1];
 
+
+  var newState = Object.assign({}, state);
+
+  // reset some state
+  newState.errors = {};
+
   switch (action.type) {
+    case _post.RECEIVE_COMMENTS:
+      return Object.assign(newState, {
+        comments: action.comments
+      });
     case _post.TOGGLE_SUBMIT:
-      return Object.assign({}, state, {
+      return Object.assign(newState, {
         enabledSubmit: action.enabledSubmit
       });
     case _post.COMMENT_INVALID:
-      return Object.assign({}, state, {
+      return Object.assign(newState, {
         errors: action.errors
       });
+    case _post.ADD_COMMENT:
+      newState.comments.push(action.newComment);
+
+      // reset the form
+      newState.enabledSubmit = false;
+      return newState;
     default:
       return state;
   }
@@ -37167,7 +37399,7 @@ var rootReducer = (0, _redux.combineReducers)({
 
 exports.default = rootReducer;
 
-},{"../actions/post":190,"redux":180}],196:[function(require,module,exports){
+},{"../actions/post":190,"redux":180}],198:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -37201,7 +37433,7 @@ var postTarget = document.getElementById('post'); /**
 var postId = postTarget.getAttribute('post_id');
 
 function renderPostMeta() {
-  var postMetaTarget = document.getElementById('post-meta');
+  var postMetaTarget = document.getElementById('post-tools');
 
   var initialState = {
     postMeta: {
@@ -37221,16 +37453,11 @@ function renderPostMeta() {
 
 function renderPostComment() {
 
-  var elems = document.getElementsByClassName("a-comment");
-  var commentIds = (0, _lodash.map)(elems, function (elem) {
-    return elem.getAttribute('comment_id');
-  });
-
   var initialState = {
     postComment: {
       id: postId,
-      commentIds: commentIds,
-      enabledSubmit: false
+      enabledSubmit: false,
+      comments: []
     }
   };
 
@@ -37240,7 +37467,7 @@ function renderPostComment() {
     _reactRedux.Provider,
     { store: commentStore },
     _react2.default.createElement(_PostComment2.default, null)
-  ), document.getElementById('comment-form'));
+  ), document.getElementById('post-comment'));
 }
 
 if (postTarget) {
@@ -37251,7 +37478,7 @@ if (postTarget) {
   renderPostComment();
 }
 
-},{"../containers/PostComment.js":193,"../containers/PostMeta.js":194,"../stores/configureStore":197,"lodash":30,"react":171,"react-dom":32,"react-redux":35}],197:[function(require,module,exports){
+},{"../containers/PostComment.js":195,"../containers/PostMeta.js":196,"../stores/configureStore":199,"lodash":30,"react":171,"react-dom":32,"react-redux":35}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37281,4 +37508,4 @@ function configureStore(initialState) {
   return store;
 }
 
-},{"../reducers":195,"redux":180,"redux-logger":173,"redux-thunk":174}]},{},[196]);
+},{"../reducers":197,"redux":180,"redux-logger":173,"redux-thunk":174}]},{},[198]);

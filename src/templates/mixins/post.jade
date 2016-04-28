@@ -1,5 +1,3 @@
-include ./comment
-
 mixin post-meta(post, page)
   .post-meta
     i.fa.fa-user
@@ -20,7 +18,7 @@ mixin post-meta(post, page)
         a(href='/' + post.type)
           =post.typename
 
-mixin content-post(post, comments)
+mixin content-post(post)
   article.post#post(post_id=post.key)
     h1
       =post.title
@@ -28,9 +26,8 @@ mixin content-post(post, comments)
     // TODO: add editor quick link
     p
       !=post.content.extended
-    #post-meta(post_likes=post.likes)
+    #post-tools(post_likes=post.likes)
     #post-comment
-      +comments(comments)
       
 mixin content-tip(tip)
   .card.tip

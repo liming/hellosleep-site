@@ -21,7 +21,7 @@ PostComment.add({
   content: { type: Types.Html, wysiwyg: false, height: 300 }
 });
 
-PostComment.schema.virtual('formatedPublishedDate').get(function () {
+PostComment.schema.virtual('format.date').get(function () {
   return moment(this.publishedDate).locale('zh-cn').format('ll');
 });
 
