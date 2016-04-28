@@ -114,15 +114,6 @@ exports = module.exports = function (req, res) {
       });
   });
 
-  view.on('init', function(next) {
-    listComments(postKey, function(err, comments) {
-      if (err) return next(err);
-
-      locals.comments = comments || [];
-      return next();
-    });
-  });
-
   // Render the view
 	view.render('tutorial');
 };
