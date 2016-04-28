@@ -4,7 +4,6 @@
 const keystone = require('keystone');
 const PostCategory = keystone.list('PostCategory');
 const Post = keystone.list('Post');
-const listComments = require('./common').listComments;
 
 exports = module.exports = function (req, res) {
   const view = new keystone.View(req, res);
