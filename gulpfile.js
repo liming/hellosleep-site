@@ -61,7 +61,8 @@ gulp.task('nodemon', cb => {
     script: filePath.main,
     watch: [
       'src/routes/',
-      'src/models/'
+      'src/models/',
+      'src/lib/'
     ],
     ignore: [
       'src/client/**',

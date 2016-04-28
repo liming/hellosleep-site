@@ -36701,9 +36701,9 @@ function fetchComments(id) {
   };
 }
 
-function shouldFetchComments(state, id) {
-  var comment = state.postComment.comments[id];
-  if (!comment) {
+function shouldFetchComments(state) {
+  var comments = state.postComment.comments;
+  if (!comments) {
     return true;
   }
 
@@ -36712,7 +36712,7 @@ function shouldFetchComments(state, id) {
 
 function fetchCommentsIfNeeded(id) {
   return function (dispatch, getState) {
-    if (shouldFetchComments(getState(), id)) {
+    if (shouldFetchComments(getState())) {
       return dispatch(fetchComments(id));
     }
   };
@@ -37456,8 +37456,7 @@ function renderPostComment() {
   var initialState = {
     postComment: {
       id: postId,
-      enabledSubmit: false,
-      comments: []
+      enabledSubmit: false
     }
   };
 

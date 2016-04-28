@@ -5,6 +5,7 @@ const PostCategory = keystone.list('PostCategory');
 const PostComment = keystone.list('PostComment');
 const Post = keystone.list('Post');
 const moment = require('moment');
+const mailer = require('../../lib/mail');
 
 exports.listCategories = function(req, res) {
   PostCategory.model.find().sort('name').exec((err, results) => {
@@ -76,6 +77,9 @@ exports.postComment = function(req, res) {
 
   newComment.save((err, comment) => {
     if (err) return res.apiError('database error', err);
+
+    // TODO: send the mail to the author of current post.
+    // mailer.send({}, err => console.log(err));
 
     res.apiResponse({
 			data: {

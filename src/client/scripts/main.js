@@ -38,8 +38,7 @@ function renderPostComment() {
   const initialState = {
     postComment: {
       id: postId,
-      enabledSubmit: false,
-      comments: []
+      enabledSubmit: false
     }
   };
 

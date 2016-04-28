@@ -111,9 +111,9 @@ function fetchComments(id) {
   }
 }
 
-function shouldFetchComments(state, id) {
-  const comment = state.postComment.comments[id];
-  if (!comment) {
+function shouldFetchComments(state) {
+  const comments = state.postComment.comments;
+  if (!comments) {
     return true;
   }
 
@@ -122,7 +122,7 @@ function shouldFetchComments(state, id) {
 
 export function fetchCommentsIfNeeded(id) {
   return (dispatch, getState) => {
-    if (shouldFetchComments(getState(), id)) {
+    if (shouldFetchComments(getState())) {
       return dispatch(fetchComments(id));
     }
   }
