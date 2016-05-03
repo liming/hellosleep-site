@@ -57,14 +57,7 @@ exports.listComments = function(req, res) {
       if (err) return res.apiError('database error', err);
 
       res.apiResponse({
-			  data: comments.map(comment => {
-          return {
-            id: comment._id,
-            author: comment.author,
-            formatedDate: comment.format.date,
-            content: comment.content
-          };
-        })
+			  data: comments.map(comment => comment.formed.data)
 		  });
     });
 };
@@ -75,19 +68,25 @@ exports.postComment = function(req, res) {
     post: req.params.id
   }, req.body));
 
-  newComment.save((err, comment) => {
+  if (req.user) {
+    newComment.author = req.user.name.first;
+    newComment.email = req.user.email;
+  }
+
+  newComment.save((err, result) => {
     if (err) return res.apiError('database error', err);
 
     // TODO: send the mail to the author of current post.
     // mailer.send({}, err => console.log(err));
 
-    res.apiResponse({
-			data: {
-        id: comment._id,
-        author: comment.author,
-        formatedDate: comment.format.date,
-        content: comment.content
-      }
-		});
+    PostComment.model.findById(result._id)
+      .populate('replyTo', 'author')
+      .exec((err, comment) => {
+        if (err) return res.apiError('database error', err);
+
+        res.apiResponse({
+			    data: comment.formed.data
+		    });
+      });
   });
 };

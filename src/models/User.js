@@ -22,6 +22,15 @@ User.schema.virtual('canAccessKeystone').get(function() {
   return this.isAdmin;
 });
 
+// used by react client to get the user info
+User.schema.virtual('short').get(function() {
+  return JSON.stringify({
+    name: this.name.first,
+    email: this.email,
+    isAdmin: this.isAdmin
+  });
+});
+
 User.relationship({ ref: 'Post', path: 'posts', refPath: 'author' });
 
 User.defaultColumns = 'name, email, isAdmin';

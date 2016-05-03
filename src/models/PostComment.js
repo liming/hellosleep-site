@@ -25,6 +25,16 @@ PostComment.schema.virtual('format.date').get(function () {
   return moment(this.publishedDate).locale('zh-cn').format('ll');
 });
 
+PostComment.schema.virtual('formed.data').get(function () {
+  return {
+    id: this._id,
+    author: this.author,
+    formatedDate: this.format.date,
+    content: this.content,
+    replyTo: this.replyTo && this.replyTo.author ? {author: this.replyTo.author} : undefined
+  };
+});
+
 PostComment.track = true;
-PostComment.defaultColumns = 'author, email, post, publishedOn';
+PostComment.defaultColumns = 'author, email, post, publishedOn, replyTo';
 PostComment.register();

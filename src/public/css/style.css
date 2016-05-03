@@ -6559,7 +6559,7 @@ a.bg-danger:focus, a.bg-danger:hover {
     .content .main .post h2 {
       font-size: 1.5rem;
       margin: 1.5rem 0 0.75rem 0; }
-  #post .post-meta .fa {
+  .post-meta .fa {
     margin-right: 0.2rem; }
   .posts-list .tip footer {
     margin-top: 0.5rem; }

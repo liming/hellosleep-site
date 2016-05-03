@@ -36584,12 +36584,14 @@ Emitter.prototype.hasListeners = function(event){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.RECEIVE_COMMENTS = exports.ADD_COMMENT = exports.COMMENT_INVALID = exports.TOGGLE_SUBMIT = exports.RESPONSE_ERROR = exports.RECEIVE_META = undefined;
+exports.CANCEL_REPLY = exports.REPLY_COMMENT = exports.RECEIVE_COMMENTS = exports.ADD_COMMENT = exports.COMMENT_INVALID = exports.TOGGLE_SUBMIT = exports.RESPONSE_ERROR = exports.RECEIVE_META = undefined;
 exports.likePost = likePost;
 exports.fetchPostMeta = fetchPostMeta;
 exports.fetchCommentsIfNeeded = fetchCommentsIfNeeded;
 exports.toggleSubmit = toggleSubmit;
 exports.submitComment = submitComment;
+exports.replyComment = replyComment;
+exports.cancelReply = cancelReply;
 
 var _superagent = require('superagent');
 
@@ -36603,6 +36605,8 @@ var TOGGLE_SUBMIT = exports.TOGGLE_SUBMIT = 'TOGGLE_SUBMIT';
 var COMMENT_INVALID = exports.COMMENT_INVALID = 'COMMENT_INVALID';
 var ADD_COMMENT = exports.ADD_COMMENT = 'ADD_COMMENT';
 var RECEIVE_COMMENTS = exports.RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
+var REPLY_COMMENT = exports.REPLY_COMMENT = 'REPLY_COMMENT';
+var CANCEL_REPLY = exports.CANCEL_REPLY = 'CANCEL_REPLY';
 
 function likePost(id) {
   return function (dispatch) {
@@ -36784,50 +36788,125 @@ function submitComment(id, comment) {
   };
 }
 
+function replyComment(replyId) {
+  return {
+    type: REPLY_COMMENT,
+    replyId: replyId
+  };
+}
+
+function cancelReply() {
+  return {
+    type: CANCEL_REPLY
+  };
+}
+
 },{"superagent":185}],191:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _react = require("react");
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Comment = function Comment(_ref) {
-  var author = _ref.author;
-  var formatedDate = _ref.formatedDate;
-  var content = _ref.content;
-  return _react2.default.createElement(
-    "div",
-    { className: "card a-comment" },
-    _react2.default.createElement(
-      "div",
-      { className: "card-block" },
-      _react2.default.createElement(
-        "div",
-        { className: "card-title" },
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Comment = function (_Component) {
+  _inherits(Comment, _Component);
+
+  function Comment(props) {
+    _classCallCheck(this, Comment);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Comment).call(this, props));
+
+    _this.onClick = _this.onClick.bind(_this);
+    return _this;
+  }
+
+  _createClass(Comment, [{
+    key: 'onClick',
+    value: function onClick(e) {
+      e.preventDefault();
+
+      var _props = this.props;
+      var id = _props.id;
+      var onReply = _props.onReply;
+
+      // scroll to the form
+
+      var formElem = document.getElementById('comment-form');
+      formElem.scrollIntoView();
+
+      onReply(id);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props;
+      var id = _props2.id;
+      var author = _props2.author;
+      var formatedDate = _props2.formatedDate;
+      var content = _props2.content;
+      var replyTo = _props2.replyTo;
+
+
+      var titleAuthor = author + (replyTo ? ' 回复给 ' + replyTo.author : '');
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'card a-comment' },
         _react2.default.createElement(
-          "span",
-          { className: "m-r-1 font-weight-bold" },
-          author
-        ),
-        _react2.default.createElement(
-          "span",
-          { className: "m-r-1 pull-xs-right text-muted" },
-          formatedDate
+          'div',
+          { className: 'card-block' },
+          _react2.default.createElement(
+            'div',
+            { className: 'card-title' },
+            _react2.default.createElement(
+              'span',
+              { className: 'm-r-1 font-weight-bold' },
+              titleAuthor
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'm-r-1 pull-xs-right text-muted' },
+              formatedDate
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'card-text' },
+            content
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'comment-reply' },
+            _react2.default.createElement(
+              'a',
+              { href: '#', onClick: this.onClick },
+              '回应'
+            )
+          )
         )
-      ),
-      _react2.default.createElement(
-        "div",
-        { className: "card-text" },
-        content
-      )
-    )
-  );
+      );
+    }
+  }]);
+
+  return Comment;
+}(_react.Component);
+
+Comment.propTypes = {
+  onReply: _react.PropTypes.func.isRequired
 };
 
 exports.default = Comment;
@@ -36844,6 +36923,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _ReplyTo = require('./ReplyTo');
+
+var _ReplyTo2 = _interopRequireDefault(_ReplyTo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36872,32 +36957,26 @@ var CommentForm = function (_Component) {
       var email = document.getElementById('comment_email').value;
       var content = document.getElementById('comment_content').value;
 
-      this.props.onFormSubmit({ author: author, email: email, content: content });
+      var newComment = { author: author, email: email, content: content };
+
+      if (this.props.reply) {
+        newComment.replyTo = this.props.reply.id;
+      }
+      this.props.onFormSubmit(newComment);
     }
   }, {
     key: 'render',
     value: function render() {
       var _props = this.props;
       var onToggleSubmit = _props.onToggleSubmit;
+      var onCancelReply = _props.onCancelReply;
       var enabledSubmit = _props.enabledSubmit;
       var errors = _props.errors;
+      var reply = _props.reply;
+      var user = _props.user;
 
       var submitClass = 'btn btn-secondary';
       if (!enabledSubmit) submitClass += ' disabled';
-
-      var authorString = '* 用户名';
-      var authorClass = 'form-group';
-      if (errors.author) {
-        authorString += ' ( ' + errors.author + ' )';
-        authorClass += ' has-warning';
-      }
-
-      var emailString = '* 邮箱';
-      var emailClass = 'form-group';
-      if (errors.email) {
-        emailString += ' ( ' + errors.email + ' )';
-        emailClass += ' has-warning';
-      }
 
       var contentString = '* 回复内容';
       var contentClass = 'form-group';
@@ -36906,9 +36985,16 @@ var CommentForm = function (_Component) {
         contentClass += ' has-warning';
       }
 
+      var replyElem = reply ? _react2.default.createElement(
+        'div',
+        { className: 'bg-info' },
+        '回复',
+        reply.author
+      ) : null;
+
       return _react2.default.createElement(
         'div',
-        { className: 'card comment-form' },
+        { id: 'comment-form', className: 'card' },
         _react2.default.createElement(
           'div',
           { className: 'card-block' },
@@ -36921,37 +37007,18 @@ var CommentForm = function (_Component) {
               '添加评论'
             )
           ),
+          _react2.default.createElement(_ReplyTo2.default, {
+            reply: reply,
+            onCancelReply: onCancelReply
+          }),
           _react2.default.createElement(
             'div',
             { className: 'card-text' },
             _react2.default.createElement(
               'form',
               null,
-              _react2.default.createElement(
-                'fieldset',
-                { className: authorClass },
-                _react2.default.createElement(
-                  'label',
-                  { htmlFor: 'comment_author' },
-                  authorString
-                ),
-                _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'comment_author', placeholder: '输入名字' })
-              ),
-              _react2.default.createElement(
-                'fieldset',
-                { className: emailClass },
-                _react2.default.createElement(
-                  'label',
-                  { htmlFor: 'comment_email' },
-                  emailString
-                ),
-                _react2.default.createElement('input', { type: 'email', className: 'form-control', id: 'comment_email', placeholder: '输入邮件地址' }),
-                _react2.default.createElement(
-                  'small',
-                  { className: 'text-muted' },
-                  '你的邮件地址不会显示。'
-                )
-              ),
+              this.getAuthorField(user, errors),
+              this.getEmailField(user, errors),
               _react2.default.createElement(
                 'fieldset',
                 { className: contentClass },
@@ -36985,6 +37052,56 @@ var CommentForm = function (_Component) {
         )
       );
     }
+  }, {
+    key: 'getAuthorField',
+    value: function getAuthorField(user, errors) {
+      if (user) return false;
+
+      var authorString = '* 用户名';
+      var authorClass = 'form-group';
+      if (errors.author) {
+        authorString += ' ( ' + errors.author + ' )';
+        authorClass += ' has-warning';
+      }
+
+      return _react2.default.createElement(
+        'fieldset',
+        { className: authorClass },
+        _react2.default.createElement(
+          'label',
+          { htmlFor: 'comment_author' },
+          authorString
+        ),
+        _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'comment_author', placeholder: '输入名字' })
+      );
+    }
+  }, {
+    key: 'getEmailField',
+    value: function getEmailField(user, errors) {
+      if (user) return false;
+      var emailString = '* 邮箱';
+      var emailClass = 'form-group';
+      if (errors.email) {
+        emailString += ' ( ' + errors.email + ' )';
+        emailClass += ' has-warning';
+      }
+
+      return _react2.default.createElement(
+        'fieldset',
+        { className: emailClass },
+        _react2.default.createElement(
+          'label',
+          { htmlFor: 'comment_email' },
+          emailString
+        ),
+        _react2.default.createElement('input', { type: 'email', className: 'form-control', id: 'comment_email', placeholder: '输入邮件地址' }),
+        _react2.default.createElement(
+          'small',
+          { className: 'text-muted' },
+          '你的邮件地址不会显示。'
+        )
+      );
+    }
   }]);
 
   return CommentForm;
@@ -36998,7 +37115,7 @@ CommentForm.propTypes = {
   onToggleSubmit: _react.PropTypes.func.isRequired
 };
 
-},{"react":171}],193:[function(require,module,exports){
+},{"./ReplyTo":195,"react":171,"react-dom":32}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37037,7 +37154,9 @@ var CommentList = function (_Component) {
   _createClass(CommentList, [{
     key: 'render',
     value: function render() {
-      var comments = this.props.comments;
+      var _props = this.props;
+      var comments = _props.comments;
+      var onReply = _props.onReply;
 
 
       return _react2.default.createElement(
@@ -37045,7 +37164,8 @@ var CommentList = function (_Component) {
         { className: 'card-columns comments-list' },
         comments.map(function (comment) {
           return _react2.default.createElement(_Comment2.default, _extends({
-            key: comment.id
+            key: comment.id,
+            onReply: onReply
           }, comment));
         })
       );
@@ -37063,8 +37183,12 @@ CommentList.propTypes = {
     author: _react.PropTypes.string.isRequired,
     id: _react.PropTypes.string.isRequired,
     formatedDate: _react.PropTypes.string.isRequired,
-    content: _react.PropTypes.string.isRequired
-  }).isRequired).isRequired
+    content: _react.PropTypes.string.isRequired,
+    replyTo: _react.PropTypes.shape({
+      author: _react.PropTypes.string.isRequired
+    })
+  }).isRequired).isRequired,
+  onReply: _react.PropTypes.func.isRequired
 };
 
 },{"./Comment":191,"react":171}],194:[function(require,module,exports){
@@ -37135,6 +37259,82 @@ LikeButton.propTypes = {
 };
 
 },{"react":171}],195:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ReplyTo = function (_Component) {
+  _inherits(ReplyTo, _Component);
+
+  function ReplyTo(props) {
+    _classCallCheck(this, ReplyTo);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReplyTo).call(this, props));
+
+    _this.onClick = _this.onClick.bind(_this);
+    return _this;
+  }
+
+  _createClass(ReplyTo, [{
+    key: "onClick",
+    value: function onClick(e) {
+      e.preventDefault();
+
+      this.props.onCancelReply();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _props = this.props;
+      var onCancelReply = _props.onCancelReply;
+      var reply = _props.reply;
+
+
+      if (!reply) return false;
+
+      return _react2.default.createElement(
+        "div",
+        { className: "reply-to m-b-1" },
+        _react2.default.createElement("i", { className: "fa fa-reply m-r-1" }),
+        "回复给",
+        _react2.default.createElement(
+          "span",
+          { className: "font-weight-bold" },
+          reply.author
+        ),
+        _react2.default.createElement(
+          "a",
+          { href: "#", className: "m-l-1", onClick: this.onClick },
+          "取消"
+        )
+      );
+    }
+  }]);
+
+  return ReplyTo;
+}(_react.Component);
+
+;
+
+exports.default = ReplyTo;
+
+},{"react":171}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37177,6 +37377,7 @@ var PostComment = function (_Component) {
 
     _this.onFormSubmit = _this.onFormSubmit.bind(_this);
     _this.onToggleSubmit = _this.onToggleSubmit.bind(_this);
+    _this.onReplyComment = _this.onReplyComment.bind(_this);
     return _this;
   }
 
@@ -37206,13 +37407,25 @@ var PostComment = function (_Component) {
       dispatch((0, _post.toggleSubmit)(checked));
     }
   }, {
+    key: 'onReplyComment',
+    value: function onReplyComment(commentId) {
+      var dispatch = this.props.dispatch;
+
+
+      dispatch((0, _post.replyComment)(commentId));
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _props3 = this.props;
+      var dispatch = _props3.dispatch;
       var comments = _props3.comments;
       var enabledSubmit = _props3.enabledSubmit;
       var errors = _props3.errors;
+      var reply = _props3.reply;
+      var user = _props3.user;
 
+      console.log(user);
 
       return _react2.default.createElement(
         'div',
@@ -37224,11 +37437,17 @@ var PostComment = function (_Component) {
           '个回应'
         ),
         _react2.default.createElement(_CommentList2.default, {
+          onReply: this.onReplyComment,
           comments: comments }),
         _react2.default.createElement(_CommentForm2.default, {
           key: comments.length,
+          user: user,
+          reply: reply,
           enabledSubmit: enabledSubmit,
           onToggleSubmit: this.onToggleSubmit,
+          onCancelReply: function onCancelReply() {
+            return dispatch((0, _post.cancelReply)());
+          },
           errors: errors,
           onFormSubmit: this.onFormSubmit })
       );
@@ -37246,13 +37465,14 @@ function mapStateToProps(state) {
     id: postComment.id,
     enabledSubmit: postComment.enabledSubmit,
     comments: postComment.comments || [],
-    errors: postComment.errors || {}
+    errors: postComment.errors || {},
+    reply: postComment.reply
   };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostComment);
 
-},{"../actions/post":190,"../components/CommentForm":192,"../components/CommentList":193,"react":171,"react-redux":35}],196:[function(require,module,exports){
+},{"../actions/post":190,"../components/CommentForm":192,"../components/CommentList":193,"react":171,"react-redux":35}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37332,7 +37552,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostMeta);
 
-},{"../actions/post":190,"../components/LikeButton":194,"react":171,"react-redux":35}],197:[function(require,module,exports){
+},{"../actions/post":190,"../components/LikeButton":194,"react":171,"react-redux":35}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37382,10 +37602,20 @@ function postComment() {
         errors: action.errors
       });
     case _post.ADD_COMMENT:
+      newState.reply = undefined;
       newState.comments.push(action.newComment);
 
       // reset the form
       newState.enabledSubmit = false;
+      return newState;
+    case _post.REPLY_COMMENT:
+      var comms = state.comments.filter(function (comment) {
+        return comment.id == action.replyId;
+      });
+      if (comms.length == 0) return state;
+      return Object.assign(newState, { reply: comms[0] });
+    case _post.CANCEL_REPLY:
+      newState.reply = undefined;
       return newState;
     default:
       return state;
@@ -37399,7 +37629,7 @@ var rootReducer = (0, _redux.combineReducers)({
 
 exports.default = rootReducer;
 
-},{"../actions/post":190,"redux":180}],198:[function(require,module,exports){
+},{"../actions/post":190,"redux":180}],199:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -37431,6 +37661,7 @@ var postTarget = document.getElementById('post'); /**
                                                    */
 
 var postId = postTarget.getAttribute('post_id');
+var user = postTarget.getAttribute('user');
 
 function renderPostMeta() {
   var postMetaTarget = document.getElementById('post-tools');
@@ -37465,7 +37696,9 @@ function renderPostComment() {
   (0, _reactDom.render)(_react2.default.createElement(
     _reactRedux.Provider,
     { store: commentStore },
-    _react2.default.createElement(_PostComment2.default, null)
+    _react2.default.createElement(_PostComment2.default, {
+      user: JSON.parse(user)
+    })
   ), document.getElementById('post-comment'));
 }
 
@@ -37477,7 +37710,7 @@ if (postTarget) {
   renderPostComment();
 }
 
-},{"../containers/PostComment.js":195,"../containers/PostMeta.js":196,"../stores/configureStore":199,"lodash":30,"react":171,"react-dom":32,"react-redux":35}],199:[function(require,module,exports){
+},{"../containers/PostComment.js":196,"../containers/PostMeta.js":197,"../stores/configureStore":200,"lodash":30,"react":171,"react-dom":32,"react-redux":35}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37507,4 +37740,4 @@ function configureStore(initialState) {
   return store;
 }
 
-},{"../reducers":197,"redux":180,"redux-logger":173,"redux-thunk":174}]},{},[198]);
+},{"../reducers":198,"redux":180,"redux-logger":173,"redux-thunk":174}]},{},[199]);

@@ -7,13 +7,14 @@ export default class CommentList extends Component {
   }
 
   render() {
-    const { comments } = this.props;
+    const { comments, onReply } = this.props;
 
     return (
       <div className="card-columns comments-list">
         {comments.map(comment =>
           <Comment
             key={comment.id}
+            onReply={onReply}
             {...comment}
           />
          )}
@@ -27,7 +28,11 @@ CommentList.propTypes = {
     author: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     formatedDate: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired
-    }).isRequired).isRequired
+    content: PropTypes.string.isRequired,
+    replyTo: PropTypes.shape({
+      author: PropTypes.string.isRequired
+    })
+  }).isRequired).isRequired,
+  onReply: PropTypes.func.isRequired
 };
 

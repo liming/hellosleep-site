@@ -6,6 +6,8 @@ export const TOGGLE_SUBMIT = 'TOGGLE_SUBMIT';
 export const COMMENT_INVALID = 'COMMENT_INVALID';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS';
+export const REPLY_COMMENT = 'REPLY_COMMENT';
+export const CANCEL_REPLY = 'CANCEL_REPLY';
 
 export function likePost(id) {
   return dispatch => {
@@ -195,4 +197,17 @@ export function submitComment(id, comment) {
         }
       });
   }
+}
+
+export function replyComment(replyId) {
+  return {
+    type: REPLY_COMMENT,
+    replyId: replyId
+  };
+}
+
+export function cancelReply() {
+  return {
+    type: CANCEL_REPLY
+  };
 }

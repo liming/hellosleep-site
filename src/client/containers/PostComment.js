@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CommentForm from '../components/CommentForm';
 import CommentList from '../components/CommentList';
-import { fetchCommentsIfNeeded, toggleSubmit, submitComment } from '../actions/post';
+import { fetchCommentsIfNeeded, toggleSubmit, submitComment, replyComment, cancelReply } from '../actions/post';
 
 class PostComment extends Component {
 
@@ -11,6 +11,7 @@ class PostComment extends Component {
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onToggleSubmit = this.onToggleSubmit.bind(this);
+    this.onReplyComment = this.onReplyComment.bind(this);
   }
 
   componentDidMount() {
@@ -28,8 +29,15 @@ class PostComment extends Component {
     dispatch(toggleSubmit(checked));
   }
 
+  onReplyComment(commentId) {
+    const { dispatch } = this.props;
+
+    dispatch(replyComment(commentId));
+  }
+
   render() {
-    const { comments, enabledSubmit, errors } = this.props;
+    const { dispatch, comments, enabledSubmit, errors, reply, user } = this.props;
+    console.log(user);
 
     return (
       <div>
@@ -39,12 +47,16 @@ class PostComment extends Component {
         </h4>
 
         <CommentList
+          onReply={this.onReplyComment}
           comments={comments}/>
 
         <CommentForm
           key={comments.length}
+          user={user}
+          reply={reply}
           enabledSubmit={enabledSubmit}
           onToggleSubmit={this.onToggleSubmit}
+          onCancelReply={() => dispatch(cancelReply())}
           errors={errors}
           onFormSubmit={this.onFormSubmit}/>
       </div>
@@ -58,7 +70,8 @@ function mapStateToProps(state) {
     id: postComment.id,
     enabledSubmit: postComment.enabledSubmit,
     comments: postComment.comments || [],
-    errors: postComment.errors || {}
+    errors: postComment.errors || {},
+    reply: postComment.reply
   };
 };
 

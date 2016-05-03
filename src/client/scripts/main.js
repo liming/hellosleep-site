@@ -12,6 +12,7 @@ import { map } from 'lodash';
 
 const postTarget = document.getElementById('post');
 const postId = postTarget.getAttribute('post_id');
+const user = postTarget.getAttribute('user');
 
 function renderPostMeta() {
   const postMetaTarget = document.getElementById('post-tools');
@@ -46,7 +47,9 @@ function renderPostComment() {
 
   render(
     <Provider store={commentStore}>
-      <PostCommentApp />
+      <PostCommentApp
+        user={JSON.parse(user)}
+      />
     </Provider>,
     document.getElementById('post-comment')
   );

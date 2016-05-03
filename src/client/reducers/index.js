@@ -4,7 +4,9 @@ import {
   TOGGLE_SUBMIT,
   COMMENT_INVALID,
   ADD_COMMENT,
-  RECEIVE_COMMENTS
+  RECEIVE_COMMENTS,
+  REPLY_COMMENT,
+  CANCEL_REPLY
 } from '../actions/post';
 
 function postMeta(state = {}, action) {
@@ -40,10 +42,18 @@ function postComment(state = {}, action) {
       errors: action.errors
     });
   case ADD_COMMENT:
+    newState.reply = undefined;
     newState.comments.push(action.newComment);
 
     // reset the form
     newState.enabledSubmit = false;
+    return newState;
+  case REPLY_COMMENT:
+    const comms = state.comments.filter(comment => comment.id == action.replyId);
+    if (comms.length == 0) return state;
+    return Object.assign(newState, {reply: comms[0]});
+  case CANCEL_REPLY:
+    newState.reply = undefined;
     return newState;
   default:
     return state;
