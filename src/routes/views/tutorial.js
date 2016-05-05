@@ -108,7 +108,6 @@ exports = module.exports = function (req, res) {
         if (err) return next(err);
 
         locals.post = result;
-        postKey = result.key;
         return next();
       });
   });
