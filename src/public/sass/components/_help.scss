@@ -1,0 +1,42 @@
+
+@media all {
+
+  .hs-help-section {
+    padding-top: 3rem;
+
+    p {
+      text-indent: 2rem;
+    }
+
+    .evaluation-director {
+      font-size: 2rem;
+      line-height: 1.33333rem;
+    }
+
+    .hs-help-section-header {
+      margin-bottom: 3rem;
+      color: $primary-color;
+
+      h2 {
+        font-weight: 100;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 2rem;
+      }
+
+      .hs-help-section-title {
+        margin-bottom: 1rem;
+	      text-align: center;
+
+        span {
+          width: 2em;
+          height: 2em;
+	        border: 2px solid;
+	        border-radius: 50%;
+	        display: inline-block;
+	        line-height: 2em;
+	        margin-bottom: .5em;
+        }
+      }
+    }
+  }
+}

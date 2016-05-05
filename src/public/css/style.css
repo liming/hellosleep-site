@@ -6505,6 +6505,8 @@ a.bg-danger:focus, a.bg-danger:hover {
         margin-bottom: 1rem; }
         .jumbotron .introduction h2 a {
           color: #717171; }
+  .page-content {
+    margin-bottom: 100px; }
   .page-404 .error-info {
     margin-top: 20px; }
   .page-404 .search {
@@ -6523,6 +6525,33 @@ a.bg-danger:focus, a.bg-danger:hover {
     border-top: 1px solid #dedede; }
     footer.site-footer p {
       font-size: 0.75rem; } }
+
+@media all {
+  .hs-help-section {
+    padding-top: 3rem; }
+    .hs-help-section p {
+      text-indent: 2rem; }
+    .hs-help-section .evaluation-director {
+      font-size: 2rem;
+      line-height: 1.33333rem; }
+    .hs-help-section .hs-help-section-header {
+      margin-bottom: 3rem;
+      color: #ff8408; }
+      .hs-help-section .hs-help-section-header h2 {
+        font-weight: 100;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 2rem; }
+      .hs-help-section .hs-help-section-header .hs-help-section-title {
+        margin-bottom: 1rem;
+        text-align: center; }
+        .hs-help-section .hs-help-section-header .hs-help-section-title span {
+          width: 2em;
+          height: 2em;
+          border: 2px solid;
+          border-radius: 50%;
+          display: inline-block;
+          line-height: 2em;
+          margin-bottom: .5em; } }
 
 @media (min-width: 25vw) {
   .sidebar {
