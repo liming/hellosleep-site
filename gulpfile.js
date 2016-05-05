@@ -60,6 +60,7 @@ gulp.task('nodemon', cb => {
     exec: 'node',
     script: filePath.main,
     watch: [
+      'src/app.js',
       'src/routes/',
       'src/models/',
       'src/lib/'

@@ -30,7 +30,9 @@ keystone.init({
   'auto update': true,
 
   // editor configuration
-  'wysiwyg additional buttons': 'styleselect'
+  'wysiwyg additional buttons': 'styleselect',
+
+  'basedir': __dirname
 });
 
 keystone.import('models');
