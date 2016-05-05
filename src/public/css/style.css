@@ -6531,6 +6531,9 @@ a.bg-danger:focus, a.bg-danger:hover {
     padding-top: 3rem; }
     .hs-help-section p {
       text-indent: 2rem; }
+    .hs-help-section .col-md-6,
+    .hs-help-section .col-md-3 {
+      margin-top: 3rem; }
     .hs-help-section .evaluation-director {
       font-size: 2rem;
       line-height: 1.33333rem; }
