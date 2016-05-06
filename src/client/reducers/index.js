@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import {
+  WAIT_META,
   RECEIVE_META,
   TOGGLE_SUBMIT,
   COMMENT_INVALID,
@@ -9,12 +10,18 @@ import {
   CANCEL_REPLY
 } from '../actions/post';
 
-function postMeta(state = {}, action) {
+function postMeta(state = {invalid: false}, action) {
   switch(action.type) {
+
+  case WAIT_META:
+    return Object.assign({}, state, {
+      invalid: true
+    });
 
   case RECEIVE_META:
     return Object.assign({}, state, {
-      meta: action.meta
+      meta: action.meta,
+      invalid: false
     });
   default:
     return state;

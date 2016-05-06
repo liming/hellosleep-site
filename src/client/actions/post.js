@@ -1,5 +1,6 @@
 import request from 'superagent';
 
+export const WAIT_META = 'WAIT_META';
 export const RECEIVE_META = 'RECEIVE_META';
 export const RESPONSE_ERROR = 'RESPONSE_ERROR';
 export const TOGGLE_SUBMIT = 'TOGGLE_SUBMIT';
@@ -11,6 +12,7 @@ export const CANCEL_REPLY = 'CANCEL_REPLY';
 
 export function likePost(id) {
   return dispatch => {
+    dispatch(waitPostMeta(id));
 
     let postStatus;
     try {
@@ -55,6 +57,12 @@ export function likePost(id) {
   };
 }
 
+function waitPostMeta(id) {
+  return {
+    type: WAIT_META
+  };
+}
+
 function receivePostMeta(id, result) {
   return {
     type: RECEIVE_META,
@@ -66,6 +74,7 @@ function receivePostMeta(id, result) {
 
 function requestPostMeta(id) {
   return dispatch => {
+    dispatch(waitPostMeta(id));
     return request
       .get(`/api/posts/{id}/meta`)
       .end((err, res) => {

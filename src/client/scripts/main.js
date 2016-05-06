@@ -48,7 +48,7 @@ function renderPostComment() {
   render(
     <Provider store={commentStore}>
       <PostCommentApp
-        user={JSON.parse(user)}
+        user={user}
       />
     </Provider>,
     document.getElementById('post-comment')

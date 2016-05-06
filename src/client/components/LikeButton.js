@@ -8,11 +8,13 @@ export default class LikeButton extends Component {
 
   render() {
 
-    const { onClick, count } = this.props;
+    const { onClick, count, disabled } = this.props;
+
+    const btnCls = disabled ? 'btn btn-default disabled' : 'btn btn-default';
 
     return (
-      <span className="like-button" onClick={onClick}>
-        <a className="btn btn-default">
+      <span className="like-button">
+        <a className={btnCls} onClick={onClick}>
           <i className="fa fa-thumbs-up"></i>有用 <span className="badge">{count}</span>
         </a>
       </span>

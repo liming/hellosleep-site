@@ -36584,7 +36584,7 @@ Emitter.prototype.hasListeners = function(event){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CANCEL_REPLY = exports.REPLY_COMMENT = exports.RECEIVE_COMMENTS = exports.ADD_COMMENT = exports.COMMENT_INVALID = exports.TOGGLE_SUBMIT = exports.RESPONSE_ERROR = exports.RECEIVE_META = undefined;
+exports.CANCEL_REPLY = exports.REPLY_COMMENT = exports.RECEIVE_COMMENTS = exports.ADD_COMMENT = exports.COMMENT_INVALID = exports.TOGGLE_SUBMIT = exports.RESPONSE_ERROR = exports.RECEIVE_META = exports.WAIT_META = undefined;
 exports.likePost = likePost;
 exports.fetchPostMeta = fetchPostMeta;
 exports.fetchCommentsIfNeeded = fetchCommentsIfNeeded;
@@ -36599,6 +36599,7 @@ var _superagent2 = _interopRequireDefault(_superagent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var WAIT_META = exports.WAIT_META = 'WAIT_META';
 var RECEIVE_META = exports.RECEIVE_META = 'RECEIVE_META';
 var RESPONSE_ERROR = exports.RESPONSE_ERROR = 'RESPONSE_ERROR';
 var TOGGLE_SUBMIT = exports.TOGGLE_SUBMIT = 'TOGGLE_SUBMIT';
@@ -36610,6 +36611,7 @@ var CANCEL_REPLY = exports.CANCEL_REPLY = 'CANCEL_REPLY';
 
 function likePost(id) {
   return function (dispatch) {
+    dispatch(waitPostMeta(id));
 
     var postStatus = void 0;
     try {
@@ -36651,6 +36653,12 @@ function likePost(id) {
   };
 }
 
+function waitPostMeta(id) {
+  return {
+    type: WAIT_META
+  };
+}
+
 function receivePostMeta(id, result) {
   return {
     type: RECEIVE_META,
@@ -36662,6 +36670,7 @@ function receivePostMeta(id, result) {
 
 function requestPostMeta(id) {
   return function (dispatch) {
+    dispatch(waitPostMeta(id));
     return _superagent2.default.get('/api/posts/{id}/meta').end(function (err, res) {
       if (err) console.error(err);
 
@@ -37192,7 +37201,7 @@ CommentList.propTypes = {
 };
 
 },{"./Comment":191,"react":171}],194:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -37200,7 +37209,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -37222,24 +37231,27 @@ var LikeButton = function (_Component) {
   }
 
   _createClass(LikeButton, [{
-    key: "render",
+    key: 'render',
     value: function render() {
       var _props = this.props;
       var onClick = _props.onClick;
       var count = _props.count;
+      var disabled = _props.disabled;
 
+
+      var btnCls = disabled ? 'btn btn-default disabled' : 'btn btn-default';
 
       return _react2.default.createElement(
-        "span",
-        { className: "like-button", onClick: onClick },
+        'span',
+        { className: 'like-button' },
         _react2.default.createElement(
-          "a",
-          { className: "btn btn-default" },
-          _react2.default.createElement("i", { className: "fa fa-thumbs-up" }),
-          "有用 ",
+          'a',
+          { className: btnCls, onClick: onClick },
+          _react2.default.createElement('i', { className: 'fa fa-thumbs-up' }),
+          '有用 ',
           _react2.default.createElement(
-            "span",
-            { className: "badge" },
+            'span',
+            { className: 'badge' },
             count
           )
         )
@@ -37525,13 +37537,16 @@ var PostMeta = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var likes = this.props.likes;
+      var _props2 = this.props;
+      var likes = _props2.likes;
+      var invalid = _props2.invalid;
 
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(_LikeButton2.default, {
           count: parseInt(likes),
+          disabled: invalid,
           onClick: this.onLikeChange })
       );
     }
@@ -37546,7 +37561,8 @@ function mapStateToProps(state) {
   var postMeta = state.postMeta;
   return {
     id: postMeta.id,
-    likes: postMeta.meta && postMeta.meta.likes ? postMeta.meta.likes : 0
+    likes: postMeta.meta && postMeta.meta.likes ? postMeta.meta.likes : 0,
+    invalid: postMeta.invalid
   };
 };
 
@@ -37564,14 +37580,20 @@ var _redux = require('redux');
 var _post = require('../actions/post');
 
 function postMeta() {
-  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var state = arguments.length <= 0 || arguments[0] === undefined ? { invalid: false } : arguments[0];
   var action = arguments[1];
 
   switch (action.type) {
 
+    case _post.WAIT_META:
+      return Object.assign({}, state, {
+        invalid: true
+      });
+
     case _post.RECEIVE_META:
       return Object.assign({}, state, {
-        meta: action.meta
+        meta: action.meta,
+        invalid: false
       });
     default:
       return state;
@@ -37697,7 +37719,7 @@ function renderPostComment() {
     _reactRedux.Provider,
     { store: commentStore },
     _react2.default.createElement(_PostComment2.default, {
-      user: JSON.parse(user)
+      user: user
     })
   ), document.getElementById('post-comment'));
 }

@@ -17,11 +17,12 @@ class PostMeta extends Component {
   }
 
   render() {
-    const { likes } = this.props;
+    const { likes, invalid } = this.props;
     return (
       <div>
         <LikeButton
           count={parseInt(likes)}
+          disabled={invalid}
           onClick={this.onLikeChange} />
       </div>
     );
@@ -32,7 +33,8 @@ function mapStateToProps(state) {
   const postMeta = state.postMeta;
   return {
     id: postMeta.id,
-    likes: postMeta.meta && postMeta.meta.likes ? postMeta.meta.likes : 0
+    likes: postMeta.meta && postMeta.meta.likes ? postMeta.meta.likes : 0,
+    invalid: postMeta.invalid
   };
 };
 
