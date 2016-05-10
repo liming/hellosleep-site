@@ -20,8 +20,8 @@ class PostComment extends Component {
   }
 
   onFormSubmit(comment) {
-    const { dispatch, id } = this.props;
-    dispatch(submitComment(id, comment));
+    const { dispatch, id, user } = this.props;
+    dispatch(submitComment(id, comment, user));
   }
 
   onToggleSubmit(checked) {
@@ -37,7 +37,6 @@ class PostComment extends Component {
 
   render() {
     const { dispatch, comments, enabledSubmit, errors, reply, user } = this.props;
-    console.log(user);
 
     return (
       <div>

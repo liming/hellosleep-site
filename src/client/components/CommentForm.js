@@ -11,11 +11,18 @@ export default class CommentForm extends Component {
   }
 
   onSubmit() {
-    const author = document.getElementById('comment_author').value;
-    const email = document.getElementById('comment_email').value;
-    const content = document.getElementById('comment_content').value;
+    const { user } = this.props;
 
-    let newComment = {author, email, content};
+    let author, email, content;
+
+    if (!user) {
+      author = document.getElementById('comment_author').value;
+      email = document.getElementById('comment_email').value;
+    }
+
+    content = document.getElementById('comment_content').value;
+
+    let newComment = user ? {content} : {author, email, content};
 
     if (this.props.reply) {
       newComment.replyTo = this.props.reply.id;

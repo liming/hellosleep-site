@@ -36738,14 +36738,14 @@ function toggleSubmit(checked) {
   };
 }
 
-function validateComment(comment) {
+function validateComment(comment, user) {
   var errors = {};
 
-  if (!comment.author || !comment.author.length) {
+  if (!user && (!comment.author || !comment.author.length)) {
     errors.author = '请填写用户名';
   }
 
-  if (!comment.email || !comment.email.length) {
+  if (!user && (!comment.email || !comment.email.length)) {
     errors.email = '请填写邮箱';
   }
 
@@ -36774,8 +36774,8 @@ function validateComment(comment) {
   };
 }
 
-function submitComment(id, comment) {
-  var result = validateComment(comment);
+function submitComment(id, comment, user) {
+  var result = validateComment(comment, user);
   if (result !== true) return result;
 
   return function (dispatch) {
@@ -36962,11 +36962,21 @@ var CommentForm = function (_Component) {
   _createClass(CommentForm, [{
     key: 'onSubmit',
     value: function onSubmit() {
-      var author = document.getElementById('comment_author').value;
-      var email = document.getElementById('comment_email').value;
-      var content = document.getElementById('comment_content').value;
+      var user = this.props.user;
 
-      var newComment = { author: author, email: email, content: content };
+
+      var author = void 0,
+          email = void 0,
+          content = void 0;
+
+      if (!user) {
+        author = document.getElementById('comment_author').value;
+        email = document.getElementById('comment_email').value;
+      }
+
+      content = document.getElementById('comment_content').value;
+
+      var newComment = user ? { content: content } : { author: author, email: email, content: content };
 
       if (this.props.reply) {
         newComment.replyTo = this.props.reply.id;
@@ -37170,7 +37180,7 @@ var CommentList = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'card-columns comments-list' },
+        { className: 'comments-list' },
         comments.map(function (comment) {
           return _react2.default.createElement(_Comment2.default, _extends({
             key: comment.id,
@@ -37408,8 +37418,9 @@ var PostComment = function (_Component) {
       var _props2 = this.props;
       var dispatch = _props2.dispatch;
       var id = _props2.id;
+      var user = _props2.user;
 
-      dispatch((0, _post.submitComment)(id, comment));
+      dispatch((0, _post.submitComment)(id, comment, user));
     }
   }, {
     key: 'onToggleSubmit',
@@ -37437,7 +37448,6 @@ var PostComment = function (_Component) {
       var reply = _props3.reply;
       var user = _props3.user;
 
-      console.log(user);
 
       return _react2.default.createElement(
         'div',

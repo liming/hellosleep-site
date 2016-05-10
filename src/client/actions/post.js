@@ -146,14 +146,14 @@ export function toggleSubmit(checked) {
   };
 }
 
-function validateComment(comment) {
+function validateComment(comment, user) {
   let errors = {};
 
-  if (!comment.author || !comment.author.length) {
+  if (!user && (!comment.author || !comment.author.length)) {
     errors.author = '请填写用户名';
   }
 
-  if (!comment.email || !comment.email.length) {
+  if (!user && (!comment.email || !comment.email.length)) {
     errors.email = '请填写邮箱';
   }
 
@@ -182,8 +182,8 @@ function validateComment(comment) {
   };
 }
 
-export function submitComment(id, comment) {
-  const result = validateComment(comment);
+export function submitComment(id, comment, user) {
+  const result = validateComment(comment, user);
   if (result !== true) return result;
 
   return dispatch => {

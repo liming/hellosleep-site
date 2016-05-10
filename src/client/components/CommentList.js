@@ -10,7 +10,7 @@ export default class CommentList extends Component {
     const { comments, onReply } = this.props;
 
     return (
-      <div className="card-columns comments-list">
+      <div className="comments-list">
         {comments.map(comment =>
           <Comment
             key={comment.id}
