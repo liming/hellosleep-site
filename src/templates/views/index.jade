@@ -35,7 +35,7 @@ block content
   
     .col-md-8.latest-content
       h5 最近更新
-      .card-columns
+      .card-deck
         each post in posts.results
           +brief-post(post, 'home')
       a.btn.btn-primary-outline.pull-xs-right(href='/posts', role="button") 列出所有文章
