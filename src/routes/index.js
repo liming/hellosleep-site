@@ -1,5 +1,5 @@
 /**
- * 
+ * This is where we define the route
  */
 
 'use strict';
