@@ -21,6 +21,11 @@ block article-nav
 
 block article
   if post
+    if category && category.key
+      .nav-back.m-b-2.m-t-1
+        a.btn.btn-link(href='/tutorial/categories/' + category.key) 
+          i.fa.fa-chevron-left
+          span.m-l-1 #{category.name}
     +content-post(post, comments)
   else if posts
     +content-posts(category, posts)
