@@ -26,6 +26,8 @@ block article
         li
           a(href="/") 主页
         li
+          a(href="/tutorial") 指南
+        li
           a(href='/tutorial/categories/' + category.key) #{category.name}
         li.active #{post.title}
     +content-post(post, comments)
