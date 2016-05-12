@@ -9,8 +9,8 @@ const keystone = require('keystone');
 
 keystone.init({
 
-  'name': 'Hello Sleep',
-  'brand': 'HelloSleep',
+  'name': '睡吧',
+  'brand': '睡吧',
 
   'less': 'public',
   'static': 'public',

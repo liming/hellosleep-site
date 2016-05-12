@@ -73,6 +73,37 @@ exports = module.exports = function (req, res) {
       });
   });
 
+  // check the category of current post
+  view.on('init', function(next) {
+    if (!locals.post || !locals.category) return next();
+
+    // load the posts based on a category
+    Post.model.find({}, {'title': 1, 'key': 1})
+      .sort('weight')
+      .where('state', 'published')
+      .where('categories').in([locals.category.key])
+      .exec((err, posts) => {
+        if (err) return next(err);
+
+        const post = locals.post;
+        let prevPost, nextPost;
+
+        posts.some((p, i) => {
+          if (p.key == post.key) {
+            if (posts[i + 1]) nextPost = posts[i + 1];
+            return true;
+          }
+
+          prevPost = p;
+        });
+
+        locals.post.prev = prevPost;
+        locals.post.next = nextPost;
+
+        return next();
+      });
+  });
+
   // check the category
   view.on('init', function(next) {
     if (!catKey) return next();

@@ -17,14 +17,26 @@ mixin post-meta(post, page)
       span
         a(href='/' + post.type)
           =post.typename
+          
+mixin post-nav(post)
+  if post.prev || post.next
+    .post-nav
+      if post.prev
+        span.pull-xs-left
+          span 上一篇 : 
+          a(href='/' + post.type + '/' + post.prev.key) #{post.prev.title}
+      if post.next
+        span.pull-xs-right
+          span 下一篇 : 
+          a(href='/' + post.type + '/' + post.next.key) #{post.next.title}
 
 mixin content-post-real(post)
   h1
     =post.title
   +post-meta(post)
   // TODO: add editor quick link
-  p
   !=post.content.extended
+  +post-nav(post)
   #post-tools(post_likes=post.likes)
   #post-comment
 
