@@ -1,0 +1,27 @@
+{
+  "version": "1",
+  "data": [
+    {
+      "text": "category 1",
+      "data": [
+        {
+          "text": "subject 1"
+        },
+        {
+          "text": "subject 2"
+        }
+      ]
+    },
+    {
+      "text": "category 2",
+      "data": [
+        {
+          "text": "subject 1"
+        },
+        {
+          "text": "subject 2"
+        }
+      ]
+    }
+  ]
+}

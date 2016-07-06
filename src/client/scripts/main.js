@@ -7,14 +7,13 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import configureStore from '../stores/configureStore';
 import PostMetaApp from '../containers/PostMeta.js';
-import PostCommentApp from '../containers/PostComment.js';
+import PostCommentApp from '../containers/PostComment';
+import EvaluationApp from '../containers/Evaluation';
 import { map } from 'lodash';
 
 const postTarget = document.getElementById('post');
-const postId = postTarget.getAttribute('post_id');
-const user = postTarget.getAttribute('user');
 
-function renderPostMeta() {
+function renderPostMeta(postId) {
   const postMetaTarget = document.getElementById('post-tools');
 
   const initialState = {
@@ -34,7 +33,7 @@ function renderPostMeta() {
   );
 }
 
-function renderPostComment() {
+function renderPostComment(postId) {
 
   const initialState = {
     postComment: {
@@ -43,6 +42,7 @@ function renderPostComment() {
     }
   };
 
+  const user = postTarget.getAttribute('user');
   const commentStore = configureStore(initialState);
 
   render(
@@ -56,9 +56,36 @@ function renderPostComment() {
 }
 
 if (postTarget) {
+  const postId = postTarget.getAttribute('post_id');
 
   // render the post meta
-  renderPostMeta();
+  renderPostMeta(postId);
 
-  renderPostComment();
+  renderPostComment(postId);
+}
+
+// create evaluation page
+const evaluationTarget = document.getElementById('new_evaluation');
+
+function renderEvaluation() {
+
+  const initialState = {
+    evaluation: {
+      form: require('../data/evaluation.json')
+    }
+  };
+
+  const evaluationStore = configureStore(initialState);
+
+  render(
+    <Provider store={evaluationStore}>
+      <EvaluationApp
+      />
+    </Provider>,
+    evaluationTarget
+  );
+}
+
+if (evaluationTarget) {
+  renderEvaluation();
 }

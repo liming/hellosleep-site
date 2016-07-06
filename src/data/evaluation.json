@@ -1,0 +1,168 @@
+{
+  "version": "1",
+  "data": [
+    {
+      "text": "基本信息",
+      "page": "single",
+      "data": [
+        {
+          "text": "邮箱",
+          "type": "TextFieldChoice",
+          "placeHolder": "输入你的邮箱"
+        },
+        {
+          "text": "生日",
+          "type": "DatePickerChoice"
+        },
+        {
+          "text": "性别",
+          "name": "gender",
+          "type": "RadioChoice",
+          "data": [
+            {
+              "text": "男",
+              "type": "Text"
+            },
+            {
+              "text": "女",
+              "type": "Text"
+            }
+          ]
+        },
+        {
+          "text": "你的状态",
+          "type": "SelectChoice",
+          "data": [
+            {
+              "text": "工作"
+            },
+            {
+              "text": "上学"
+            },
+            {
+              "text": "待业"
+            },
+            {
+              "text": "孕期"
+            },
+            {
+              "text": "产后"
+            },
+            {
+              "text": "退休"
+            }
+          ],
+          "results": [
+            {
+              "calc": "this.selected == 2",
+              "tagId": "无所事事"
+            },
+            {
+              "calc": "this.selected == 4",
+              "tagId": "产后"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "睡眠相关",
+      "page": "multiple",
+      "data": [
+        {
+          "id": "1",
+          "text": "通常几点睡觉？",
+          "type": "RadioChoice",
+          "data": [
+            {
+              "text": "9点之前"
+            },
+            {
+              "text": "9点 ~ 10点"
+            },
+            {
+              "text": "10点 ~ 11点"
+            },
+            {
+              "text": "11点 ~ 12点"
+            },
+            {
+              "text": "12点以后"
+            },
+            {
+              "text": "不固定"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "text": "通常几点起床？",
+          "type": "RadioChoice",
+          "data": [
+            {
+              "text": "6点之前"
+            },
+            {
+              "text": "6点 ~ 7点"
+            },
+            {
+              "text": "7点 ~ 8点"
+            },
+            {
+              "text": "8点 ~ 9点"
+            },
+            {
+              "text": "9点以后"
+            },
+            {
+              "text": "不固定"
+            }
+          ],
+          "results": [
+            {
+              "calc": "this.selected == 1",
+              "tagId": "赖床"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "text": "晚上的实际睡眠时间有多少？",
+          "type": "SelectChoice",
+          "data": [
+            {
+              "text": "少于3个小时",
+              "type": "Text"
+            },
+            {
+              "text": "3到4个小时",
+              "type": "Text"
+            },
+            {
+              "text": "4到5个小时",
+              "type": "Text"
+            },
+            {
+              "text": "5到6个小时",
+              "type": "Text"
+            },
+            {
+              "text": "6个小时以上",
+              "type": "Text"
+            },
+            {
+              "text": "不固定",
+              "type": "Text"
+            }
+          ],
+          "results": [
+            {
+              "calc": "(parent.data[0] - parent.data[1]) / parent.data[2]"
+            }
+          ]
+          
+        }
+      ]
+    }
+  ]
+}

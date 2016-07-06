@@ -37371,6 +37371,71 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = require('react-redux');
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Evaluation = function (_Component) {
+  _inherits(Evaluation, _Component);
+
+  function Evaluation(props) {
+    _classCallCheck(this, Evaluation);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Evaluation).call(this, props));
+  }
+
+  _createClass(Evaluation, [{
+    key: 'render',
+    value: function render() {
+      var form = this.props.form;
+
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'h1',
+          null,
+          '睡眠评估'
+        ),
+        _react2.default.createElement(EvaluationForm, { form: form })
+      );
+    }
+  }]);
+
+  return Evaluation;
+}(_react.Component);
+
+;
+
+function mapStateToProps(state) {
+  var evaluation = state.evaluation;
+  return {
+    form: evaluation.form
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(Evaluation);
+
+},{"react":171,"react-redux":35}],197:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
 var _CommentForm = require('../components/CommentForm');
 
 var _CommentForm2 = _interopRequireDefault(_CommentForm);
@@ -37494,7 +37559,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostComment);
 
-},{"../actions/post":190,"../components/CommentForm":192,"../components/CommentList":193,"react":171,"react-redux":35}],197:[function(require,module,exports){
+},{"../actions/post":190,"../components/CommentForm":192,"../components/CommentList":193,"react":171,"react-redux":35}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37578,7 +37643,52 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostMeta);
 
-},{"../actions/post":190,"../components/LikeButton":194,"react":171,"react-redux":35}],198:[function(require,module,exports){
+},{"../actions/post":190,"../components/LikeButton":194,"react":171,"react-redux":35}],199:[function(require,module,exports){
+module.exports={
+  "version": "1",
+  "data": [
+    {
+      "text": "category 1",
+      "data": [
+        {
+          "text": "subject 1"
+        },
+        {
+          "text": "subject 2"
+        }
+      ]
+    },
+    {
+      "text": "category 2",
+      "data": [
+        {
+          "text": "subject 1"
+        },
+        {
+          "text": "subject 2"
+        }
+      ]
+    }
+  ]
+}
+
+},{}],200:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function evaluation() {
+  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var action = arguments[1];
+
+  return state;
+}
+
+exports.default = evaluation;
+
+},{}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37587,28 +37697,36 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = require('redux');
 
+var _post_meta = require('./post_meta');
+
+var _post_meta2 = _interopRequireDefault(_post_meta);
+
+var _post_comment = require('./post_comment');
+
+var _post_comment2 = _interopRequireDefault(_post_comment);
+
+var _evaluation = require('./evaluation');
+
+var _evaluation2 = _interopRequireDefault(_evaluation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var rootReducer = (0, _redux.combineReducers)({
+  postMeta: _post_meta2.default,
+  postComment: _post_comment2.default,
+  evaluation: _evaluation2.default
+});
+
+exports.default = rootReducer;
+
+},{"./evaluation":200,"./post_comment":202,"./post_meta":203,"redux":180}],202:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _post = require('../actions/post');
-
-function postMeta() {
-  var state = arguments.length <= 0 || arguments[0] === undefined ? { invalid: false } : arguments[0];
-  var action = arguments[1];
-
-  switch (action.type) {
-
-    case _post.WAIT_META:
-      return Object.assign({}, state, {
-        invalid: true
-      });
-
-    case _post.RECEIVE_META:
-      return Object.assign({}, state, {
-        meta: action.meta,
-        invalid: false
-      });
-    default:
-      return state;
-  }
-}
 
 function postComment() {
   var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -37654,14 +37772,41 @@ function postComment() {
   }
 }
 
-var rootReducer = (0, _redux.combineReducers)({
-  postMeta: postMeta,
-  postComment: postComment
+exports.default = postComment;
+
+},{"../actions/post":190}],203:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 
-exports.default = rootReducer;
+var _post = require('../actions/post');
 
-},{"../actions/post":190,"redux":180}],199:[function(require,module,exports){
+function postMeta() {
+  var state = arguments.length <= 0 || arguments[0] === undefined ? { invalid: false } : arguments[0];
+  var action = arguments[1];
+
+  switch (action.type) {
+
+    case _post.WAIT_META:
+      return Object.assign({}, state, {
+        invalid: true
+      });
+
+    case _post.RECEIVE_META:
+      return Object.assign({}, state, {
+        meta: action.meta,
+        invalid: false
+      });
+    default:
+      return state;
+  }
+}
+
+exports.default = postMeta;
+
+},{"../actions/post":190}],204:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -37680,22 +37825,25 @@ var _PostMeta = require('../containers/PostMeta.js');
 
 var _PostMeta2 = _interopRequireDefault(_PostMeta);
 
-var _PostComment = require('../containers/PostComment.js');
+var _PostComment = require('../containers/PostComment');
 
 var _PostComment2 = _interopRequireDefault(_PostComment);
+
+var _Evaluation = require('../containers/Evaluation');
+
+var _Evaluation2 = _interopRequireDefault(_Evaluation);
 
 var _lodash = require('lodash');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var postTarget = document.getElementById('post'); /**
-                                                   * The file is used for post related manipulation
-                                                   */
+/**
+ * The file is used for post related manipulation
+ */
 
-var postId = postTarget.getAttribute('post_id');
-var user = postTarget.getAttribute('user');
+var postTarget = document.getElementById('post');
 
-function renderPostMeta() {
+function renderPostMeta(postId) {
   var postMetaTarget = document.getElementById('post-tools');
 
   var initialState = {
@@ -37714,7 +37862,7 @@ function renderPostMeta() {
   ), postMetaTarget);
 }
 
-function renderPostComment() {
+function renderPostComment(postId) {
 
   var initialState = {
     postComment: {
@@ -37723,6 +37871,7 @@ function renderPostComment() {
     }
   };
 
+  var user = postTarget.getAttribute('user');
   var commentStore = (0, _configureStore2.default)(initialState);
 
   (0, _reactDom.render)(_react2.default.createElement(
@@ -37735,14 +37884,39 @@ function renderPostComment() {
 }
 
 if (postTarget) {
+  var postId = postTarget.getAttribute('post_id');
 
   // render the post meta
-  renderPostMeta();
+  renderPostMeta(postId);
 
-  renderPostComment();
+  renderPostComment(postId);
 }
 
-},{"../containers/PostComment.js":196,"../containers/PostMeta.js":197,"../stores/configureStore":200,"lodash":30,"react":171,"react-dom":32,"react-redux":35}],200:[function(require,module,exports){
+// create evaluation page
+var evaluationTarget = document.getElementById('new_evaluation');
+
+function renderEvaluation() {
+
+  var initialState = {
+    evaluation: {
+      form: require('../data/evaluation.json')
+    }
+  };
+
+  var evaluationStore = (0, _configureStore2.default)(initialState);
+
+  (0, _reactDom.render)(_react2.default.createElement(
+    _reactRedux.Provider,
+    { store: evaluationStore },
+    _react2.default.createElement(_Evaluation2.default, null)
+  ), evaluationTarget);
+}
+
+if (evaluationTarget) {
+  renderEvaluation();
+}
+
+},{"../containers/Evaluation":196,"../containers/PostComment":197,"../containers/PostMeta.js":198,"../data/evaluation.json":199,"../stores/configureStore":205,"lodash":30,"react":171,"react-dom":32,"react-redux":35}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37772,4 +37946,4 @@ function configureStore(initialState) {
   return store;
 }
 
-},{"../reducers":198,"redux":180,"redux-logger":173,"redux-thunk":174}]},{},[199]);
+},{"../reducers":201,"redux":180,"redux-logger":173,"redux-thunk":174}]},{},[204]);

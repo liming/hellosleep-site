@@ -1,0 +1,7 @@
+extends ../layouts/default
+
+block content
+  if status == "new"
+    #new_evaluation
+  else
+    a.btn.btn-primary.btn-lg.m-t-2(href='/evaluation/new') 创建睡眠评估

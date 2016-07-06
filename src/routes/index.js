@@ -33,6 +33,8 @@ exports = module.exports = function (app) {
   app.get('/tutorial/categories/:category', routes.views.tutorial);
   app.get('/share/:share?', routes.views.share);
   app.get('/share/categories/:category', routes.views.share);
+  app.get('/evaluation', routes.views.evaluation);
+  app.get('/evaluation/:id?', routes.views.evaluation);
 
   // list of the post
   app.get('/tip', routes.views.posts);
