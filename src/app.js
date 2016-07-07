@@ -29,6 +29,8 @@ keystone.init({
 
   'auto update': true,
 
+  'session store': 'mongo',
+
   // editor configuration
   'wysiwyg additional buttons': 'styleselect',
 
