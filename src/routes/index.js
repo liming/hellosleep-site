@@ -29,6 +29,7 @@ exports = module.exports = function (app) {
 	// Views
 	app.get('/', routes.views.index);
   app.get('/help', routes.views.help);
+  app.get('/donate', routes.views.donate);
   app.get('/tutorial/:post?', routes.views.tutorial);
   app.get('/tutorial/categories/:category', routes.views.tutorial);
   app.get('/share/:share?', routes.views.share);

@@ -24,6 +24,11 @@ class PostMeta extends Component {
           count={parseInt(likes)}
           disabled={invalid}
           onClick={this.onLikeChange} />
+        <span>
+          <a href="/donate">
+            <i className="fa fa-heart"></i>帮助睡吧
+          </a>
+        </span>
       </div>
     );
   }

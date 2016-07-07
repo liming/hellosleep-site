@@ -37557,7 +37557,17 @@ var PostMeta = function (_Component) {
         _react2.default.createElement(_LikeButton2.default, {
           count: parseInt(likes),
           disabled: invalid,
-          onClick: this.onLikeChange })
+          onClick: this.onLikeChange }),
+        _react2.default.createElement(
+          'span',
+          null,
+          _react2.default.createElement(
+            'a',
+            { href: '/donate' },
+            _react2.default.createElement('i', { className: 'fa fa-heart' }),
+            '帮助睡吧'
+          )
+        )
       );
     }
   }]);
