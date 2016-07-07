@@ -9,7 +9,7 @@ const nodemailer = require('nodemailer');
 class Email {
 
   constructor() {
-    this.transport = nodemailer.createTransport('smtps://liming.dl%40gmail.com:l1m1ngCN*@smtp.gmail.com');
+    this.transport = nodemailer.createTransport('smtps://liming.dl%40gmail.com:smtp.gmail.com');
   }
 
   send(options, cb) {
