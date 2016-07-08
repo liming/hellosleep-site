@@ -25,7 +25,7 @@ class PostMeta extends Component {
           disabled={invalid}
           onClick={this.onLikeChange} />
         <span>
-          <a href="/donate">
+          <a href="/contribute">
             <i className="fa fa-heart"></i>帮助睡吧
           </a>
         </span>

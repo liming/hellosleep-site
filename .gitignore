@@ -37,4 +37,4 @@ node_modules
 
 .env
 
-syncmongo
+syncmongo.sh

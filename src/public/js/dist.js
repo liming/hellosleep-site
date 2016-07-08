@@ -37563,7 +37563,7 @@ var PostMeta = function (_Component) {
           null,
           _react2.default.createElement(
             'a',
-            { href: '/donate' },
+            { href: '/contribute' },
             _react2.default.createElement('i', { className: 'fa fa-heart' }),
             '帮助睡吧'
           )
