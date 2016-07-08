@@ -12,6 +12,9 @@ header
             li.nav-item(class=(section === link.key ? 'active' : null)): a(href=link.href)= link.label
           li.nav-item: a(href='mailto:liming.dl@gmail.com') 联系睡吧
         ul.nav.navbar-nav.pull-xs-right
+          li.nav-item: a(href='/contribute')
+            i.fa.fa-heart &nbsp; 帮助睡吧
+             
           if user
             li.nav-item: a(href='/keystone') 管理
             li.nav-item: a(href='/keystone/signout')

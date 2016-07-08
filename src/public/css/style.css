@@ -4477,7 +4477,7 @@ a.bg-danger:focus, a.bg-danger:hover {
 
 .fa {
   display: inline-block;
-  font: normal normal normal 14px / 1 FontAwesome;
+  font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
@@ -6524,7 +6524,12 @@ a.bg-danger:focus, a.bg-danger:hover {
     background-color: #f5f5f5;
     border-top: 1px solid #dedede; }
     footer.site-footer p {
-      font-size: 0.75rem; } }
+      font-size: 0.75rem; }
+  .contribute {
+    margin-top: 3rem; }
+    .contribute .title {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem; } }
 
 @media all {
   .hs-help-section {
