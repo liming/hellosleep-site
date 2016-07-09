@@ -57,11 +57,14 @@
     font-size: 1.05rem;
     font-weight: 200;
 
-    padding: 6em 2em;
+    padding: 2em 2em 6em 2em;
 
     .motto {
+      background-image: url('/images/homepage.jpg');
+      background-size: cover;
+      padding: 3rem 1rem;
       padding-left: 15px;
-      margin-bottom: 1em;
+      color: #ddd;
     }
 
     background: linear-gradient(to bottom,#fff 10%, #F0F1F2 100%);
