@@ -6487,11 +6487,15 @@ a.bg-danger:focus, a.bg-danger:hover {
   .jumbotron {
     font-size: 1.05rem;
     font-weight: 200;
-    padding: 6em 2em;
+    padding: 2em 2em 6em 2em;
     background: linear-gradient(to bottom, #fff 10%, #F0F1F2 100%); }
     .jumbotron .motto {
+      background-image: url("/images/homepage.jpg");
+      background-color: #3B3C3D;
+      background-size: cover;
+      padding: 3rem 1rem;
       padding-left: 15px;
-      margin-bottom: 1em; }
+      color: #ddd; }
     .jumbotron .introduction {
       padding-left: 25px;
       padding-right: 25px;
