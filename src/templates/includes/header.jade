@@ -1,24 +1,22 @@
 
+// navigation menu
 header
-  nav.navbar.navbar-light.navbar-faded
-    .container
-      button.navbar-toggler.hidden-sm-up(type='button', data-toggle='collapse', data-target='#navbar-header', aria-controls='navbar-header') &#9776;
-      #navbar-header.collapse.navbar-toggleable-xs
-        a.navbar-brand(href='/')
-          span.shui 睡
-          span.ba 吧
-        ul.nav.navbar-nav
-          each link in navLinks
-            li.nav-item(class=(section === link.key ? 'active' : null)): a(href=link.href)= link.label
-          li.nav-item: a(href='mailto:liming.dl@gmail.com') 联系睡吧
-        ul.nav.navbar-nav.pull-xs-right
-          li.nav-item: a(href='/contribute')
-            i.fa.fa-heart &nbsp; 帮助睡吧
-             
-          if user
-            li.nav-item: a(href='/keystone') 管理
-            li.nav-item: a(href='/keystone/signout')
-              i.fa.fa-sign-out
-          else
-            li.nav-item: a(href='/keystone/signin') 
-              i.fa.fa-sign-in &nbsp; 登录
+  .ui.container
+    .ui.large.secondary.pointing.menu
+      a.toc.item
+        .i.sidebar.icon
+      a.header.item(href='/')
+        span.shui 睡
+        span.ba 吧
+      include ./links
+      .right.item
+        a.item(href='/contribute')
+          i.fa.fa-heart &nbsp; 帮助睡吧
+        if user
+          a.ui.item(href='/keystone') 管理
+          a.ui.item(href='/keystone/signout')
+            i.fa.fa-sign-out
+        else
+          a.ui.item(href='/keystone/signin') 
+            i.fa.fa-sign-in &nbsp; 登录
+  

@@ -3,58 +3,58 @@ extends ../layouts/default
 include ../mixins/post
 
 block intro
-  .jumbotron.text-left
-    .container
-      .motto
-        .row
-          .col-md-5
-          .col-md-7
-            h2.m-b-3(style="letter-spacing: 5px;") 和失眠说再见
-            p 失眠只是一个结果，造成这个结果的原因来自于每个人自身存在的问题。想要走出失眠，我们要做的就是找到这些问题并加以改善。
-            a.btn.btn-success.btn-lg.m-t-2(href='/help') 走出失眠的方法
-      .row
-        .col-md-4.introduction.m-t-3
-          .motto-icon.fa.fa-road
-          h2
-            a(href='/tutorial') 睡吧指南
-          p 失眠的方方面面都在睡吧指南中有所讲解，通过指南中的文章，你会清楚的知道自己该如何做才能走出失眠。
-          a.btn.btn-primary-outline(href='/tutorial') 阅读指南
-        .col-md-4.introduction.m-t-3
-          .motto-icon.fa.fa-share-alt
-          h2
-            a(href='/share') 经验谈
-          p 经验谈中收集了吧友走出失眠后的分享。你可以从这些文章中看到和自己类似的情况，这些分享会带给你足够的勇气和信心。
-          a.btn.btn-primary-outline(href='/share') 阅读分享
-        .col-md-4.introduction.m-t-3
-          .motto-icon.fa.fa-group
-          h2
-            a(href='https://www.douban.com/group/hellosleep/' target='_blank') 睡吧小组
-          p 豆瓣小组是睡吧网友求助、讨论的社区。你可以在小组发表睡眠评估来寻求帮助，也可以帮助其他失眠的吧友。
-          a.btn.btn-primary-outline(href='https://www.douban.com/group/hellosleep/' target='_blank') 进入小组
+  .ui.container.intro
+    .motto
+      .mainentry.middle.aligned
+        h1.header(style="letter-spacing: 5px;") 和失眠说再见
+        p 失眠只是一个结果，造成这个结果的原因来自于每个人自身存在的问题。想要走出失眠，我们要做的就是找到这些问题并加以改善。
+        a.ui.positive.big.button(href='/help') 走出失眠的方法
+    .ui.stackable.three.column.grid
+      .column.introduction
+        i.icon.road
+        h2
+          a(href='/tutorial') 睡吧指南
+        p 失眠的方方面面都在睡吧指南中有所讲解，通过指南中的文章，你会清楚的知道自己该如何做才能走出失眠。
+        a.ui.positive.basic.button(href='/tutorial') 阅读指南
+      .column.introduction
+        i.icon.share.alternate
+        h2
+          a(href='/share') 经验谈
+        p 经验谈中收集了吧友走出失眠后的分享。你可以从这些文章中看到和自己类似的情况，这些分享会带给你足够的勇气和信心。
+        a.ui.positive.basic.button(href='/share') 阅读分享
+      .column.introduction
+        i.icon.users
+        h2
+          a(href='https://www.douban.com/group/hellosleep/' target='_blank') 睡吧小组
+        p 豆瓣小组是睡吧网友求助、讨论的社区。你可以在小组发表睡眠评估来寻求帮助，也可以帮助其他失眠的吧友。
+        a.ui.positive.basic.button(href='https://www.douban.com/group/hellosleep/' target='_blank') 进入小组
 
 block content
-  .row.home-content
-  
-    .col-md-8.latest-content
-      h5 最近更新
-      .card-deck
+  .home-content.ui.container.stackable.two.column.grid
+    .latest-content.twelve.wide.column
+      h2 最近更新
+      .ui.stackable.two.column.grid
         each post in posts.results
-          +brief-post(post, 'home')
-      a.btn.btn-primary-outline.pull-xs-right(href='/posts', role="button") 列出所有文章
+          .column
+            +brief-post(post, 'home')
+      a.list-all.ui.button.right.floated(href='/posts', role="button") 列出所有文章
         
-    .col-md-4
-      .card
-        .card-block
-          .card-title.font-weight-bold 睡眠鸡汤
-          +home-tip(tip)
-          a.card-link(href='/tip') 阅读更多
-          
-      .card
-        .card-block
-          .card-title.font-weight-bold 推荐阅读
-        .list-group.list-group-flush
+    .recommend-content.four.wide.column
+      .ui.fluid.card.tip
+        .content
+          .header 睡眠鸡汤
+          .description
+            =tip.content
+        .extra.content
+          a(href='/tip') 阅读更多
+
+      .recommend-post
+        .ui.fluid.card
+          .content
+            .header 推荐阅读
           each post in recommends
-            a.list-group-item(href='/' + post.type + '/' + post.key)
-              =post.title
-        .card-block
-          a.card-link(href='/recommend') 阅读更多
+            .content
+              a(href='/' + post.type + '/' + post.key)
+                =post.title
+          .extra.content
+            a(href='/recommend') 阅读更多

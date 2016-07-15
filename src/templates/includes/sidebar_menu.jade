@@ -1,0 +1,9 @@
+
+.ui.vertical.inverted.sidebar.menu
+  include ./links
+  a.item(href='/contribute') 帮助睡吧
+  if user
+    a.item(href='/keystone') 管理
+    a.item(href='/keystone/signout') 登出
+  else
+    a.item(href='/keystone/signin') 登录

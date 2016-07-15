@@ -8,6 +8,7 @@ html
     title= title || '睡吧-和失眠说再见'
     link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
     link(href="/css/dist/style.css", rel="stylesheet")
+    link(href="/semantic/semantic.css", rel="stylesheet")
     
     if user && user.canAccessKeystone
       link(href="/keystone/styles/content/editor.min.css", rel="stylesheet")
@@ -16,23 +17,32 @@ html
     block head
     
   body
-    include ../includes/header
-                
-    //- intro
-    block intro
-    
-    .container.page-content
-      //- messages
-      +flash-messages(messages)
-      //- content
-      block content
-      //- footer
+    include ../includes/sidebar_menu
+
+    .pusher
+      include ../includes/header
+
+      //- intro
+      block intro
+
+      .ui.main.container
+        //- messages
+        +flash-messages(messages)
+        //- content
+        block content
+        //- footer
 
     include ../includes/footer
       
     script(src='/js/libs/jquery-1.12.2.min.js')
     script(src='/js/libs/tether.min.js')
     script(src='/js/libs/bootstrap.min.js')
+    script(src='/semantic/semantic.min.js')
+    
+    script.
+      $(document).ready(function() {
+        $('.ui.sidebar').sidebar('attach events', '.toc.item');
+      });
 
     if user && user.canAccessKeystone
       script(src='/keystone/js/content/editor.js')

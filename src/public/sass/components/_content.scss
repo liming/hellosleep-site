@@ -150,17 +150,27 @@
     .latest-content {
       padding-bottom: 2rem;
 
-      h5 {
-        margin-bottom: 2rem;
+      h2 {
+        margin: 2rem 0;
       }
 
-      .card {
-        flex-basis: 40%;
+      .card > .content > .description {
+        min-height: 150px;
+      }
+
+      .list-all {
+        margin: 2rem 0;
       }
     }
 
-    .recommend-post {
-      margin: 15px 0px;
+    .recommend-content {
+
+      margin-top: 6rem;
+
+      .recommend-post {
+        margin: 15px 0px;
+      }
     }
+
   }
 }

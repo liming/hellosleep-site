@@ -74,22 +74,17 @@ mixin content-posts(category, posts)
             =p.title
             
 mixin brief-post(post, page)
-  .card
-    .card-block
-      .card-title.post-heading
+  .ui.fluid.card
+    .content
+      .header
         a(href='/' + post.type + '/' + post.key)
           =post.title
-      .card-text
+      .meta
         +post-meta(post, page)
-      .card-text.content-brief
+      .description
         != post.content.short
-      a.btn.btn-secondary-outline.btn-sm(href='/' + post.type + '/' + post.key, role="button") 阅读更多
+    a.ui.bottom.attached.button(href='/' + post.type + '/' + post.key, role="button") 阅读更多
 
-mixin home-tip(tip)
-  .single-tip
-    blockquote
-      =tip.content
-      
 mixin pagination(posts)
   if posts.totalPages > 1
     ul.pagination
