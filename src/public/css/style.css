@@ -2014,10 +2014,12 @@
     min-height: 100%; }
   body {
     font-size: 14px; }
-  .pusher {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column; }
+    body .pusher {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column; }
+      body .pusher .main {
+        flex: 1; }
   header .secondary.pointing.menu .toc.item {
     display: none; }
   .intro {
@@ -2059,7 +2061,6 @@
     .page-404 .search form {
       width: 20%; }
   .footer {
-    flex: 1;
     padding: 1.5rem;
     background-color: #f5f5f5;
     border-top: 1px solid #dedede;
@@ -2102,28 +2103,6 @@
           line-height: 2em;
           margin-bottom: .5em; } }
 
-@media (min-width: 25vw) {
-  .sidebar {
-    display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto; }
-    .sidebar a.active {
-      color: #ff8408;
-      background-color: inherit;
-      border-color: #ddd; }
-    .sidebar a.active:focus,
-    .sidebar a.active:hover {
-      color: inherit;
-      background-color: inherit; }
-  .hs-nav-sidebar .nav > li > a {
-    padding-left: 0px; }
-  .hs-nav-sidebar .nav > .active > a {
-    color: #ff8408; }
-  .hs-nav-sidebar .nav > li > a:focus,
-  .hs-nav-sidebar .nav > li > a:hover {
-    background-color: inherit; } }
-
 @media all {
   a {
     color: #249cea; }
@@ -2132,17 +2111,18 @@
     .post-heading a {
       color: #555; }
   .content {
-    margin-top: 30px; }
-    .content .main {
-      padding-top: 20px; }
-      .content .main .post h1 {
-        font-size: 2rem;
-        margin-bottom: 1.5rem; }
-      .content .main .post h2 {
-        font-size: 1.5rem;
-        margin: 1.5rem 0 0.75rem 0; }
-  .post-meta .fa {
-    margin-right: 0.2rem; }
+    margin-top: 3rem; }
+  .post h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem; }
+  .post h2 {
+    font-size: 1.5rem;
+    margin: 1.5rem 0 0.75rem 0; }
+  .post .post-meta {
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 1rem; }
+    .post .post-meta span {
+      margin-right: 0.5rem; }
   .posts-list .tip footer {
     margin-top: 0.5rem; }
     .posts-list .tip footer a {
@@ -2184,12 +2164,13 @@
     text-align: center;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem; }
-    #post-tools .btn {
-      font-size: 0.85rem; }
     #post-tools span {
-      margin-left: 2px; }
+      margin-right: 1rem; }
     #post-tools a {
       color: #555; }
+    #post-tools a.disabled {
+      color: gray;
+      pointer-events: none; }
   #post-comment h4 {
     padding-bottom: 0.8rem;
     border-bottom: 2px solid #f2f2f2; }

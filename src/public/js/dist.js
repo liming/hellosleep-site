@@ -39716,21 +39716,17 @@ var LikeButton = function (_Component) {
       var disabled = _props.disabled;
 
 
-      var btnCls = disabled ? 'btn btn-default disabled' : 'btn btn-default';
+      var btnCls = disabled ? 'disabled' : '';
 
       return _react2.default.createElement(
         'span',
-        { className: 'like-button' },
+        null,
         _react2.default.createElement(
           'a',
-          { className: btnCls, onClick: onClick },
-          _react2.default.createElement('i', { className: 'fa fa-thumbs-up' }),
+          { href: '#', className: btnCls, onClick: onClick },
+          _react2.default.createElement('i', { className: 'icon thumbs up' }),
           '有用 ',
-          _react2.default.createElement(
-            'span',
-            { className: 'badge' },
-            count
-          )
+          count
         )
       );
     }
@@ -40004,10 +40000,13 @@ var PostMeta = function (_Component) {
 
   _createClass(PostMeta, [{
     key: 'onLikeChange',
-    value: function onLikeChange() {
+    value: function onLikeChange(e) {
       var _props = this.props;
       var dispatch = _props.dispatch;
       var id = _props.id;
+
+
+      e.preventDefault();
 
       dispatch((0, _post.likePost)(id));
     }
@@ -40031,7 +40030,7 @@ var PostMeta = function (_Component) {
           _react2.default.createElement(
             'a',
             { href: '/contribute' },
-            _react2.default.createElement('i', { className: 'fa fa-heart' }),
+            _react2.default.createElement('i', { className: 'icon heart' }),
             '帮助睡吧'
           )
         )

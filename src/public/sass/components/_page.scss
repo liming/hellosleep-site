@@ -34,12 +34,19 @@
 
   body {
     font-size: 14px;
-  }
 
-  .pusher {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
+    // the sticky footer tips.
+    // https://github.com/Semantic-Org/Semantic-UI/issues/2882
+    // https://jsbin.com/culavuxugi/edit?html,css,js,output
+    .pusher {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+
+      .main {
+        flex: 1;
+      }
+    }
   }
 
   header {
@@ -117,7 +124,6 @@
   }
 
   .footer {
-    flex: 1;
     padding: 1.5rem;
     background-color: #f5f5f5;
     border-top: 1px solid #dedede;
