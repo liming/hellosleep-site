@@ -49,15 +49,18 @@ mixin content-post(post)
       +content-post-real(post)
       
 mixin content-tip(tip)
-  .card.tip
-    .card-block
-      blockquote.blockquote
-        p.m-b-0
-          !=tip.content
-        footer.blockquote-footer
-          span #{tip.author}在
-            a(href=tip.url target='_blank') 这里
-          span 提到
+  .card
+    .content
+      .description
+        blockquote.blockquote
+          p.m-b-0
+            !=tip.content
+    .extra.content
+      .right.floated.author
+        i.icon.quote.left
+        span #{tip.author}在
+          a(href=tip.url target='_blank') 这里
+        span 提到
 
 mixin content-posts(category, posts)
   article.real-content
@@ -74,7 +77,7 @@ mixin content-posts(category, posts)
             =p.title
             
 mixin brief-post(post, page)
-  .ui.fluid.card
+  .card
     .content
       .header
         a(href='/' + post.type + '/' + post.key)
@@ -83,7 +86,8 @@ mixin brief-post(post, page)
         +post-meta(post, page)
       .description
         != post.content.short
-    a.ui.bottom.attached.button(href='/' + post.type + '/' + post.key, role="button") 阅读更多
+    .extra.content
+      a(href='/' + post.type + '/' + post.key, role="button") 阅读更多
 
 mixin pagination(posts)
   if posts.totalPages > 1

@@ -3,16 +3,15 @@ extends ../layouts/page
 include ../mixins/post
 
 block article-nav
-  .card
-    .card-block
-      .card-title
-        i.fa.fa-share.m-r-1
+  .ui.vertical.menu
+    .item
+      .header
+        i.icon.road
         span 经验谈导航
-    .list-group.list-group-flush
-      each cat in categories
-        a.list-group-item(href='/share/categories/' + cat.key, class=(category && category.key == cat.key ? 'active': ''))
-          i.fa.fa-tag.m-r-1
-          =cat.name
+    each cat in categories
+      a.item(href='/share/categories/' + cat.key, class=(category && category.key == cat.key ? 'active': ''))
+        i.icon.tag
+        =cat.name
 
 block article
   if post

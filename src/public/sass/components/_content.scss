@@ -38,18 +38,6 @@
     }
   }
   
-  .posts-list {
-    .tip {
-      footer {
-        margin-top: 0.5rem;
-        a {
-          font-size: 1rem;
-          color: inherit;
-        }
-      }
-    }
-  }
-
   article.real-content {
     h1 {
       color: $title-color;
@@ -95,6 +83,16 @@
 
     blockquote p {
       display: inline;
+    }
+
+    .tip {
+      footer {
+        margin-top: 0.5rem;
+        a {
+          font-size: 1rem;
+          color: inherit;
+        }
+      }
     }
   }
 
@@ -153,10 +151,6 @@
         margin: 2rem 0;
       }
 
-      .card > .content > .description {
-        min-height: 150px;
-      }
-
       .list-all {
         margin: 2rem 0;
       }
@@ -171,5 +165,9 @@
       }
     }
 
+  }
+
+  .card > .content > .description {
+    min-height: 150px;
   }
 }

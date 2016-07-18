@@ -33,10 +33,9 @@ block content
   .home-content.ui.container.stackable.two.column.grid
     .latest-content.twelve.wide.column
       h2 最近更新
-      .ui.stackable.two.column.grid
+      .ui.two.stackable.cards
         each post in posts.results
-          .column
-            +brief-post(post, 'home')
+          +brief-post(post, 'home')
       a.list-all.ui.button.right.floated(href='/posts', role="button") 列出所有文章
         
     .recommend-content.four.wide.column

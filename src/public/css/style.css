@@ -2123,11 +2123,6 @@
     margin-bottom: 1rem; }
     .post .post-meta span {
       margin-right: 0.5rem; }
-  .posts-list .tip footer {
-    margin-top: 0.5rem; }
-    .posts-list .tip footer a {
-      font-size: 1rem;
-      color: inherit; }
   article.real-content h1 {
     color: #4E5264;
     margin-bottom: 0.6em; }
@@ -2156,6 +2151,11 @@
       vertical-align: -0.4em; }
     .posts-list blockquote p {
       display: inline; }
+    .posts-list .tip footer {
+      margin-top: 0.5rem; }
+      .posts-list .tip footer a {
+        font-size: 1rem;
+        color: inherit; }
   .post-nav {
     height: 2rem;
     padding: 10px 0;
@@ -2184,11 +2184,11 @@
     padding-bottom: 2rem; }
     .home-content .latest-content h2 {
       margin: 2rem 0; }
-    .home-content .latest-content .card > .content > .description {
-      min-height: 150px; }
     .home-content .latest-content .list-all {
       margin: 2rem 0; }
   .home-content .recommend-content {
     margin-top: 6rem; }
     .home-content .recommend-content .recommend-post {
-      margin: 15px 0px; } }
+      margin: 15px 0px; }
+  .card > .content > .description {
+    min-height: 150px; } }
