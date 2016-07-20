@@ -2191,4 +2191,6 @@
     .home-content .recommend-content .recommend-post {
       margin: 15px 0px; }
   .card > .content > .description {
-    min-height: 150px; } }
+    min-height: 150px; }
+  .card > .content > .meta {
+    margin: 1rem 0; } }

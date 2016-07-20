@@ -17,7 +17,8 @@ block article
   if post
     +content-post(post)
   else
-    each post in posts.results
-      +brief-post(post)
+    .ui.two.stackable.cards
+      each post in posts.results
+        +brief-post(post)
     +pagination(posts)
   
