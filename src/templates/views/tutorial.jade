@@ -3,33 +3,32 @@ extends ../layouts/page
 include ../mixins/post
 
 block article-nav
-  .card
-    .card-block
-      .card-title
-        i.fa.fa-road.m-r-1
+  .ui.vertical.menu
+    .item
+      .header
+        i.icon.road
         span 睡吧指南导航
-    .list-group.list-group-flush
-      each indice in indices
-        if !indice.tutorialCount
-          a.list-group-item(href='/tutorial/' + indice.key, class=(post && post.key == indice.key ? 'active': ''))
-            i.fa.fa-file-text-o.m-r-1
-            =indice.title
-        else if indice.tutorialCount > 0
-          a.list-group-item(href='/tutorial/categories/' + indice.key, class=(category && category.key == indice.key ? 'active': ''))
-            i.fa.fa-tag.m-r-1
-            =indice.name
+    each indice in indices
+      if !indice.tutorialCount
+        a.item(href='/tutorial/' + indice.key, class=(post && post.key == indice.key ? 'active': ''))
+          i.icon.file.text.outline
+          =indice.title
+      else if indice.tutorialCount > 0
+        a.item(href='/tutorial/categories/' + indice.key, class=(category && category.key == indice.key ? 'active': ''))
+          i.icon.tag
+          =indice.name
 
 block article
   if post
     if category && category.key
-      ol.breadcrumb
-        li
-          a(href="/") 主页
-        li
-          a(href="/tutorial") 指南
-        li
-          a(href='/tutorial/categories/' + category.key) #{category.name}
-        li.active #{post.title}
+      .ui.breadcrumb
+        a.section(href="/") 主页
+        i.divider.right.chevron.icon
+        a.section(href="/tutorial") 指南
+        i.divider.right.chevron.icon
+        a.section(href='/tutorial/categories/' + category.key) #{category.name}
+        i.divider.right.chevron.icon
+        d.active.section #{post.title}
     +content-post(post, comments)
   else if posts
     +content-posts(category, posts)

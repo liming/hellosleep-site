@@ -19,9 +19,9 @@ class ReplyTo extends Component {
     if (!reply) return false;
 
     return (
-      <div className="reply-to m-b-1">
-        <i className="fa fa-reply m-r-1"></i>回复给<span className="font-weight-bold">{reply.author}</span>
-        <a href="#" className="m-l-1" onClick={this.onClick}>取消</a>
+      <div className="reply-to">
+        <i className="icon reply"></i>回复给<span className="font-weight-bold">{reply.author}</span>
+        <a className="cancel-reply" href="#" onClick={this.onClick}>取消</a>
       </div>
     );
   }

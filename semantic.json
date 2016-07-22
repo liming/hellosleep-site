@@ -1,0 +1,49 @@
+{
+  "base": "src",
+  "paths": {
+    "source": {
+      "config": "semantic/src/theme.config",
+      "definitions": "semantic/src/definitions/",
+      "site": "semantic/src/site/",
+      "themes": "semantic/src/themes/"
+    },
+    "output": {
+      "packaged": "public/semantic/",
+      "uncompressed": "public/semantic/components/",
+      "compressed": "public/semantic/components/",
+      "themes": "public/semantic/themes/"
+    },
+    "clean": "public/semantic/"
+  },
+  "permission": false,
+  "autoInstall": false,
+  "rtl": false,
+  "components": [
+    "reset",
+    "site",
+    "button",
+    "container",
+    "divider",
+    "header",
+    "icon",
+    "image",
+    "input",
+    "label",
+    "list",
+    "breadcrumb",
+    "form",
+    "grid",
+    "menu",
+    "message",
+    "card",
+    "comment",
+    "item",
+    "checkbox",
+    "dropdown",
+    "search",
+    "sidebar",
+    "sticky",
+    "segment"
+  ],
+  "version": "2.2.2"
+}

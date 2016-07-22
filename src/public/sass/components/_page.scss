@@ -1,4 +1,53 @@
 
+@media only screen and (max-width: 700px) {
+  .intro {
+    .motto {
+      background-image: url('/images/homepage_mobile.jpg');
+
+      .mainentry {
+        margin-left: 1em;
+        margin-top: 5vh;
+      }
+    }
+  }
+
+  /* hide the fix menu */
+  header {
+    .pointing.menu {
+      .menu,
+      .item {
+        display: none !important;
+      }
+
+      .toc.item {
+        display: block !important;
+      }
+      
+    }
+  }
+}
+
+@media (min-width: 700px) {
+  .intro {
+    .motto {
+      background-image: url('/images/homepage.jpg');
+
+      .mainentry {
+        margin-left: 40%;
+        margin-top: 5vh;
+      }
+    }
+  }
+
+  header {
+    .pointing.menu {
+      .toc.item {
+        display: none;
+      }
+    }
+  }
+}
+
 @media all {
 
   html {
@@ -7,82 +56,60 @@
   }
 
   body {
-    margin-bottom: 60px;
-    color: $primary-text-color;
     font-size: 14px;
-  }
 
-  header {
-    border-bottom: 1px solid #e7e7e7;
-    .navbar {
+    // the sticky footer tips.
+    // https://github.com/Semantic-Org/Semantic-UI/issues/2882
+    // https://jsbin.com/culavuxugi/edit?html,css,js,output
+    .pusher {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
 
-      background-color: $nav-bg;
-
-      .navbar-brand {
-
-        letter-spacing: 0.25rem;
-        margin-right: 2rem;
-
-        .shui {
-          font-size: 2rem;
-          color: $primary-color;
-        }
-
-        .ba {
-          font-size: 1.2rem;
-          color: $secondary-color;
-        }
-      }
-
-      .navbar-nav {
-        > li > a {
-          color: $primary-link-color;
-          line-height: 60px;
-        }
-
-        > .active > a {
-          &,
-          &:hover,
-          &:focus {
-            background-color: $nav-bg;
-            color: $primary-color;
-          }
-        }
+      .main {
+        flex: 1;
       }
     }
   }
 
-  .jumbotron {
+  .intro {
 
+    background: linear-gradient(to bottom,#fff 10%, #F0F1F2 100%);
     font-size: 1.05rem;
-    font-weight: 200;
-
-    padding: 2em 2em 6em 2em;
+    padding: 2rem 0;
 
     .motto {
-      background-image: url('/images/homepage.jpg');
-      background-color: #3B3C3D;
+      min-height: 400px;
+      background-color: #6A6B6D;
       background-size: cover;
       padding: 3rem 1rem;
       padding-left: 15px;
       color: #ddd;
+      margin-bottom: 3rem;
+
+      p {
+        font-size: 1.2rem;
+        padding: 1rem 0;
+      }
     }
 
-    background: linear-gradient(to bottom,#fff 10%, #F0F1F2 100%);
-
     .introduction {
-      padding-left: 25px;
-      padding-right: 25px;
+      margin-top: 2rem;
       text-align: center;
 
-      .fa {
+      p {
+        font-size: 1.1rem;
+        padding: 0 1.5rem;
+      }
+
+      .icon {
         color: $secondary-color;
         margin-right: 0.5rem;
         font-size: 4.5rem;
-        margin-bottom: 1rem;
       }
 
       h2{
+        margin-top: 0;
         margin-bottom: 1rem;
 
         a {
@@ -98,32 +125,23 @@
 
   .page-404 {
 
-    .error-info {
-      margin-top: 20px;
-    }
-
     .search {
-      padding: 20px 0px;
-
-      form {
-        width: 20%;
-      }
+      margin: 2rem 0;
     }
+
   }
 
-  footer.site-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    /* Set the fixed height of the footer here */
-    height: 60px;
-    line-height: 30px; /* Vertically center the text there */
+  .footer {
+    margin-top: 5rem;
+    padding: 1.5rem;
     background-color: #f5f5f5;
     border-top: 1px solid #dedede;
 
     p {
       font-size: 0.75rem;
     }
+
+    text-align: center;
   }
 
   .contribute {

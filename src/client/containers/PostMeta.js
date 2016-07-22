@@ -11,8 +11,11 @@ class PostMeta extends Component {
     this.onLikeChange = this.onLikeChange.bind(this);
   }
 
-  onLikeChange() {
+  onLikeChange(e) {
     const { dispatch, id } = this.props;
+
+    e.preventDefault();
+
     dispatch(likePost(id));
   }
 
@@ -26,7 +29,7 @@ class PostMeta extends Component {
           onClick={this.onLikeChange} />
         <span>
           <a href="/contribute">
-            <i className="fa fa-heart"></i>帮助睡吧
+            <i className="icon heart"></i>帮助睡吧
           </a>
         </span>
       </div>
