@@ -2,21 +2,23 @@
 // navigation menu
 header
   .ui.container
-    .ui.large.secondary.pointing.menu
+    .ui.pointing.menu
       a.toc.item
-        .i.sidebar.icon
+        i.sidebar.icon
       a.header.item(href='/')
         span.shui 睡
         span.ba 吧
       include ./links
-      .right.item
+      .right.menu
         a.item(href='/contribute')
-          i.fa.fa-heart &nbsp; 帮助睡吧
+          i.icon.heart
+          | &nbsp;帮助睡吧
         if user
-          a.ui.item(href='/keystone') 管理
-          a.ui.item(href='/keystone/signout')
-            i.fa.fa-sign-out
+          a.item(href='/keystone') 管理
+          a.item(href='/keystone/signout')
+            i.icon.sign.out
         else
-          a.ui.item(href='/keystone/signin') 
-            i.fa.fa-sign-in &nbsp; 登录
+          a.item(href='/keystone/signin') 
+            i.icon.sign.in
+            | &nbsp; 登录
   

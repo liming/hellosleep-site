@@ -3,13 +3,15 @@ extends ../../layouts/default
 include ../../mixins/searchbox
 
 block intro
-  .jumbotron.page-404
-    .container
-      h2 没有这个页面
-      p.error-info 非常抱歉，因为服务器故障网站内容丢失。重建的网站无法定位之前的内容。
+  .ui.container.masthead.segment.page-404
+    h1 没有这个页面
+    .ui.icon.message
+      i.icon.warning
+      .content
+        p 非常抱歉，因为服务器故障网站内容丢失。重建的网站无法定位之前的内容。
 
-      .search
-        p 请尝试搜索关键字：
-        +search-box
-        
-      a(href='/').btn.btn-info 回到主页
+    .search
+      p 请尝试搜索关键字：
+      +search-box
+
+    a(href='/').ui.button 回到主页

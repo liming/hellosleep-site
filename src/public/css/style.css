@@ -1994,19 +1994,27 @@
 .fa-percent:before {
   content: ""; }
 
-@media (max-width: 800px) {
+@media only screen and (max-width: 700px) {
   .intro .motto {
     background-image: url("/images/homepage_mobile.jpg"); }
     .intro .motto .mainentry {
       margin-left: 1em;
-      margin-top: 5vh; } }
+      margin-top: 5vh; }
+  /* hide the fix menu */
+  header .pointing.menu .menu,
+  header .pointing.menu .item {
+    display: none !important; }
+  header .pointing.menu .toc.item {
+    display: block !important; } }
 
-@media (min-width: 800px) {
+@media (min-width: 700px) {
   .intro .motto {
     background-image: url("/images/homepage.jpg"); }
     .intro .motto .mainentry {
       margin-left: 40%;
-      margin-top: 5vh; } }
+      margin-top: 5vh; }
+  header .pointing.menu .toc.item {
+    display: none; } }
 
 @media all {
   html {
@@ -2020,8 +2028,6 @@
       flex-direction: column; }
       body .pusher .main {
         flex: 1; }
-  header .secondary.pointing.menu .toc.item {
-    display: none; }
   .intro {
     background: linear-gradient(to bottom, #fff 10%, #F0F1F2 100%);
     font-size: 1.05rem;
@@ -2054,13 +2060,10 @@
           color: #717171; }
   .page-content {
     margin-bottom: 100px; }
-  .page-404 .error-info {
-    margin-top: 20px; }
   .page-404 .search {
-    padding: 20px 0px; }
-    .page-404 .search form {
-      width: 20%; }
+    margin: 2rem 0; }
   .footer {
+    margin-top: 5rem;
     padding: 1.5rem;
     background-color: #f5f5f5;
     border-top: 1px solid #dedede;
@@ -2077,9 +2080,9 @@
   .hs-help-section {
     padding-top: 3rem; }
     .hs-help-section p {
-      text-indent: 2rem; }
-    .hs-help-section .col-md-6,
-    .hs-help-section .col-md-3 {
+      text-indent: 2rem;
+      font-size: 1.25rem; }
+    .hs-help-section .ui.stackable.column {
       margin-top: 3rem; }
     .hs-help-section .evaluation-director {
       font-size: 2rem;
@@ -2110,7 +2113,7 @@
     font-size: 1.2rem; }
     .post-heading a {
       color: #555; }
-  .content {
+  .page-content {
     margin-top: 3rem; }
   .post h1 {
     font-size: 2rem;
@@ -2194,7 +2197,5 @@
     margin-top: 6rem; }
     .home-content .recommend-content .recommend-post {
       margin: 15px 0px; }
-  .card > .content > .description {
-    min-height: 150px; }
   .card > .content > .meta {
     margin: 1rem 0; } }

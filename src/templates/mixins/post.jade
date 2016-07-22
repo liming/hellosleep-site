@@ -84,7 +84,7 @@ mixin brief-post(post, page)
           =post.title
       .meta
         +post-meta(post, page)
-      .description
+      .description.post
         != post.content.short
     .extra.content
       a(href='/' + post.type + '/' + post.key, role="button") 阅读更多

@@ -4,11 +4,12 @@ include ../mixins/post
 
 block content
   .posts-list
-    .ui.three.stackable.cards
-      each post in posts.results
-        if section == 'tip'
+    if section == 'tip'
+      .ui.one.stackable.cards
+        each post in posts.results
           +content-tip(post)
-        else
+    else
+      .ui.three.stackable.cards
+        each post in posts.results
           +brief-post(post)
-
   +pagination(posts)

@@ -1,5 +1,5 @@
 
-@media (max-width: 800px) {
+@media only screen and (max-width: 700px) {
   .intro {
     .motto {
       background-image: url('/images/homepage_mobile.jpg');
@@ -10,9 +10,24 @@
       }
     }
   }
+
+  /* hide the fix menu */
+  header {
+    .pointing.menu {
+      .menu,
+      .item {
+        display: none !important;
+      }
+
+      .toc.item {
+        display: block !important;
+      }
+      
+    }
+  }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 700px) {
   .intro {
     .motto {
       background-image: url('/images/homepage.jpg');
@@ -20,6 +35,14 @@
       .mainentry {
         margin-left: 40%;
         margin-top: 5vh;
+      }
+    }
+  }
+
+  header {
+    .pointing.menu {
+      .toc.item {
+        display: none;
       }
     }
   }
@@ -45,14 +68,6 @@
 
       .main {
         flex: 1;
-      }
-    }
-  }
-
-  header {
-    .secondary.pointing.menu {
-      .toc.item {
-        display: none;
       }
     }
   }
@@ -110,20 +125,14 @@
 
   .page-404 {
 
-    .error-info {
-      margin-top: 20px;
-    }
-
     .search {
-      padding: 20px 0px;
-
-      form {
-        width: 20%;
-      }
+      margin: 2rem 0;
     }
+
   }
 
   .footer {
+    margin-top: 5rem;
     padding: 1.5rem;
     background-color: #f5f5f5;
     border-top: 1px solid #dedede;
