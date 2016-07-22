@@ -26,20 +26,22 @@ class Comment extends Component {
     const titleAuthor = author + (replyTo ? ' 回复给 ' + replyTo.author : '');
 
     return (
-      <div className="card a-comment">
-        <div className="card-block">
+      <div className="comment">
+        <div className="content">
 
-          <div className="card-title">
-            <span className="m-r-1 font-weight-bold">{titleAuthor}</span>
-            <span className="m-r-1 pull-xs-right text-muted">{formatedDate}</span>
+          <a className="author">{titleAuthor}</a>
+          <div className="metadata">
+            <span className="date">
+              {formatedDate}
+            </span>
           </div>
 
-          <div className="card-text">
+          <div className="text">
             {content}
           </div>
 
-          <div className="comment-reply">
-            <a href="#" onClick={this.onClick}>回应</a>
+          <div className="actions">
+            <a href="#" className="reply" onClick={this.onClick}>回应</a>
           </div>
 
         </div>

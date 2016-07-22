@@ -21,14 +21,14 @@ block article-nav
 block article
   if post
     if category && category.key
-      ol.breadcrumb
-        li
-          a(href="/") 主页
-        li
-          a(href="/tutorial") 指南
-        li
-          a(href='/tutorial/categories/' + category.key) #{category.name}
-        li.active #{post.title}
+      .ui.breadcrumb
+        a.section(href="/") 主页
+        i.divider.right.chevron.icon
+        a.section(href="/tutorial") 指南
+        i.divider.right.chevron.icon
+        a.section(href='/tutorial/categories/' + category.key) #{category.name}
+        i.divider.right.chevron.icon
+        d.active.section #{post.title}
     +content-post(post, comments)
   else if posts
     +content-posts(category, posts)

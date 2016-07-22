@@ -39341,35 +39341,35 @@ var Comment = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'card a-comment' },
+        { className: 'comment' },
         _react2.default.createElement(
           'div',
-          { className: 'card-block' },
+          { className: 'content' },
+          _react2.default.createElement(
+            'a',
+            { className: 'author' },
+            titleAuthor
+          ),
           _react2.default.createElement(
             'div',
-            { className: 'card-title' },
+            { className: 'metadata' },
             _react2.default.createElement(
               'span',
-              { className: 'm-r-1 font-weight-bold' },
-              titleAuthor
-            ),
-            _react2.default.createElement(
-              'span',
-              { className: 'm-r-1 pull-xs-right text-muted' },
+              { className: 'date' },
               formatedDate
             )
           ),
           _react2.default.createElement(
             'div',
-            { className: 'card-text' },
+            { className: 'text' },
             content
           ),
           _react2.default.createElement(
             'div',
-            { className: 'comment-reply' },
+            { className: 'actions' },
             _react2.default.createElement(
               'a',
-              { href: '#', onClick: this.onClick },
+              { href: '#', className: 'reply', onClick: this.onClick },
               '回应'
             )
           )
@@ -39461,14 +39461,14 @@ var CommentForm = function (_Component) {
       var reply = _props.reply;
       var user = _props.user;
 
-      var submitClass = 'btn btn-secondary';
+      var submitClass = 'ui button';
       if (!enabledSubmit) submitClass += ' disabled';
 
       var contentString = '* 回复内容';
-      var contentClass = 'form-group';
+      var contentClass = 'field';
       if (errors.content) {
         contentString += ' ( ' + errors.content + ' )';
-        contentClass += ' has-warning';
+        contentClass += ' error';
       }
 
       var replyElem = reply ? _react2.default.createElement(
@@ -39480,61 +39480,52 @@ var CommentForm = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        { id: 'comment-form', className: 'card' },
+        { id: 'comment-form', className: 'ui reply form' },
+        _react2.default.createElement(
+          'h3',
+          { className: 'ui header' },
+          '添加评论'
+        ),
         _react2.default.createElement(
           'div',
-          { className: 'card-block' },
-          _react2.default.createElement(
-            'div',
-            { className: 'card-title' },
-            _react2.default.createElement(
-              'h4',
-              null,
-              '添加评论'
-            )
-          ),
+          { className: 'field' },
           _react2.default.createElement(_ReplyTo2.default, {
             reply: reply,
             onCancelReply: onCancelReply
-          }),
+          })
+        ),
+        this.getAuthorField(user, errors),
+        this.getEmailField(user, errors),
+        _react2.default.createElement(
+          'div',
+          { className: contentClass },
+          _react2.default.createElement(
+            'label',
+            { htmlFor: 'comment_content' },
+            contentString
+          ),
+          _react2.default.createElement('textarea', { id: 'comment_content', rows: '3' })
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'inline field' },
           _react2.default.createElement(
             'div',
-            { className: 'card-text' },
+            { className: 'ui checkbox' },
+            _react2.default.createElement('input', { onChange: function onChange(e) {
+                return onToggleSubmit(e.target.checked);
+              }, type: 'checkbox' }),
             _react2.default.createElement(
-              'form',
+              'label',
               null,
-              this.getAuthorField(user, errors),
-              this.getEmailField(user, errors),
-              _react2.default.createElement(
-                'fieldset',
-                { className: contentClass },
-                _react2.default.createElement(
-                  'label',
-                  { htmlFor: 'comment_content' },
-                  contentString
-                ),
-                _react2.default.createElement('textarea', { className: 'form-control', id: 'comment_content', rows: '3' })
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'checkbox' },
-                _react2.default.createElement(
-                  'label',
-                  null,
-                  _react2.default.createElement('input', {
-                    onChange: function onChange(e) {
-                      return onToggleSubmit(e.target.checked);
-                    }, type: 'checkbox' }),
-                  ' 我不是机器人'
-                )
-              ),
-              _react2.default.createElement(
-                'a',
-                { onClick: this.onSubmit, className: submitClass },
-                '提交'
-              )
+              '我不是机器人'
             )
           )
+        ),
+        _react2.default.createElement(
+          'a',
+          { onClick: this.onSubmit, className: submitClass },
+          '提交'
         )
       );
     }
@@ -39544,14 +39535,14 @@ var CommentForm = function (_Component) {
       if (user) return false;
 
       var authorString = '* 用户名';
-      var authorClass = 'form-group';
+      var authorClass = 'field';
       if (errors.author) {
         authorString += ' ( ' + errors.author + ' )';
-        authorClass += ' has-warning';
+        authorClass += ' error';
       }
 
       return _react2.default.createElement(
-        'fieldset',
+        'div',
         { className: authorClass },
         _react2.default.createElement(
           'label',
@@ -39566,14 +39557,14 @@ var CommentForm = function (_Component) {
     value: function getEmailField(user, errors) {
       if (user) return false;
       var emailString = '* 邮箱';
-      var emailClass = 'form-group';
+      var emailClass = 'field';
       if (errors.email) {
         emailString += ' ( ' + errors.email + ' )';
-        emailClass += ' has-warning';
+        emailClass += ' error';
       }
 
       return _react2.default.createElement(
-        'fieldset',
+        'div',
         { className: emailClass },
         _react2.default.createElement(
           'label',
@@ -39601,83 +39592,7 @@ CommentForm.propTypes = {
   onToggleSubmit: _react.PropTypes.func.isRequired
 };
 
-},{"./ReplyTo":202,"react":180,"react-dom":37}],200:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _Comment = require('./Comment');
-
-var _Comment2 = _interopRequireDefault(_Comment);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var CommentList = function (_Component) {
-  _inherits(CommentList, _Component);
-
-  function CommentList(props) {
-    _classCallCheck(this, CommentList);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(CommentList).call(this, props));
-  }
-
-  _createClass(CommentList, [{
-    key: 'render',
-    value: function render() {
-      var _props = this.props;
-      var comments = _props.comments;
-      var onReply = _props.onReply;
-
-
-      return _react2.default.createElement(
-        'div',
-        { className: 'comments-list' },
-        comments.map(function (comment) {
-          return _react2.default.createElement(_Comment2.default, _extends({
-            key: comment.id,
-            onReply: onReply
-          }, comment));
-        })
-      );
-    }
-  }]);
-
-  return CommentList;
-}(_react.Component);
-
-exports.default = CommentList;
-
-
-CommentList.propTypes = {
-  comments: _react.PropTypes.arrayOf(_react.PropTypes.shape({
-    author: _react.PropTypes.string.isRequired,
-    id: _react.PropTypes.string.isRequired,
-    formatedDate: _react.PropTypes.string.isRequired,
-    content: _react.PropTypes.string.isRequired,
-    replyTo: _react.PropTypes.shape({
-      author: _react.PropTypes.string.isRequired
-    })
-  }).isRequired).isRequired,
-  onReply: _react.PropTypes.func.isRequired
-};
-
-},{"./Comment":198,"react":180}],201:[function(require,module,exports){
+},{"./ReplyTo":201,"react":180,"react-dom":37}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -39743,7 +39658,7 @@ LikeButton.propTypes = {
   onClick: _react.PropTypes.func.isRequired
 };
 
-},{"react":180}],202:[function(require,module,exports){
+},{"react":180}],201:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -39795,8 +39710,8 @@ var ReplyTo = function (_Component) {
 
       return _react2.default.createElement(
         "div",
-        { className: "reply-to m-b-1" },
-        _react2.default.createElement("i", { className: "fa fa-reply m-r-1" }),
+        { className: "reply-to" },
+        _react2.default.createElement("i", { className: "icon reply" }),
         "回复给",
         _react2.default.createElement(
           "span",
@@ -39805,7 +39720,7 @@ var ReplyTo = function (_Component) {
         ),
         _react2.default.createElement(
           "a",
-          { href: "#", className: "m-l-1", onClick: this.onClick },
+          { className: "cancel-reply", href: "#", onClick: this.onClick },
           "取消"
         )
       );
@@ -39819,12 +39734,14 @@ var ReplyTo = function (_Component) {
 
 exports.default = ReplyTo;
 
-},{"react":180}],203:[function(require,module,exports){
+},{"react":180}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -39838,9 +39755,9 @@ var _CommentForm = require('../components/CommentForm');
 
 var _CommentForm2 = _interopRequireDefault(_CommentForm);
 
-var _CommentList = require('../components/CommentList');
+var _Comment = require('../components/Comment');
 
-var _CommentList2 = _interopRequireDefault(_CommentList);
+var _Comment2 = _interopRequireDefault(_Comment);
 
 var _post = require('../actions/post');
 
@@ -39903,6 +39820,8 @@ var PostComment = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var _props3 = this.props;
       var dispatch = _props3.dispatch;
       var comments = _props3.comments;
@@ -39914,16 +39833,19 @@ var PostComment = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'ui comments' },
         _react2.default.createElement(
-          'h4',
-          null,
+          'h2',
+          { className: 'ui dividing header' },
           comments.length,
           '个回应'
         ),
-        _react2.default.createElement(_CommentList2.default, {
-          onReply: this.onReplyComment,
-          comments: comments }),
+        comments.map(function (comment) {
+          return _react2.default.createElement(_Comment2.default, _extends({
+            key: comment.id,
+            onReply: _this2.onReplyComment
+          }, comment));
+        }),
         _react2.default.createElement(_CommentForm2.default, {
           key: comments.length,
           user: user,
@@ -39957,7 +39879,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostComment);
 
-},{"../actions/post":197,"../components/CommentForm":199,"../components/CommentList":200,"react":180,"react-redux":40}],204:[function(require,module,exports){
+},{"../actions/post":197,"../components/Comment":198,"../components/CommentForm":199,"react":180,"react-redux":40}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40054,7 +39976,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostMeta);
 
-},{"../actions/post":197,"../components/LikeButton":201,"react":180,"react-redux":40}],205:[function(require,module,exports){
+},{"../actions/post":197,"../components/LikeButton":200,"react":180,"react-redux":40}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40137,7 +40059,7 @@ var rootReducer = (0, _redux.combineReducers)({
 
 exports.default = rootReducer;
 
-},{"../actions/post":197,"redux":189}],206:[function(require,module,exports){
+},{"../actions/post":197,"redux":189}],205:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -40218,7 +40140,7 @@ if (postTarget) {
   renderPostComment();
 }
 
-},{"../containers/PostComment.js":203,"../containers/PostMeta.js":204,"../stores/configureStore":207,"lodash":34,"react":180,"react-dom":37,"react-redux":40}],207:[function(require,module,exports){
+},{"../containers/PostComment.js":202,"../containers/PostMeta.js":203,"../stores/configureStore":206,"lodash":34,"react":180,"react-dom":37,"react-redux":40}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40248,4 +40170,4 @@ function configureStore(initialState) {
   return store;
 }
 
-},{"../reducers":205,"redux":189,"redux-logger":182,"redux-thunk":183}]},{},[206]);
+},{"../reducers":204,"redux":189,"redux-logger":182,"redux-thunk":183}]},{},[205]);

@@ -69,12 +69,13 @@ mixin content-posts(category, posts)
     p
       != category.description
     h2 文章列表
-    ul.article-index
+    .ui.list
       each p in posts
-        li
+        a.item(href='/tutorial/' + p.key)
           i.icon.file.text.outline
-          a(href='/tutorial/' + p.key)
-            =p.title
+          .content
+            .discription
+              =p.title
             
 mixin brief-post(post, page)
   .card
