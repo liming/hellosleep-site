@@ -96,6 +96,14 @@
     }
   }
 
+  .posts-pagination {
+    margin: 2rem 0;
+
+    a.disabled {
+      pointer-events: none;
+    }
+  }
+
   .post-nav {
     height: 2rem;
     padding: 10px 0;

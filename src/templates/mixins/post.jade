@@ -90,16 +90,16 @@ mixin brief-post(post, page)
       a(href='/' + post.type + '/' + post.key, role="button") 阅读更多
 
 mixin pagination(posts)
-  if posts.totalPages > 1
-    ul.pagination
-      if posts.previous
-        li.page-item: a.page-link(href='?page=' + posts.previous): i.fa.fa-angle-left
-      else
-        li.page-item.disabled: a.page-link(href='?page=' + 1): i.fa.fa-angle-left
-      each p, i in posts.pages
-        li.page-item(class=posts.currentPage === p ? 'active' : null)
-          a.page-link(href='?page=' + (p === '...' ? (i ? posts.totalPages : 1) : p ))= p
-      if posts.next
-        li.page-item: a.page-link(href='?page=' + posts.next): i.fa.fa-angle-right
-      else
-        li.page-item.disabled: a.page-link(href='?page=' + posts.totalPages): i.fa.fa-angle-right
+  .posts-pagination
+    if posts.totalPages > 1
+      .ui.pagination.menu
+        if posts.previous
+          a.item(href='?page=' + posts.previous): i.step.backward.icon
+        else
+          a.disabled.item(href='?page=' + 1): i.step.backward.icon
+        each p, i in posts.pages
+          a.item(class=posts.currentPage === p ? 'active' : null href='?page=' + (p === '...' ? (i ? posts.totalPages : 1) : p ))= p
+        if posts.next
+          a.item(href='?page=' + posts.next): i.step.forward.icon
+        else
+          a.item(href='?page=' + posts.totalPages): i.step.forward.icon
