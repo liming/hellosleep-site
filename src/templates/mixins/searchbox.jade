@@ -1,8 +1,9 @@
 
 mixin search-box()
-  form(role="search" action="/search" method="get")
-    .input-group
-      input.form-control(type="text" placeholder="想要搜索..." name="q")
-      span.input-group-btn
-        button.btn.btn-default(type="submit")
-          i.fa.fa-search
+  form.ui.form(role="search" action="/search" method="get")
+    .fields
+      .field
+        input(type="text" placeholder="想要搜索..." name="q")
+      .field
+        button.ui.icon.button(type="submit")
+            i.icon.search

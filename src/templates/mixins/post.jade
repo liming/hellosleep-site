@@ -1,19 +1,19 @@
 mixin post-meta(post, page)
-  .post-meta.m-b-1
-    i.fa.fa-user
-    span.m-r-1 #{post.authorname}
-    i.fa.fa-calendar
-    span.m-r-1 #{post.formatedPublishedDate} 
+  .post-meta
+    i.icon.user
+    span #{post.authorname}
+    i.icon.calendar
+    span #{post.formatedPublishedDate} 
     if page != 'home'
       if post.originUrl
-        i.fa.fa-external-link
+        i.icon.external
         span
           a(href=post.originUrl) 原文连接
     else
       if post.type == "tutorial"
-        i.fa.fa-road
+        i.icon.road
       else if post.type == "share"
-        i.fa.fa-share-alt
+        i.icon.share.alternate
       span
         a(href='/' + post.type)
           =post.typename
@@ -49,15 +49,18 @@ mixin content-post(post)
       +content-post-real(post)
       
 mixin content-tip(tip)
-  .card.tip
-    .card-block
-      blockquote.blockquote
-        p.m-b-0
-          !=tip.content
-        footer.blockquote-footer
-          span #{tip.author}在
-            a(href=tip.url target='_blank') 这里
-          span 提到
+  .card
+    .content
+      .description
+        blockquote.blockquote
+          p.m-b-0
+            !=tip.content
+    .extra.content
+      .right.floated.author
+        i.icon.quote.left
+        span #{tip.author}在
+          a(href=tip.url target='_blank') 这里
+        span 提到
 
 mixin content-posts(category, posts)
   article.real-content
@@ -66,41 +69,38 @@ mixin content-posts(category, posts)
     p
       != category.description
     h2 文章列表
-    ul.article-index.fa-ul
+    .ui.list
       each p in posts
-        li
-          i.fa-li.fa.fa-file-text-o
-          a(href='/tutorial/' + p.key)
-            =p.title
+        a.item(href='/tutorial/' + p.key)
+          i.icon.file.text.outline
+          .content
+            .discription
+              =p.title
             
 mixin brief-post(post, page)
   .card
-    .card-block
-      .card-title.post-heading
+    .content
+      .header
         a(href='/' + post.type + '/' + post.key)
           =post.title
-      .card-text
+      .meta
         +post-meta(post, page)
-      .card-text.content-brief
+      .description.post
         != post.content.short
-      a.btn.btn-secondary-outline.btn-sm(href='/' + post.type + '/' + post.key, role="button") 阅读更多
+    .extra.content
+      a(href='/' + post.type + '/' + post.key, role="button") 阅读更多
 
-mixin home-tip(tip)
-  .single-tip
-    blockquote
-      =tip.content
-      
 mixin pagination(posts)
-  if posts.totalPages > 1
-    ul.pagination
-      if posts.previous
-        li.page-item: a.page-link(href='?page=' + posts.previous): i.fa.fa-angle-left
-      else
-        li.page-item.disabled: a.page-link(href='?page=' + 1): i.fa.fa-angle-left
-      each p, i in posts.pages
-        li.page-item(class=posts.currentPage === p ? 'active' : null)
-          a.page-link(href='?page=' + (p === '...' ? (i ? posts.totalPages : 1) : p ))= p
-      if posts.next
-        li.page-item: a.page-link(href='?page=' + posts.next): i.fa.fa-angle-right
-      else
-        li.page-item.disabled: a.page-link(href='?page=' + posts.totalPages): i.fa.fa-angle-right
+  .posts-pagination
+    if posts.totalPages > 1
+      .ui.pagination.menu
+        if posts.previous
+          a.item(href='?page=' + posts.previous): i.step.backward.icon
+        else
+          a.disabled.item(href='?page=' + 1): i.step.backward.icon
+        each p, i in posts.pages
+          a.item(class=posts.currentPage === p ? 'active' : null href='?page=' + (p === '...' ? (i ? posts.totalPages : 1) : p ))= p
+        if posts.next
+          a.item(href='?page=' + posts.next): i.step.forward.icon
+        else
+          a.item(href='?page=' + posts.totalPages): i.step.forward.icon

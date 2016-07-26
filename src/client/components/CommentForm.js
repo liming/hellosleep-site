@@ -33,49 +33,44 @@ export default class CommentForm extends Component {
   render() {
 
     const { onToggleSubmit, onCancelReply, enabledSubmit, errors, reply, user } = this.props;
-    let submitClass = 'btn btn-secondary';
+    let submitClass = 'ui button';
     if (!enabledSubmit) submitClass += ' disabled';
 
     let contentString = '* 回复内容';
-    let contentClass = 'form-group';
+    let contentClass = 'field';
     if (errors.content) {
       contentString += ` ( ${errors.content} )`;
-      contentClass += ' has-warning';
+      contentClass += ' error';
     }
 
     const replyElem = reply ? <div className="bg-info">回复{reply.author}</div> : null;
 
     return (
-      <div id="comment-form" className="card">
-        <div className="card-block">
-          <div className="card-title">
-            <h4>添加评论</h4>
-          </div>
+      <div id="comment-form" className="ui reply form">
+        <h3 className="ui header">添加评论</h3>
+        <div className="field">
           <ReplyTo
             reply={reply}
             onCancelReply={onCancelReply}
           />
-          <div className="card-text">
-            <form>
-              {this.getAuthorField(user, errors)}
-              {this.getEmailField(user, errors)}
+        </div>
 
-              <fieldset className={contentClass}>
-                <label htmlFor="comment_content">{contentString}</label>
-                <textarea className="form-control" id="comment_content" rows="3"></textarea>
-              </fieldset>
+        {this.getAuthorField(user, errors)}
+        {this.getEmailField(user, errors)}
 
-              <div className="checkbox">
-                <label>
-                  <input
-                    onChange={e => onToggleSubmit(e.target.checked)} type="checkbox" /> 我不是机器人
-                </label>
-              </div>
+        <div className={contentClass}>
+          <label htmlFor="comment_content">{contentString}</label>
+          <textarea id="comment_content" rows="3"></textarea>
+        </div>
 
-              <a onClick={this.onSubmit} className={submitClass}>提交</a>
-            </form>
+        <div className="inline field">
+          <div className="ui checkbox">
+            <input onChange={e => onToggleSubmit(e.target.checked)} type="checkbox" />
+            <label>我不是机器人</label>
           </div>
         </div>
+
+        <a onClick={this.onSubmit} className={submitClass}>提交</a>
       </div>
     );
   }
@@ -84,35 +79,35 @@ export default class CommentForm extends Component {
     if (user) return false;
 
     let authorString = '* 用户名';
-    let authorClass = 'form-group';
+    let authorClass = 'field';
     if (errors.author) {
       authorString += ` ( ${errors.author} )`;
-      authorClass += ' has-warning';
+      authorClass += ' error';
     }
 
     return (
-      <fieldset className={authorClass}>
+      <div className={authorClass}>
         <label htmlFor="comment_author">{authorString}</label>
         <input type="text" className="form-control" id="comment_author" placeholder="输入名字" />
-      </fieldset>
+      </div>
     );
   }
 
   getEmailField(user, errors) {
     if (user) return false;
     let emailString = '* 邮箱';
-    let emailClass = 'form-group';
+    let emailClass = 'field';
     if (errors.email) {
       emailString += ` ( ${errors.email} )`;
-      emailClass += ' has-warning';
+      emailClass += ' error';
     }
 
     return (
-      <fieldset className={emailClass}>
+      <div className={emailClass}>
         <label htmlFor="comment_email">{emailString}</label>
         <input type="email" className="form-control" id="comment_email" placeholder="输入邮件地址" />
         <small className="text-muted">你的邮件地址不会显示。</small>
-      </fieldset>
+      </div>
     );
   }
 };

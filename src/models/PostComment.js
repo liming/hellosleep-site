@@ -36,5 +36,6 @@ PostComment.schema.virtual('formed.data').get(function () {
 });
 
 PostComment.track = true;
-PostComment.defaultColumns = 'author, email, post, publishedOn, replyTo';
+PostComment.defaultSort = '-publishedDate';
+PostComment.defaultColumns = 'author, post, email, replyTo';
 PostComment.register();

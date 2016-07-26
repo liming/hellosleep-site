@@ -1,14 +1,9 @@
 
 // import bootstrap
-$enable-rounded: false !default;
-@import "bootstrap/bootstrap-flex.scss";
-
-// import font awesome
-@import "fontawesome/font-awesome.scss";
+// $enable-rounded: false !default;
 
 // from hellosleep components
 @import "components/variables.scss";
 @import "components/page.scss";
 @import "components/help.scss";
-@import "components/sidebar.scss";
 @import "components/content.scss";

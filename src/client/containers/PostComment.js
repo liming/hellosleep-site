@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CommentForm from '../components/CommentForm';
-import CommentList from '../components/CommentList';
+import Comment from '../components/Comment';
 import { fetchCommentsIfNeeded, toggleSubmit, submitComment, replyComment, cancelReply } from '../actions/post';
 
 class PostComment extends Component {
@@ -39,15 +39,18 @@ class PostComment extends Component {
     const { dispatch, comments, enabledSubmit, errors, reply, user } = this.props;
 
     return (
-      <div>
-
-        <h4>
+      <div className="ui comments">
+        <h2 className="ui dividing header">
           {comments.length}个回应
-        </h4>
+        </h2>
 
-        <CommentList
-          onReply={this.onReplyComment}
-          comments={comments}/>
+        {comments.map(comment =>
+          <Comment
+            key={comment.id}
+            onReply={this.onReplyComment}
+            {...comment}
+           />
+         )}
 
         <CommentForm
           key={comments.length}

@@ -6,10 +6,10 @@
 
     p {
       text-indent: 2rem;
+      font-size: 1.25rem;
     }
 
-    .col-md-6,
-    .col-md-3 {
+    .ui.stackable.column {
       margin-top: 3rem;
     }
 

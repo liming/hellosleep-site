@@ -10,11 +10,11 @@ block content
       .lead
         p 你之所以陷入失眠是因为不懂得如何对待它，你之所以恐惧失眠是因为不了解它。所以走出失眠的过程就是一个自我学习和自我努力的过程。我们不可能轻而易举的通过外部的药物和神奇的方法走出失眠，你必须去学习、去尝试、去坚持。睡吧在几年的时间里积累了不少资料与珍贵的经验，你可以通过阅读这些资料和分享了解如何对待失眠，并按照文章中的建议去尝试和坚持。
         p 在发起求助之前，试着去阅读下面连接中的文章。学习和寻找的过程会让你受益终生。
-      .row.text-xs-center
-        .col-md-6
-          a.btn.btn-primary-outline.btn-lg(href='/tutorial') 睡吧指南
-        .col-md-6
-          a.btn.btn-primary-outline.btn-lg(href='/share') 经验分享
+      .ui.stackable.two.column.centered.grid
+        .column
+          a.ui.primary.basic.button.big(href='/tutorial') 睡吧指南
+        .column
+          a.ui.primary.basic.button.big(href='/share') 经验分享
 
 
     .hs-help-section
@@ -24,14 +24,16 @@ block content
           .hs-help-section-title-label 填写睡眠评估
       .lead
         p 如果你没法通过阅读资料找到自己失眠的原因，也不能明确的了解具体该如何做才能走出失眠。那就需要求助，但是每个人都应该通过正确的方式求助。许多人只是在抱怨一番并询问该怎么办？这样的提问无法得到任何答案。因为你所经历的痛苦只是一些表象，而我们无法通过一些表面现象的抱怨和哭诉找出失眠的原因。想要求助就需要填写睡眠评估，并发表在睡吧小组或者通过邮件发送。
-      .row.text-xs-center
-        .col-md-6
-          a.btn.btn-primary-outline.btn-lg.m-r-3(href='https://www.douban.com/group/topic/9471899/' target='_blank') 睡眠评估模板
-          i.fa.fa-hand-o-right.evaluation-director
-        .col-md-3
-          a.btn.btn-primary-outline(href='https://www.douban.com/group/hellosleep/' target='_blank') 睡吧小组
-        .col-md-3
-          a.btn.btn-primary-outline(href='mailto:liming.dl@gmail.com') 发送邮件
+      .ui.stackable.two.column.centered.grid
+        .column
+          a.ui.primary.basic.button.big(href='https://www.douban.com/group/topic/9471899/' target='_blank') 睡眠评估模板
+          i.icon.pointing.right.evaluation-director
+        .column
+          .ui.two.column.grid
+            .column
+              a.ui.primary.basic.button(href='https://www.douban.com/group/hellosleep/' target='_blank') 睡吧小组
+            .column
+              a.ui.primary.basic.button(href='mailto:liming.dl@gmail.com') 发送邮件
 
     .hs-help-section
       .hs-help-section-header
@@ -46,11 +48,11 @@ block content
           li 我有没有通过大家给出的意见反省自己？
           li 我这个问题是在试图解决造成失眠的原因，还是失眠的现象？
         p 事实上，许多疑问都已经在之前的意见中给出了解答，我们只是需要回顾之前的意见并反省自己。确保自己的问题有价值，只有有价值的问题才会让自己有所进步。另外，下面两个连接解答了许多常见的问题，提问之前先浏览一下有没有你想要的答案。
-      .row.text-xs-center
-        .col-md-6
-          a.btn.btn-primary-outline.btn-lg(href='/tutorial/categories/56e90c6fce64810300107443') 调节失眠误区
-        .col-md-6
-          a.btn.btn-primary-outline.btn-lg(href='/tutorial/categories/56e91e66ce6481030010744b') 失眠常见问题
+      .ui.stackable.two.column.centered.grid
+        .column
+          a.ui.primary.basic.button.big(href='/tutorial/categories/56e90c6fce64810300107443') 调节失眠误区
+        .column
+          a.ui.primary.basic.button.big(href='/tutorial/categories/56e91e66ce6481030010744b') 失眠常见问题
 
     .hs-help-section
       .hs-help-section-header
@@ -68,6 +70,5 @@ block content
           .hs-help-section-title-label 帮助睡吧
       .lead
         p 睡吧社区的许多网友都强烈希望睡吧能将面对失眠的理念更广泛的传播出去，可以帮助更多的失眠者。然而睡吧需要更多的支持，你可以通过各种方式来帮助睡吧。具体做法可以参考这个页面。
-      .row.text-xs-center
-        .col-md-12
-          a.btn.btn-primary-outline.btn-lg(href='/contribute') 帮助睡吧
+        .ui.stackable.one.column.centered.grid
+          a.ui.primary.basic.button.big(href='/contribute') 帮助睡吧
