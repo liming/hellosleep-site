@@ -5,11 +5,11 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import configureStore from '../stores/configureStore';
-import PostMetaApp from '../containers/PostMeta.js';
-import PostCommentApp from '../containers/PostComment';
-import EvaluationApp from '../containers/Evaluation';
-import { map } from 'lodash';
+
+import {configureStore, configureEvaluationStore} from './stores/configureStore';
+import PostMetaApp from './containers/PostMeta.js';
+import PostCommentApp from './containers/PostComment';
+import EvaluationApp from './containers/Evaluation';
 
 const postTarget = document.getElementById('post');
 
@@ -69,17 +69,15 @@ const evaluationTarget = document.getElementById('new_evaluation');
 
 function renderEvaluation() {
 
-  const initialState = {
-    evaluation: {
-      form: require('../data/evaluation.json')
-    }
-  };
+  const initialState = {};
 
-  const evaluationStore = configureStore(initialState);
+  const evaluationStore = configureEvaluationStore(initialState);
+  const content = require('../data/evaluation.json');
 
   render(
     <Provider store={evaluationStore}>
       <EvaluationApp
+        content={content}
       />
     </Provider>,
     evaluationTarget

@@ -15,23 +15,26 @@
     "lodash": "^4.0.1",
     "moment": "^2.12.0",
     "nodemailer": "^2.3.2",
-    "react": "15.0.1",
-    "react-dom": "15.0.1",
+    "react": "15.2.1",
+    "react-dom": "15.2.1",
     "react-redux": "^4.4.2",
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
+    "redux-form": "^6.0.0-rc.3",
     "store-prototype": "^1.1.1",
-    "superagent": "^1.8.3",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "superagent": "^1.8.3"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-clean-css": "^2.0.3",
     "gulp-nodemon": "^2.0.6",
     "gulp-sass": "^2.2.0",
-    "gulp-util": "^3.0.7"
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-util": "^3.0.7",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
   },
   "scripts": {
     "start": "node src/app.js"

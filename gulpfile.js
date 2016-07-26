@@ -15,6 +15,8 @@ const watchify = require('watchify');
 const babelify = require('babelify');
 const gutil = require('gulp-util');
 const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
+const sourcemaps = require('gulp-sourcemaps');
 
 const filePath = {
   main: './src/app.js',
@@ -27,7 +29,7 @@ const filePath = {
     dest: './src/public/css/dist'
   },
   js: {
-    src: './src/client/scripts/main.js',
+    src: './src/client/index.js',
     destFile: 'dist.js',
     destFolder: './src/public/js'
   }
@@ -109,10 +111,11 @@ function bundle() {
   // log errors if they happen
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source(filePath.js.destFile))
+    .pipe(buffer())
   // optional, remove if you dont want sourcemaps
-//    .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+    .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
   // Add transformation tasks to the pipeline here.
-//    .pipe(sourcemaps.write('./')) // writes .map file
+    .pipe(sourcemaps.write('./')) // writes .map file
     .pipe(gulp.dest(filePath.js.destFolder));
 }
 

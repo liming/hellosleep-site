@@ -3,11 +3,19 @@ import { combineReducers } from 'redux';
 import postMeta from './post_meta';
 import postComment from './post_comment';
 import evaluation from './evaluation';
+import {reducer as formReducer} from 'redux-form';
 
-const rootReducer = combineReducers({
+const postReducers = combineReducers({
   postMeta,
-  postComment,
-  evaluation
+  postComment
 });
 
-export default rootReducer;
+const evaluationReducers = combineReducers({
+  evaluation,
+  form: formReducer
+});
+
+export {
+  postReducers,
+  evaluationReducers
+};
