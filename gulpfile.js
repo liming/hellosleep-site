@@ -15,8 +15,6 @@ const watchify = require('watchify');
 const babelify = require('babelify');
 const gutil = require('gulp-util');
 const source = require('vinyl-source-stream');
-const watch = require('./src/semantic/tasks/watch');
-const build = require('./src/semantic/tasks/build');
 
 const filePath = {
   main: './src/app.js',
@@ -124,10 +122,6 @@ gulp.task('watchcss', function() {
   });
 });
 
-// import semantic watch and build
-gulp.task('watch ui', watch);
-gulp.task('build ui', build);
-
-gulp.task('default', ['set-env', 'watchcss', 'watch ui', 'js', 'nodemon']);
+gulp.task('default', ['set-env', 'watchcss', 'js', 'nodemon']);
 
 gulp.task('build', ['sass', 'minify-css']);
