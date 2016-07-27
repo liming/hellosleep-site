@@ -1,19 +1,26 @@
 @media only screen and (max-width: 700px) {
   .intro .motto {
-    background-image: url("/images/homepage_mobile.jpg"); }
+    background-image: url("/images/homepage_mobile.jpg");
+    padding: 1rem; }
     .intro .motto .mainentry {
       margin-left: 1em;
-      margin-top: 5vh; }
+      margin-top: 1em; }
+  .intro .introduction .icon, .intro .introduction .button {
+    display: none; }
   /* hide the fix menu */
   header .pointing.menu .menu,
   header .pointing.menu .item {
     display: none !important; }
   header .pointing.menu .toc.item {
-    display: block !important; } }
+    display: block !important; }
+  .recommend-post {
+    display: none; } }
 
 @media (min-width: 700px) {
   .intro .motto {
-    background-image: url("/images/homepage.jpg"); }
+    min-height: 400px;
+    background-image: url("/images/homepage.jpg");
+    padding: 3rem 1rem; }
     .intro .motto .mainentry {
       margin-left: 40%;
       margin-top: 5vh; }
@@ -26,11 +33,8 @@
     font-size: 1.05rem;
     padding: 2rem 0; }
     .intro .motto {
-      min-height: 400px;
-      background-color: #6A6B6D;
+      background-color: RGBA(106, 107, 109, 0.8);
       background-size: cover;
-      padding: 3rem 1rem;
-      padding-left: 15px;
       color: #ddd;
       margin-bottom: 3rem; }
       .intro .motto p {
@@ -85,63 +89,26 @@
 @media all {
   a {
     color: #249cea; }
-  .post .post-meta {
-    color: rgba(0, 0, 0, 0.6);
-    margin-bottom: 1rem; }
-    .post .post-meta span {
-      margin-right: 0.5rem; }
-  article.real-content h1 {
-    color: #4E5264;
-    margin-bottom: 0.6em; }
-  article.real-content h2 {
-    border-top: 1px solid #f2f2f2;
-    padding-top: 0.8em;
-    margin-bottom: 0.8em; }
-  article.real-content .article-index > li {
-    padding-bottom: 5px; }
-  .single-post {
-    background: #fff;
-    padding: 10px; }
-  .post-title {
-    font-size: 120%;
-    color: #4E5264; }
-  .posts-list {
-    margin-top: 3em; }
-    .posts-list blockquote {
-      margin: 1em 10px;
-      padding: 0.5em 10px; }
-    .posts-list blockquote:before {
-      color: #ccc;
-      font-size: 4em;
-      line-height: 0.1em;
-      margin-right: 0.25em;
-      vertical-align: -0.4em; }
-    .posts-list blockquote p {
-      display: inline; }
-    .posts-list .tip footer {
-      margin-top: 0.5rem; }
-      .posts-list .tip footer a {
-        font-size: 1rem;
-        color: inherit; }
-  .posts-pagination {
-    margin: 2rem 0; }
-    .posts-pagination a.disabled {
-      pointer-events: none; }
-  .post-nav {
-    height: 2rem;
-    padding: 10px 0;
-    border-top: 2px solid #f2f2f2; }
-  #post-tools {
-    text-align: center;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem; }
-    #post-tools span {
-      margin-right: 1rem; }
-    #post-tools a {
-      color: #555; }
-    #post-tools a.disabled {
-      color: gray;
-      pointer-events: none; }
+  .post span {
+    margin-right: 0.5rem; }
+  .posts-list blockquote {
+    margin: 1em 10px;
+    padding: 0.5em 10px; }
+  .posts-list blockquote:before {
+    color: #ccc;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em; }
+  .posts-list blockquote p {
+    display: inline; }
+  #post-tools span {
+    margin-right: 1rem; }
+  #post-tools a {
+    color: #555; }
+  #post-tools a.disabled {
+    color: gray;
+    pointer-events: none; }
   #post-comment h2 {
     padding-bottom: 0.8rem;
     border-bottom: 2px solid #f2f2f2; }
