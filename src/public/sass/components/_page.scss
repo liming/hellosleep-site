@@ -49,29 +49,6 @@
 }
 
 @media all {
-
-  html {
-    position: relative;
-    min-height: 100%;
-  }
-
-  body {
-    font-size: 14px;
-
-    // the sticky footer tips.
-    // https://github.com/Semantic-Org/Semantic-UI/issues/2882
-    // https://jsbin.com/culavuxugi/edit?html,css,js,output
-    .pusher {
-      display: flex;
-      min-height: 100vh;
-      flex-direction: column;
-
-      .main {
-        flex: 1;
-      }
-    }
-  }
-
   .intro {
 
     background: linear-gradient(to bottom,#fff 10%, #F0F1F2 100%);
@@ -116,41 +93,6 @@
           color: $primary-link-color;
         }
       }
-    }
-  }
-
-  .page-content {
-    margin-bottom: 100px;
-  }
-
-  .page-404 {
-
-    .search {
-      margin: 2rem 0;
-    }
-
-  }
-
-  .footer {
-    margin-top: 5rem;
-    padding: 1.5rem;
-    background-color: #f5f5f5;
-    border-top: 1px solid #dedede;
-
-    p {
-      font-size: 0.75rem;
-    }
-
-    text-align: center;
-  }
-
-  .contribute {
-
-    margin-top: 3rem;
-
-    .title {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
     }
   }
 }

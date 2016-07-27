@@ -3,7 +3,7 @@ extends ../layouts/page
 include ../mixins/post
 
 block content
-  .posts-list
+  .posts-list(style="margin-top: 3em;")
     if section == 'tip'
       .ui.one.stackable.cards
         each post in posts.results

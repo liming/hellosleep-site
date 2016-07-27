@@ -21,17 +21,6 @@
     display: none; } }
 
 @media all {
-  html {
-    position: relative;
-    min-height: 100%; }
-  body {
-    font-size: 14px; }
-    body .pusher {
-      display: flex;
-      min-height: 100vh;
-      flex-direction: column; }
-      body .pusher .main {
-        flex: 1; }
   .intro {
     background: linear-gradient(to bottom, #fff 10%, #F0F1F2 100%);
     font-size: 1.05rem;
@@ -61,24 +50,7 @@
         margin-top: 0;
         margin-bottom: 1rem; }
         .intro .introduction h2 a {
-          color: #717171; }
-  .page-content {
-    margin-bottom: 100px; }
-  .page-404 .search {
-    margin: 2rem 0; }
-  .footer {
-    margin-top: 5rem;
-    padding: 1.5rem;
-    background-color: #f5f5f5;
-    border-top: 1px solid #dedede;
-    text-align: center; }
-    .footer p {
-      font-size: 0.75rem; }
-  .contribute {
-    margin-top: 3rem; }
-    .contribute .title {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem; } }
+          color: #717171; } }
 
 @media all {
   .hs-help-section {
@@ -113,18 +85,6 @@
 @media all {
   a {
     color: #249cea; }
-  .post-heading {
-    font-size: 1.2rem; }
-    .post-heading a {
-      color: #555; }
-  .page-content {
-    margin-top: 3rem; }
-  .post h1 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem; }
-  .post h2 {
-    font-size: 1.5rem;
-    margin: 1.5rem 0 0.75rem 0; }
   .post .post-meta {
     color: rgba(0, 0, 0, 0.6);
     margin-bottom: 1rem; }
