@@ -8,7 +8,7 @@ class DatePicker extends Component {
   componentDidMount() {
     const { type, onChange } = this.props;
 
-    $(this.refs.datepicker.getDOMNode()).calendar({
+    $(this.refs.datepicker).calendar({
       type: type,
       onChange: onChange
     });

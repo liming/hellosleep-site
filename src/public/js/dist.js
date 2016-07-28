@@ -30752,7 +30752,7 @@ var DatePicker = function (_Component) {
       var onChange = _props.onChange;
 
 
-      $(this.refs.datepicker.getDOMNode()).calendar({
+      $(this.refs.datepicker).calendar({
         type: type,
         onChange: onChange
       });
