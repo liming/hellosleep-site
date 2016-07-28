@@ -1,14 +1,15 @@
 include ../mixins/flash-messages
 
 doctype html
-html
+html(style="position: relative;min-height: 100%;")
   head
     meta(charset="utf-8")
     meta(name="viewport", content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width")
     title= title || '睡吧-和失眠说再见'
     link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
-    link(href="/semantic/semantic.min.css", rel="stylesheet")
-    link(href="/css/dist/style.css", rel="stylesheet")
+    
+    link(rel="stylesheet", href="/semantic/semantic.min.css")
+    link(rel="stylesheet", href="/css/dist/style.css")
     
     if user && user.canAccessKeystone
       link(href="/keystone/styles/content/editor.min.css", rel="stylesheet")
@@ -16,16 +17,16 @@ html
     block css
     block head
     
-  body
+  body(style="font-size: 14px;")
     include ../includes/sidebar_menu
 
-    .pusher
+    .pusher(style="display: flex;min-height: 100vh;flex-direction: column;")
       include ../includes/header
 
       //- intro
       block intro
 
-      .ui.main.container
+      .ui.container.main(style="flex: 1;")
         //- messages
         +flash-messages(messages)
         //- content
@@ -35,20 +36,15 @@ html
       include ../includes/footer
       
     script(src='/js/libs/jquery-1.12.2.min.js')
-    script(src='/js/libs/tether.min.js')
     script(src='/semantic/semantic.min.js')
+    script(async, src='/js/main.js')
     
-    script.
-      $(document).ready(function() {
-        $('.ui.sidebar').sidebar('attach events', '.toc.item');
-      });
-
     if user && user.canAccessKeystone
       script(src='/keystone/js/content/editor.js')
       
     // The scripts using react
     if section == "tutorial" || section == "share" || section == "evaluation"
-      script(src='/js/dist.js')
+      script(async, src='/js/dist.js')
       
     if env == 'production' && ga && ga.property && ga.domain
       script.

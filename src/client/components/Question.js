@@ -35,10 +35,13 @@ class Question extends Component {
 
     if (type === 'radio') {
       return (
-        <div className="field">
-          {q.data.map(item =>
-            <div className="ui radio checkbox">
-              <label><Field name={q.name} component="input" type="radio" value={item.value}/> {item.text}</label>
+        <div>
+          {q.data.map((item, i) =>
+            <div className="field">
+              <div className="ui radio checkbox" key={i}>
+                <Field name={q.name} component="input" type="radio" value={item.value}/>
+                <label>{item.text}</label>
+              </div>
             </div>
            )}
         </div>
@@ -50,8 +53,8 @@ class Question extends Component {
         <div>
           <Field name={q.name} className="ui selection dropdown" component="select">
             <option></option>
-            {q.data.map(item =>
-              <option value={item.value}>{item.text}</option>
+            {q.data.map((item, i) =>
+              <option value={item.value} key={i}>{item.text}</option>
              )}
           </Field>
         </div>
@@ -60,7 +63,4 @@ class Question extends Component {
   }
 };
 
-export default reduxForm({
-  form: 'question',
-  destroyOnUnmount: false
-})(Question);
+export default Question;

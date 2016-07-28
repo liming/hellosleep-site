@@ -23,13 +23,11 @@
           "data": [
             {
               "text": "男",
-              "value": "male",
-              "type": "Text"
+              "value": "male"
             },
             {
               "text": "女",
-              "value": "female",
-              "type": "Text"
+              "value": "female"
             }
           ]
         },
@@ -81,52 +79,64 @@
       "page": "multiple",
       "data": [
         {
-          "id": "1",
+          "name": "sleeptime",
           "text": "通常几点睡觉？",
-          "type": "RadioChoice",
+          "type": "radio",
           "data": [
             {
-              "text": "9点之前"
+              "text": "9点之前",
+              "value": "after9"
             },
             {
-              "text": "9点 ~ 10点"
+              "text": "9点 ~ 10点",
+              "value": "9to10"
             },
             {
-              "text": "10点 ~ 11点"
+              "text": "10点 ~ 11点",
+              "value": "10to11"
             },
             {
-              "text": "11点 ~ 12点"
+              "text": "11点 ~ 12点",
+              "value": "11to12"
             },
             {
-              "text": "12点以后"
+              "text": "12点以后",
+              "value": "after12"
             },
             {
-              "text": "不固定"
+              "text": "不固定",
+              "value": "unstable"
             }
           ]
         },
         {
-          "id": "2",
+          "name": "getuptime",
           "text": "通常几点起床？",
-          "type": "RadioChoice",
+          "type": "radio",
           "data": [
             {
-              "text": "6点之前"
+              "text": "6点之前",
+              "value": "before6"
             },
             {
-              "text": "6点 ~ 7点"
+              "text": "6点 ~ 7点",
+              "value": "6to7"
             },
             {
-              "text": "7点 ~ 8点"
+              "text": "7点 ~ 8点",
+              "value": "7to8"
             },
             {
-              "text": "8点 ~ 9点"
+              "text": "8点 ~ 9点",
+              "value": "8to9"
             },
             {
-              "text": "9点以后"
+              "text": "9点以后",
+              "value": "after9"
             },
             {
-              "text": "不固定"
+              "text": "不固定",
+              "value": "unstable"
             }
           ],
           "results": [
@@ -137,33 +147,33 @@
           ]
         },
         {
-          "id": "3",
+          "name": "howlong",
           "text": "晚上的实际睡眠时间有多少？",
-          "type": "SelectChoice",
+          "type": "radio",
           "data": [
             {
               "text": "少于3个小时",
-              "type": "Text"
+              "value": "lessthan3"
             },
             {
               "text": "3到4个小时",
-              "type": "Text"
+              "value": "3to4"
             },
             {
               "text": "4到5个小时",
-              "type": "Text"
+              "value": "4to5"
             },
             {
               "text": "5到6个小时",
-              "type": "Text"
+              "value": "5to6"
             },
             {
               "text": "6个小时以上",
-              "type": "Text"
+              "value": "greaterthan6"
             },
             {
               "text": "不固定",
-              "type": "Text"
+              "value": "unstable"
             }
           ],
           "results": [
@@ -171,7 +181,6 @@
               "calc": "(parent.data[0] - parent.data[1]) / parent.data[2]"
             }
           ]
-          
         }
       ]
     }

@@ -1,5 +1,5 @@
 mixin post-meta(post, page)
-  .post-meta
+  .post-meta(style="color: rgba(0,0,0,.6);margin-bottom: 1rem;")
     i.icon.user
     span #{post.authorname}
     i.icon.calendar
@@ -20,7 +20,7 @@ mixin post-meta(post, page)
           
 mixin post-nav(post)
   if post.prev || post.next
-    .post-nav
+    .post-nav(style="height: 2rem;padding: 10px 0;border-top: 2px solid #f2f2f2;")
       if post.prev
         span.pull-xs-left
           span 上一篇 : 
@@ -37,7 +37,7 @@ mixin content-post-real(post)
   // TODO: add editor quick link
   !=post.content.extended
   +post-nav(post)
-  #post-tools(post_likes=post.likes)
+  #post-tools(post_likes=post.likes, style="text-align: center;margin-top: 0.5rem;margin-bottom: 0.5rem;")
   #post-comment
 
 mixin content-post(post)
@@ -91,13 +91,13 @@ mixin brief-post(post, page)
       a(href='/' + post.type + '/' + post.key, role="button") 阅读更多
 
 mixin pagination(posts)
-  .posts-pagination
+  .posts-pagination(style="margin: 2rem 0;")
     if posts.totalPages > 1
       .ui.pagination.menu
         if posts.previous
           a.item(href='?page=' + posts.previous): i.step.backward.icon
         else
-          a.disabled.item(href='?page=' + 1): i.step.backward.icon
+          a.disabled.item(href='?page=' + 1, style="pointer-events: none;"): i.step.backward.icon
         each p, i in posts.pages
           a.item(class=posts.currentPage === p ? 'active' : null href='?page=' + (p === '...' ? (i ? posts.totalPages : 1) : p ))= p
         if posts.next

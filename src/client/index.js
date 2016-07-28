@@ -67,12 +67,39 @@ if (postTarget) {
 // create evaluation page
 const evaluationTarget = document.getElementById('new_evaluation');
 
+function getEvaluationMeta(content) {
+
+  let totalStep = 0, stepCounts = [];
+  content.data.forEach((v, i) => {
+    if (v.page == 'single') {
+      totalStep += 1;
+      stepCounts.push(1);
+    }
+    else {
+      totalStep += v.data.length;
+      stepCounts.push(v.data.length);
+    }
+  });
+
+  return {
+    totalStep, stepCounts
+  };
+}
+
 function renderEvaluation() {
 
-  const initialState = {};
+  const content = require('../data/evaluation.json');
+  const { totalStep, stepCounts } = getEvaluationMeta(content);
+
+  const initialState = {
+    evaluation: {
+      totalStep,
+      stepCounts,
+      step: 1
+    }
+  };
 
   const evaluationStore = configureEvaluationStore(initialState);
-  const content = require('../data/evaluation.json');
 
   render(
     <Provider store={evaluationStore}>

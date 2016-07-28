@@ -18,9 +18,9 @@ class DatePicker extends Component {
     const { placeholder } = this.props;
 
     return (
-      <div class="ui calendar" ref="datepicker">
-        <div class="ui input left icon">
-          <i class="calendar icon"></i>
+      <div className="ui calendar" ref="datepicker">
+        <div className="ui input left icon">
+          <i className="calendar icon"></i>
           <input type="text" placeholder={placeholder} />
         </div>
       </div>

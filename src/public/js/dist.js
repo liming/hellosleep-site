@@ -30173,6 +30173,37 @@ module.exports = function symbolObservablePonyfill(root) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.PREVIOUS_STEP = exports.NEXT_STEP = undefined;
+exports.nextStep = nextStep;
+exports.previousStep = previousStep;
+
+var _superagent = require('superagent');
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var NEXT_STEP = exports.NEXT_STEP = 'NEXT_STEP';
+var PREVIOUS_STEP = exports.PREVIOUS_STEP = 'PREVIOUS_STEP';
+
+function nextStep() {
+  return {
+    type: NEXT_STEP
+  };
+}
+
+function previousStep() {
+  return {
+    type: PREVIOUS_STEP
+  };
+}
+
+},{"superagent":360}],367:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.CANCEL_REPLY = exports.REPLY_COMMENT = exports.RECEIVE_COMMENTS = exports.ADD_COMMENT = exports.COMMENT_INVALID = exports.TOGGLE_SUBMIT = exports.RESPONSE_ERROR = exports.RECEIVE_META = exports.WAIT_META = undefined;
 exports.likePost = likePost;
 exports.fetchPostMeta = fetchPostMeta;
@@ -30399,7 +30430,7 @@ function cancelReply() {
   };
 }
 
-},{"superagent":360}],367:[function(require,module,exports){
+},{"superagent":360}],368:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30509,7 +30540,7 @@ Comment.propTypes = {
 
 exports.default = Comment;
 
-},{"react":295}],368:[function(require,module,exports){
+},{"react":295}],369:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30714,7 +30745,7 @@ CommentForm.propTypes = {
   onToggleSubmit: _react.PropTypes.func.isRequired
 };
 
-},{"./ReplyTo":373,"react":295,"react-dom":152}],369:[function(require,module,exports){
+},{"./ReplyTo":374,"react":295,"react-dom":152}],370:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30765,11 +30796,11 @@ var DatePicker = function (_Component) {
 
       return _react2.default.createElement(
         "div",
-        { "class": "ui calendar", ref: "datepicker" },
+        { className: "ui calendar", ref: "datepicker" },
         _react2.default.createElement(
           "div",
-          { "class": "ui input left icon" },
-          _react2.default.createElement("i", { "class": "calendar icon" }),
+          { className: "ui input left icon" },
+          _react2.default.createElement("i", { className: "calendar icon" }),
           _react2.default.createElement("input", { type: "text", placeholder: placeholder })
         )
       );
@@ -30783,7 +30814,7 @@ var DatePicker = function (_Component) {
 
 exports.default = DatePicker;
 
-},{"react":295}],370:[function(require,module,exports){
+},{"react":295}],371:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30819,27 +30850,10 @@ var EvaluationForm = function (_Component) {
   function EvaluationForm(props) {
     _classCallCheck(this, EvaluationForm);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EvaluationForm).call(this, props));
-
-    _this.nextStep = _this.nextStep.bind(_this);
-    _this.previousStep = _this.previousStep.bind(_this);
-    _this.state = {
-      step: 1
-    };
-    return _this;
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(EvaluationForm).call(this, props));
   }
 
   _createClass(EvaluationForm, [{
-    key: 'nextStep',
-    value: function nextStep() {
-      this.setState({ step: this.state.step + 1 });
-    }
-  }, {
-    key: 'previousStep',
-    value: function previousStep() {
-      this.setState({ step: this.state.step - 1 });
-    }
-  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -30849,72 +30863,11 @@ var EvaluationForm = function (_Component) {
         this.createNavButtons()
       );
     }
-
-    // Get the question content from data
-
-  }, {
-    key: 'getQuestion',
-    value: function getQuestion() {
-      var data = this.props.data;
-
-      var _getIndexes = this.getIndexes();
-
-      var categoryIndex = _getIndexes.categoryIndex;
-      var questionIndex = _getIndexes.questionIndex;
-
-      // at first calculate the category and question
-
-      var category = data[categoryIndex];
-
-      // questions can be single page or spread into multiple pages
-      var question = category.page == 'single' ? category.data : category.data[questionIndex];
-
-      return question;
-    }
-  }, {
-    key: 'isLastStep',
-    value: function isLastStep() {
-      var meta = this.props.meta;
-      var step = this.state.step;
-
-
-      return step === meta.totalStep;
-    }
-
-    // get the indexes from current step and the question meta data
-
-  }, {
-    key: 'getIndexes',
-    value: function getIndexes() {
-      var step = this.state.step;
-      var meta = this.props.meta;
-
-
-      var stepCounts = meta.stepCounts;
-
-      // get question data
-      var count = 0;
-      var categoryIndex = 0;
-      var questionIndex = 0;
-
-      stepCounts.some(function (v, i) {
-        var prev = count;
-        count += v;
-        if (step <= count && step > prev) {
-          categoryIndex = i;
-          questionIndex = step - prev - 1;
-
-          return true;
-        }
-      });
-
-      return { categoryIndex: categoryIndex, questionIndex: questionIndex };
-    }
   }, {
     key: 'createQuestions',
     value: function createQuestions() {
+      var question = this.props.question;
 
-      var question = this.getQuestion();
       var questions = question.constructor === Array ? question : [question];
 
       return questions.map(function (q, i) {
@@ -30927,28 +30880,30 @@ var EvaluationForm = function (_Component) {
   }, {
     key: 'createNavButtons',
     value: function createNavButtons() {
-      var onSubmit = this.props.onSubmit;
-      var step = this.state.step;
+      var _props = this.props;
+      var onNextStep = _props.onNextStep;
+      var onPreviousStep = _props.onPreviousStep;
+      var isLastStep = _props.isLastStep;
+      var isFirstStep = _props.isFirstStep;
 
 
       var prevClassName = 'ui button';
-      if (step === 1) prevClassName += ' disabled';
+      if (isFirstStep) prevClassName += ' disabled';
 
-      var onClick = this.isLastStep() ? onSubmit : this.nextStep;
-      var nextText = this.isLastStep() ? '提交' : '下一个';
+      var nextText = isLastStep ? '提交' : '下一个';
 
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
           'button',
-          { type: 'button', className: prevClassName, onClick: this.previousPage },
+          { type: 'button', className: prevClassName, onClick: onPreviousStep },
           '上一个'
         ),
         _react2.default.createElement(
           'button',
-          { type: 'submit', className: 'ui button', onClick: onClick },
-          '下一个'
+          { type: 'button', className: 'ui button', onClick: onNextStep },
+          nextText
         )
       );
     }
@@ -30958,16 +30913,16 @@ var EvaluationForm = function (_Component) {
 }(_react.Component);
 
 EvaluationForm.propTypes = {
-  onSubmit: _react.PropTypes.func.isRequired
+  onPreviousStep: _react.PropTypes.func.isRequired,
+  onNextStep: _react.PropTypes.func.isRequired
 };
 
 exports.default = (0, _reduxForm.reduxForm)({
-  form: 'evaluation', // a unique identifier for this form
+  form: 'evaluation',
   destroyOnUnmount: false
-
 })(EvaluationForm);
 
-},{"./Question":372,"react":295,"redux-form":322}],371:[function(require,module,exports){
+},{"./Question":373,"react":295,"redux-form":322}],372:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31033,7 +30988,7 @@ LikeButton.propTypes = {
   onClick: _react.PropTypes.func.isRequired
 };
 
-},{"react":295}],372:[function(require,module,exports){
+},{"react":295}],373:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31105,17 +31060,20 @@ var Question = function (_Component) {
       if (type === 'radio') {
         return _react2.default.createElement(
           'div',
-          { className: 'field' },
-          q.data.map(function (item) {
+          null,
+          q.data.map(function (item, i) {
             return _react2.default.createElement(
               'div',
-              { className: 'ui radio checkbox' },
+              { className: 'field' },
               _react2.default.createElement(
-                'label',
-                null,
+                'div',
+                { className: 'ui radio checkbox', key: i },
                 _react2.default.createElement(_reduxForm.Field, { name: q.name, component: 'input', type: 'radio', value: item.value }),
-                ' ',
-                item.text
+                _react2.default.createElement(
+                  'label',
+                  null,
+                  item.text
+                )
               )
             );
           })
@@ -31130,10 +31088,10 @@ var Question = function (_Component) {
             _reduxForm.Field,
             { name: q.name, className: 'ui selection dropdown', component: 'select' },
             _react2.default.createElement('option', null),
-            q.data.map(function (item) {
+            q.data.map(function (item, i) {
               return _react2.default.createElement(
                 'option',
-                { value: item.value },
+                { value: item.value, key: i },
                 item.text
               );
             })
@@ -31148,12 +31106,9 @@ var Question = function (_Component) {
 
 ;
 
-exports.default = (0, _reduxForm.reduxForm)({
-  form: 'question',
-  destroyOnUnmount: false
-})(Question);
+exports.default = Question;
 
-},{"./DatePicker":369,"react":295,"redux-form":322}],373:[function(require,module,exports){
+},{"./DatePicker":370,"react":295,"redux-form":322}],374:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31229,7 +31184,7 @@ var ReplyTo = function (_Component) {
 
 exports.default = ReplyTo;
 
-},{"react":295}],374:[function(require,module,exports){
+},{"react":295}],375:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31248,6 +31203,8 @@ var _EvaluationForm = require('../components/EvaluationForm');
 
 var _EvaluationForm2 = _interopRequireDefault(_EvaluationForm);
 
+var _evaluation = require('../actions/evaluation');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -31264,21 +31221,36 @@ var Evaluation = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Evaluation).call(this, props));
 
-    _this.onSubmit = _this.onSubmit.bind(_this);
+    _this.onNextStep = _this.onNextStep.bind(_this);
+    _this.onPreviousStep = _this.onPreviousStep.bind(_this);
     return _this;
   }
 
   _createClass(Evaluation, [{
-    key: 'onSubmit',
-    value: function onSubmit() {
-      console.log('--- submit evaluation form');
+    key: 'onNextStep',
+    value: function onNextStep() {
+      var _props = this.props;
+      var dispatch = _props.dispatch;
+      var isLastStep = _props.isLastStep;
+
+      dispatch((0, _evaluation.nextStep)());
+    }
+  }, {
+    key: 'onPreviousStep',
+    value: function onPreviousStep() {
+      var dispatch = this.props.dispatch;
+
+      dispatch((0, _evaluation.previousStep)());
     }
   }, {
     key: 'render',
     value: function render() {
-      var content = this.props.content;
+      var _props2 = this.props;
+      var content = _props2.content;
+      var isLastStep = _props2.isLastStep;
+      var isFirstStep = _props2.isFirstStep;
 
-      var meta = this.getMeta();
+      var question = this.getQuestion();
 
       return _react2.default.createElement(
         'div',
@@ -31289,33 +31261,64 @@ var Evaluation = function (_Component) {
           '睡眠评估'
         ),
         _react2.default.createElement(_EvaluationForm2.default, {
-          data: content.data,
-          meta: meta,
-          onSubmit: this.onSubmit
+          onNextStep: this.onNextStep,
+          onPreviousStep: this.onPreviousStep,
+          question: question,
+          isLastStep: isLastStep,
+          isFirstStep: isFirstStep
         })
       );
     }
+
+    // Get the question content from data
+
   }, {
-    key: 'getMeta',
-    value: function getMeta() {
-      var content = this.props.content;
+    key: 'getQuestion',
+    value: function getQuestion() {
+      var data = this.props.content.data;
 
+      var _getIndexes = this.getIndexes();
 
-      var totalStep = 0,
-          stepCounts = [];
-      content.data.forEach(function (v, i) {
-        if (v.page == 'single') {
-          totalStep += 1;
-          stepCounts.push(1);
-        } else {
-          totalStep += v.data.length;
-          stepCounts.push(v.data.length);
+      var categoryIndex = _getIndexes.categoryIndex;
+      var questionIndex = _getIndexes.questionIndex;
+
+      // at first calculate the category and question
+
+      var category = data[categoryIndex];
+
+      // questions can be single page or spread into multiple pages
+      var question = category.page == 'single' ? category.data : category.data[questionIndex];
+
+      return question;
+    }
+
+    // get the indexes from current step and the question meta data
+
+  }, {
+    key: 'getIndexes',
+    value: function getIndexes() {
+      var _props3 = this.props;
+      var step = _props3.step;
+      var stepCounts = _props3.stepCounts;
+
+      // get question data
+
+      var count = 0;
+      var categoryIndex = 0;
+      var questionIndex = 0;
+
+      stepCounts.some(function (v, i) {
+        var prev = count;
+        count += v;
+        if (step <= count && step > prev) {
+          categoryIndex = i;
+          questionIndex = step - prev - 1;
+
+          return true;
         }
       });
 
-      return {
-        totalStep: totalStep, stepCounts: stepCounts
-      };
+      return { categoryIndex: categoryIndex, questionIndex: questionIndex };
     }
   }]);
 
@@ -31324,9 +31327,20 @@ var Evaluation = function (_Component) {
 
 ;
 
-exports.default = Evaluation;
+var mapStateToProps = function mapStateToProps(state) {
+  var v = state.evaluation;
 
-},{"../components/EvaluationForm":370,"react":295,"react-redux":345}],375:[function(require,module,exports){
+  return {
+    isLastStep: v.step === v.totalStep,
+    isFirstStep: v.step === 1,
+    step: v.step,
+    stepCounts: v.stepCounts
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(Evaluation);
+
+},{"../actions/evaluation":366,"../components/EvaluationForm":371,"react":295,"react-redux":345}],376:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31471,7 +31485,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostComment);
 
-},{"../actions/post":366,"../components/Comment":367,"../components/CommentForm":368,"react":295,"react-redux":345}],376:[function(require,module,exports){
+},{"../actions/post":367,"../components/Comment":368,"../components/CommentForm":369,"react":295,"react-redux":345}],377:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31568,7 +31582,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostMeta);
 
-},{"../actions/post":366,"../components/LikeButton":371,"react":295,"react-redux":345}],377:[function(require,module,exports){
+},{"../actions/post":367,"../components/LikeButton":372,"react":295,"react-redux":345}],378:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -31651,12 +31665,44 @@ if (postTarget) {
 // create evaluation page
 var evaluationTarget = document.getElementById('new_evaluation');
 
+function getEvaluationMeta(content) {
+
+  var totalStep = 0,
+      stepCounts = [];
+  content.data.forEach(function (v, i) {
+    if (v.page == 'single') {
+      totalStep += 1;
+      stepCounts.push(1);
+    } else {
+      totalStep += v.data.length;
+      stepCounts.push(v.data.length);
+    }
+  });
+
+  return {
+    totalStep: totalStep, stepCounts: stepCounts
+  };
+}
+
 function renderEvaluation() {
 
-  var initialState = {};
+  var content = require('../data/evaluation.json');
+
+  var _getEvaluationMeta = getEvaluationMeta(content);
+
+  var totalStep = _getEvaluationMeta.totalStep;
+  var stepCounts = _getEvaluationMeta.stepCounts;
+
+
+  var initialState = {
+    evaluation: {
+      totalStep: totalStep,
+      stepCounts: stepCounts,
+      step: 1
+    }
+  };
 
   var evaluationStore = (0, _configureStore.configureEvaluationStore)(initialState);
-  var content = require('../data/evaluation.json');
 
   (0, _reactDom.render)(_react2.default.createElement(
     _reactRedux.Provider,
@@ -31671,23 +31717,35 @@ if (evaluationTarget) {
   renderEvaluation();
 }
 
-},{"../data/evaluation.json":383,"./containers/Evaluation":374,"./containers/PostComment":375,"./containers/PostMeta.js":376,"./stores/configureStore":382,"react":295,"react-dom":152,"react-redux":345}],378:[function(require,module,exports){
-"use strict";
+},{"../data/evaluation.json":384,"./containers/Evaluation":375,"./containers/PostComment":376,"./containers/PostMeta.js":377,"./stores/configureStore":383,"react":295,"react-dom":152,"react-redux":345}],379:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-function evaluation() {
-  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-  var action = arguments[1];
+var _evaluation = require('../actions/evaluation');
 
-  return state;
+function evaluation(state, action) {
+  var newState = Object.assign({}, state);
+
+  switch (action.type) {
+    case _evaluation.NEXT_STEP:
+      newState.step += 1;
+      break;
+    case _evaluation.PREVIOUS_STEP:
+      if (newState.step > 1) newState.step -= 1;
+      break;
+    default:
+      break;
+  }
+
+  return newState;
 }
 
 exports.default = evaluation;
 
-},{}],379:[function(require,module,exports){
+},{"../actions/evaluation":366}],380:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31726,7 +31784,7 @@ var evaluationReducers = (0, _redux.combineReducers)({
 exports.postReducers = postReducers;
 exports.evaluationReducers = evaluationReducers;
 
-},{"./evaluation":378,"./post_comment":380,"./post_meta":381,"redux":358,"redux-form":322}],380:[function(require,module,exports){
+},{"./evaluation":379,"./post_comment":381,"./post_meta":382,"redux":358,"redux-form":322}],381:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31781,7 +31839,7 @@ function postComment() {
 
 exports.default = postComment;
 
-},{"../actions/post":366}],381:[function(require,module,exports){
+},{"../actions/post":367}],382:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31813,7 +31871,7 @@ function postMeta() {
 
 exports.default = postMeta;
 
-},{"../actions/post":366}],382:[function(require,module,exports){
+},{"../actions/post":367}],383:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31850,7 +31908,7 @@ function configureEvaluationStore(initialState) {
 exports.configureStore = configureStore;
 exports.configureEvaluationStore = configureEvaluationStore;
 
-},{"../reducers":379,"redux":358,"redux-logger":351,"redux-thunk":352}],383:[function(require,module,exports){
+},{"../reducers":380,"redux":358,"redux-logger":351,"redux-thunk":352}],384:[function(require,module,exports){
 module.exports={
   "version": "1",
   "data": [
@@ -31876,13 +31934,11 @@ module.exports={
           "data": [
             {
               "text": "男",
-              "value": "male",
-              "type": "Text"
+              "value": "male"
             },
             {
               "text": "女",
-              "value": "female",
-              "type": "Text"
+              "value": "female"
             }
           ]
         },
@@ -31934,52 +31990,64 @@ module.exports={
       "page": "multiple",
       "data": [
         {
-          "id": "1",
+          "name": "sleeptime",
           "text": "通常几点睡觉？",
-          "type": "RadioChoice",
+          "type": "radio",
           "data": [
             {
-              "text": "9点之前"
+              "text": "9点之前",
+              "value": "after9"
             },
             {
-              "text": "9点 ~ 10点"
+              "text": "9点 ~ 10点",
+              "value": "9to10"
             },
             {
-              "text": "10点 ~ 11点"
+              "text": "10点 ~ 11点",
+              "value": "10to11"
             },
             {
-              "text": "11点 ~ 12点"
+              "text": "11点 ~ 12点",
+              "value": "11to12"
             },
             {
-              "text": "12点以后"
+              "text": "12点以后",
+              "value": "after12"
             },
             {
-              "text": "不固定"
+              "text": "不固定",
+              "value": "unstable"
             }
           ]
         },
         {
-          "id": "2",
+          "name": "getuptime",
           "text": "通常几点起床？",
-          "type": "RadioChoice",
+          "type": "radio",
           "data": [
             {
-              "text": "6点之前"
+              "text": "6点之前",
+              "value": "before6"
             },
             {
-              "text": "6点 ~ 7点"
+              "text": "6点 ~ 7点",
+              "value": "6to7"
             },
             {
-              "text": "7点 ~ 8点"
+              "text": "7点 ~ 8点",
+              "value": "7to8"
             },
             {
-              "text": "8点 ~ 9点"
+              "text": "8点 ~ 9点",
+              "value": "8to9"
             },
             {
-              "text": "9点以后"
+              "text": "9点以后",
+              "value": "after9"
             },
             {
-              "text": "不固定"
+              "text": "不固定",
+              "value": "unstable"
             }
           ],
           "results": [
@@ -31990,33 +32058,33 @@ module.exports={
           ]
         },
         {
-          "id": "3",
+          "name": "howlong",
           "text": "晚上的实际睡眠时间有多少？",
-          "type": "SelectChoice",
+          "type": "radio",
           "data": [
             {
               "text": "少于3个小时",
-              "type": "Text"
+              "value": "lessthan3"
             },
             {
               "text": "3到4个小时",
-              "type": "Text"
+              "value": "3to4"
             },
             {
               "text": "4到5个小时",
-              "type": "Text"
+              "value": "4to5"
             },
             {
               "text": "5到6个小时",
-              "type": "Text"
+              "value": "5to6"
             },
             {
               "text": "6个小时以上",
-              "type": "Text"
+              "value": "greaterthan6"
             },
             {
               "text": "不固定",
-              "type": "Text"
+              "value": "unstable"
             }
           ],
           "results": [
@@ -32024,13 +32092,12 @@ module.exports={
               "calc": "(parent.data[0] - parent.data[1]) / parent.data[2]"
             }
           ]
-          
         }
       ]
     }
   ]
 }
 
-},{}]},{},[377]);
+},{}]},{},[378]);
 
 //# sourceMappingURL=dist.js.map
