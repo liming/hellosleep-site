@@ -30714,7 +30714,76 @@ CommentForm.propTypes = {
   onToggleSubmit: _react.PropTypes.func.isRequired
 };
 
-},{"./ReplyTo":372,"react":295,"react-dom":152}],369:[function(require,module,exports){
+},{"./ReplyTo":373,"react":295,"react-dom":152}],369:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DatePicker = function (_Component) {
+  _inherits(DatePicker, _Component);
+
+  function DatePicker(props) {
+    _classCallCheck(this, DatePicker);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(DatePicker).call(this, props));
+  }
+
+  _createClass(DatePicker, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _props = this.props;
+      var type = _props.type;
+      var onChange = _props.onChange;
+
+
+      $(this.refs.datepicker.getDOMNode()).calendar({
+        type: type,
+        onChange: onChange
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var placeholder = this.props.placeholder;
+
+
+      return _react2.default.createElement(
+        "div",
+        { "class": "ui calendar", ref: "datepicker" },
+        _react2.default.createElement(
+          "div",
+          { "class": "ui input left icon" },
+          _react2.default.createElement("i", { "class": "calendar icon" }),
+          _react2.default.createElement("input", { type: "text", placeholder: placeholder })
+        )
+      );
+    }
+  }]);
+
+  return DatePicker;
+}(_react.Component);
+
+;
+
+exports.default = DatePicker;
+
+},{"react":295}],370:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30773,25 +30842,11 @@ var EvaluationForm = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
-
-      var onSubmit = this.props.onSubmit;
-      var step = this.state.step;
-
-      var question = this.getQuestion();
-      var questions = question.constructor === Array ? question : [question];
-
       return _react2.default.createElement(
         'form',
         { className: 'ui form' },
-        questions.map(function (q, i) {
-          return _react2.default.createElement(_Question2.default, {
-            key: i,
-            question: q,
-            previousStep: step === 1 ? undefined : _this2.previousStep,
-            onSubmit: _this2.isLastStep() ? onSubmit : _this2.nextStep
-          });
-        })
+        this.createQuestions(),
+        this.createNavButtons()
       );
     }
 
@@ -30855,6 +30910,48 @@ var EvaluationForm = function (_Component) {
 
       return { categoryIndex: categoryIndex, questionIndex: questionIndex };
     }
+  }, {
+    key: 'createQuestions',
+    value: function createQuestions() {
+
+      var question = this.getQuestion();
+      var questions = question.constructor === Array ? question : [question];
+
+      return questions.map(function (q, i) {
+        return _react2.default.createElement(_Question2.default, {
+          key: i,
+          question: q
+        });
+      });
+    }
+  }, {
+    key: 'createNavButtons',
+    value: function createNavButtons() {
+      var onSubmit = this.props.onSubmit;
+      var step = this.state.step;
+
+
+      var prevClassName = 'ui button';
+      if (step === 1) prevClassName += ' disabled';
+
+      var onClick = this.isLastStep() ? onSubmit : this.nextStep;
+      var nextText = this.isLastStep() ? '提交' : '下一个';
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'button',
+          { type: 'button', className: prevClassName, onClick: this.previousPage },
+          '上一个'
+        ),
+        _react2.default.createElement(
+          'button',
+          { type: 'submit', className: 'ui button', onClick: onClick },
+          '下一个'
+        )
+      );
+    }
   }]);
 
   return EvaluationForm;
@@ -30865,10 +30962,12 @@ EvaluationForm.propTypes = {
 };
 
 exports.default = (0, _reduxForm.reduxForm)({
-  form: 'evaluation' // a unique identifier for this form
+  form: 'evaluation', // a unique identifier for this form
+  destroyOnUnmount: false
+
 })(EvaluationForm);
 
-},{"./Question":371,"react":295,"redux-form":322}],370:[function(require,module,exports){
+},{"./Question":372,"react":295,"redux-form":322}],371:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30934,7 +31033,7 @@ LikeButton.propTypes = {
   onClick: _react.PropTypes.func.isRequired
 };
 
-},{"react":295}],371:[function(require,module,exports){
+},{"react":295}],372:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30948,6 +31047,10 @@ var _react = require('react');
 var _react2 = _interopRequireDefault(_react);
 
 var _reduxForm = require('redux-form');
+
+var _DatePicker = require('./DatePicker');
+
+var _DatePicker2 = _interopRequireDefault(_DatePicker);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30969,16 +31072,74 @@ var Question = function (_Component) {
   _createClass(Question, [{
     key: 'render',
     value: function render() {
+      var question = this.props.question;
+
+
+      var fieldClass = 'field';
+      if (question.type === 'radio') fieldClass = 'grouped fields';
+
       return _react2.default.createElement(
         'div',
-        null,
-        this.create()
+        { className: fieldClass },
+        _react2.default.createElement(
+          'label',
+          null,
+          question.text
+        ),
+        this.renderField(question)
       );
     }
   }, {
-    key: 'create',
-    value: function create() {
-      return _react2.default.createElement(_reduxForm.Field, { name: 'email', type: 'email', component: 'input', placeholder: 'Email' });
+    key: 'renderField',
+    value: function renderField(q) {
+      var type = q.type;
+
+      if (type === 'input') {
+        return _react2.default.createElement(_reduxForm.Field, { name: q.name, component: 'input', placeholder: q.placeHolder });
+      }
+
+      if (type === 'date') {
+        return _react2.default.createElement(_reduxForm.Field, { name: q.name, component: _DatePicker2.default, placeholder: q.placeHolder, type: 'date' });
+      }
+
+      if (type === 'radio') {
+        return _react2.default.createElement(
+          'div',
+          { className: 'field' },
+          q.data.map(function (item) {
+            return _react2.default.createElement(
+              'div',
+              { className: 'ui radio checkbox' },
+              _react2.default.createElement(
+                'label',
+                null,
+                _react2.default.createElement(_reduxForm.Field, { name: q.name, component: 'input', type: 'radio', value: item.value }),
+                ' ',
+                item.text
+              )
+            );
+          })
+        );
+      }
+
+      if (type === 'select') {
+        return _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            _reduxForm.Field,
+            { name: q.name, className: 'ui selection dropdown', component: 'select' },
+            _react2.default.createElement('option', null),
+            q.data.map(function (item) {
+              return _react2.default.createElement(
+                'option',
+                { value: item.value },
+                item.text
+              );
+            })
+          )
+        );
+      }
     }
   }]);
 
@@ -30992,7 +31153,7 @@ exports.default = (0, _reduxForm.reduxForm)({
   destroyOnUnmount: false
 })(Question);
 
-},{"react":295,"redux-form":322}],372:[function(require,module,exports){
+},{"./DatePicker":369,"react":295,"redux-form":322}],373:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31068,7 +31229,7 @@ var ReplyTo = function (_Component) {
 
 exports.default = ReplyTo;
 
-},{"react":295}],373:[function(require,module,exports){
+},{"react":295}],374:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31165,7 +31326,7 @@ var Evaluation = function (_Component) {
 
 exports.default = Evaluation;
 
-},{"../components/EvaluationForm":369,"react":295,"react-redux":345}],374:[function(require,module,exports){
+},{"../components/EvaluationForm":370,"react":295,"react-redux":345}],375:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31310,7 +31471,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostComment);
 
-},{"../actions/post":366,"../components/Comment":367,"../components/CommentForm":368,"react":295,"react-redux":345}],375:[function(require,module,exports){
+},{"../actions/post":366,"../components/Comment":367,"../components/CommentForm":368,"react":295,"react-redux":345}],376:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31407,7 +31568,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostMeta);
 
-},{"../actions/post":366,"../components/LikeButton":370,"react":295,"react-redux":345}],376:[function(require,module,exports){
+},{"../actions/post":366,"../components/LikeButton":371,"react":295,"react-redux":345}],377:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -31510,7 +31671,7 @@ if (evaluationTarget) {
   renderEvaluation();
 }
 
-},{"../data/evaluation.json":382,"./containers/Evaluation":373,"./containers/PostComment":374,"./containers/PostMeta.js":375,"./stores/configureStore":381,"react":295,"react-dom":152,"react-redux":345}],377:[function(require,module,exports){
+},{"../data/evaluation.json":383,"./containers/Evaluation":374,"./containers/PostComment":375,"./containers/PostMeta.js":376,"./stores/configureStore":382,"react":295,"react-dom":152,"react-redux":345}],378:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31526,7 +31687,7 @@ function evaluation() {
 
 exports.default = evaluation;
 
-},{}],378:[function(require,module,exports){
+},{}],379:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31565,7 +31726,7 @@ var evaluationReducers = (0, _redux.combineReducers)({
 exports.postReducers = postReducers;
 exports.evaluationReducers = evaluationReducers;
 
-},{"./evaluation":377,"./post_comment":379,"./post_meta":380,"redux":358,"redux-form":322}],379:[function(require,module,exports){
+},{"./evaluation":378,"./post_comment":380,"./post_meta":381,"redux":358,"redux-form":322}],380:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31620,7 +31781,7 @@ function postComment() {
 
 exports.default = postComment;
 
-},{"../actions/post":366}],380:[function(require,module,exports){
+},{"../actions/post":366}],381:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31652,7 +31813,7 @@ function postMeta() {
 
 exports.default = postMeta;
 
-},{"../actions/post":366}],381:[function(require,module,exports){
+},{"../actions/post":366}],382:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31689,7 +31850,7 @@ function configureEvaluationStore(initialState) {
 exports.configureStore = configureStore;
 exports.configureEvaluationStore = configureEvaluationStore;
 
-},{"../reducers":378,"redux":358,"redux-logger":351,"redux-thunk":352}],382:[function(require,module,exports){
+},{"../reducers":379,"redux":358,"redux-logger":351,"redux-thunk":352}],383:[function(require,module,exports){
 module.exports={
   "version": "1",
   "data": [
@@ -31698,50 +31859,61 @@ module.exports={
       "page": "single",
       "data": [
         {
+          "name": "email",
           "text": "邮箱",
-          "type": "TextFieldChoice",
+          "type": "input",
           "placeHolder": "输入你的邮箱"
         },
         {
           "text": "生日",
-          "type": "DatePickerChoice"
+          "name": "birthday",
+          "type": "date"
         },
         {
           "text": "性别",
-          "name": "gender",
-          "type": "RadioChoice",
+          "name": "sex",
+          "type": "radio",
           "data": [
             {
               "text": "男",
+              "value": "male",
               "type": "Text"
             },
             {
               "text": "女",
+              "value": "female",
               "type": "Text"
             }
           ]
         },
         {
           "text": "你的状态",
-          "type": "SelectChoice",
+          "name": "status",
+          "type": "select",
           "data": [
             {
-              "text": "工作"
+              "text": "工作",
+              "value": "work"
             },
             {
-              "text": "上学"
+              "text": "上学",
+              "value": "student"
             },
             {
-              "text": "待业"
+              "text": "待业",
+              "value": "unemployed"
             },
             {
-              "text": "孕期"
+              "text": "孕期",
+              "value": "prenatal"
             },
             {
-              "text": "产后"
+              "text": "产后",
+              "value": "postnatal"
             },
             {
-              "text": "退休"
+              "text": "退休",
+              "value": "retire"
             }
           ],
           "results": [
@@ -31859,6 +32031,6 @@ module.exports={
   ]
 }
 
-},{}]},{},[376]);
+},{}]},{},[377]);
 
 //# sourceMappingURL=dist.js.map

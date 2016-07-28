@@ -25,21 +25,10 @@ class EvaluationForm extends Component {
   }
 
   render() {
-    const { onSubmit } = this.props;
-    const { step } = this.state;
-    const question = this.getQuestion();
-    const questions = question.constructor === Array ? question : [question];
-
     return (
       <form className="ui form">
-        {questions.map((q, i) =>
-           <Question
-             key={i}
-             question={q}
-             previousStep={step === 1 ? undefined : this.previousStep}
-             onSubmit={this.isLastStep() ? onSubmit : this.nextStep}
-           />
-         )}
+        {this.createQuestions()}
+        {this.createNavButtons()}
       </form>
     );
   }
@@ -90,6 +79,37 @@ class EvaluationForm extends Component {
 
     return {categoryIndex, questionIndex};
   }
+
+  createQuestions() {
+
+    const question = this.getQuestion();
+    const questions = question.constructor === Array ? question : [question];
+
+    return questions.map((q, i) =>
+      <Question
+        key={i}
+        question={q}
+      />
+    );
+  }
+
+  createNavButtons() {
+    const { onSubmit } = this.props;
+    const { step } = this.state;
+
+    let prevClassName = 'ui button';
+    if (step === 1) prevClassName += ' disabled';
+
+    const onClick = this.isLastStep() ? onSubmit : this.nextStep;
+    const nextText = this.isLastStep() ? '提交' : '下一个';
+
+    return (
+      <div>
+        <button type="button" className={prevClassName} onClick={this.previousPage}>上一个</button>
+        <button type="submit" className="ui button" onClick={onClick}>下一个</button>
+      </div>
+    );
+  }
 }
 
 EvaluationForm.propTypes = {
@@ -97,5 +117,7 @@ EvaluationForm.propTypes = {
 }
 
 export default reduxForm({
-  form: 'evaluation'  // a unique identifier for this form
+  form: 'evaluation',  // a unique identifier for this form
+  destroyOnUnmount: false
+
 })(EvaluationForm);

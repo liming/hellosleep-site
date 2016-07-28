@@ -6,50 +6,61 @@
       "page": "single",
       "data": [
         {
+          "name": "email",
           "text": "邮箱",
-          "type": "TextFieldChoice",
+          "type": "input",
           "placeHolder": "输入你的邮箱"
         },
         {
           "text": "生日",
-          "type": "DatePickerChoice"
+          "name": "birthday",
+          "type": "date"
         },
         {
           "text": "性别",
-          "name": "gender",
-          "type": "RadioChoice",
+          "name": "sex",
+          "type": "radio",
           "data": [
             {
               "text": "男",
+              "value": "male",
               "type": "Text"
             },
             {
               "text": "女",
+              "value": "female",
               "type": "Text"
             }
           ]
         },
         {
           "text": "你的状态",
-          "type": "SelectChoice",
+          "name": "status",
+          "type": "select",
           "data": [
             {
-              "text": "工作"
+              "text": "工作",
+              "value": "work"
             },
             {
-              "text": "上学"
+              "text": "上学",
+              "value": "student"
             },
             {
-              "text": "待业"
+              "text": "待业",
+              "value": "unemployed"
             },
             {
-              "text": "孕期"
+              "text": "孕期",
+              "value": "prenatal"
             },
             {
-              "text": "产后"
+              "text": "产后",
+              "value": "postnatal"
             },
             {
-              "text": "退休"
+              "text": "退休",
+              "value": "retire"
             }
           ],
           "results": [
