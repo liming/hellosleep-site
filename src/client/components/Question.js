@@ -33,13 +33,16 @@ class Question extends Component {
       return (<Field name={q.name} component={DatePicker} placeholder={q.placeHolder} type='date' />);
     }
 
-    if (type === 'radio') {
+    if (type === 'radio' || type === 'checkbox') {
+
+      const divClass = type === 'radio' ? 'ui radio checkbox' : 'ui checkbox';
+
       return (
         <div>
           {q.data.map((item, i) =>
             <div className="field">
-              <div className="ui radio checkbox" key={i}>
-                <Field name={q.name} component="input" type="radio" value={item.value}/>
+              <div className={divClass} key={i}>
+                <Field name={type === 'radio' ? q.name : item.value} component="input" type={type} value={item.value}/>
                 <label>{item.text}</label>
               </div>
             </div>

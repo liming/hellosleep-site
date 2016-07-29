@@ -30173,9 +30173,10 @@ module.exports = function symbolObservablePonyfill(root) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PREVIOUS_STEP = exports.NEXT_STEP = undefined;
-exports.nextStep = nextStep;
+exports.PREPARE_EVALUATION = exports.PREVIOUS_STEP = exports.NEXT_STEP = undefined;
+exports.changeStep = changeStep;
 exports.previousStep = previousStep;
+exports.fetchEvaluationData = fetchEvaluationData;
 
 var _superagent = require('superagent');
 
@@ -30185,10 +30186,75 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var NEXT_STEP = exports.NEXT_STEP = 'NEXT_STEP';
 var PREVIOUS_STEP = exports.PREVIOUS_STEP = 'PREVIOUS_STEP';
+var PREPARE_EVALUATION = exports.PREPARE_EVALUATION = 'PREPARE_EVALUATION';
 
-function nextStep() {
+function getEvaluationMeta(content) {
+
+  var totalStep = 0,
+      stepCounts = [];
+  content.data.forEach(function (v, i) {
+    if (v.page == 'single') {
+      totalStep += 1;
+      stepCounts.push(1);
+    } else {
+      totalStep += v.data.length;
+      stepCounts.push(v.data.length);
+    }
+  });
+
   return {
-    type: NEXT_STEP
+    totalStep: totalStep, stepCounts: stepCounts
+  };
+}
+
+// get the indexes from current step and the question meta data
+function getIndexes(step, stepCounts) {
+  // get question data
+  var count = 0;
+  var categoryIndex = 0;
+  var questionIndex = 0;
+
+  stepCounts.some(function (v, i) {
+    var prev = count;
+    count += v;
+    if (step <= count && step > prev) {
+      categoryIndex = i;
+      questionIndex = step - prev - 1;
+
+      return true;
+    }
+  });
+
+  return { categoryIndex: categoryIndex, questionIndex: questionIndex };
+}
+
+// Get the question content from data
+function getQuestion(data, step, stepCounts) {
+  var _getIndexes = getIndexes(step, stepCounts);
+
+  var categoryIndex = _getIndexes.categoryIndex;
+  var questionIndex = _getIndexes.questionIndex;
+
+  // at first calculate the category and question
+
+  var category = data[categoryIndex];
+
+  // questions can be single page or spread into multiple pages
+  var question = category.page == 'single' ? category.data : category.data[questionIndex];
+
+  return question;
+}
+
+function changeStep(inc) {
+  return function (dispatch, getState) {
+    var evalData = getState().evaluation;
+    var step = evalData.step + (inc ? 1 : -1);
+
+    dispatch({
+      type: NEXT_STEP,
+      step: step,
+      question: getQuestion(evalData.content.data, step, evalData.stepCounts)
+    });
   };
 }
 
@@ -30198,7 +30264,46 @@ function previousStep() {
   };
 }
 
-},{"superagent":360}],367:[function(require,module,exports){
+function prepareEvaluationData(content) {
+  var _getEvaluationMeta = getEvaluationMeta(content);
+
+  var totalStep = _getEvaluationMeta.totalStep;
+  var stepCounts = _getEvaluationMeta.stepCounts;
+
+
+  var evalData = {
+    totalStep: totalStep,
+    stepCounts: stepCounts,
+    content: content,
+    step: 1
+  };
+
+  var question = getQuestion(evalData.content.data, 1, stepCounts);
+
+  return {
+    totalStep: totalStep,
+    stepCounts: stepCounts,
+    content: content,
+    question: question,
+    type: PREPARE_EVALUATION,
+    step: 1
+  };
+}
+
+function fetchEvaluationData() {
+  return function (dispatch, getState) {
+    var state = getState();
+
+    if (!state.evaluation.content) {
+      // this might come from server side
+      var content = require('../../data/evaluation.json');
+
+      dispatch(prepareEvaluationData(content));
+    }
+  };
+}
+
+},{"../../data/evaluation.json":384,"superagent":360}],367:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30856,10 +30961,23 @@ var EvaluationForm = function (_Component) {
   _createClass(EvaluationForm, [{
     key: 'render',
     value: function render() {
+
+      var formStyle = {
+        minHeight: '20rem'
+      };
+
       return _react2.default.createElement(
-        'form',
-        { className: 'ui form' },
-        this.createQuestions(),
+        'div',
+        { className: 'ui segments' },
+        _react2.default.createElement(
+          'div',
+          { className: 'ui segment', style: formStyle },
+          _react2.default.createElement(
+            'form',
+            { className: 'ui form' },
+            this.createQuestions()
+          )
+        ),
         this.createNavButtons()
       );
     }
@@ -30868,7 +30986,7 @@ var EvaluationForm = function (_Component) {
     value: function createQuestions() {
       var question = this.props.question;
 
-      var questions = question.constructor === Array ? question : [question];
+      var questions = question ? question.constructor === Array ? question : [question] : [];
 
       return questions.map(function (q, i) {
         return _react2.default.createElement(_Question2.default, {
@@ -30887,14 +31005,14 @@ var EvaluationForm = function (_Component) {
       var isFirstStep = _props.isFirstStep;
 
 
-      var prevClassName = 'ui button';
+      var prevClassName = 'ui left floated button';
       if (isFirstStep) prevClassName += ' disabled';
 
       var nextText = isLastStep ? '提交' : '下一个';
 
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'ui clearing segment' },
         _react2.default.createElement(
           'button',
           { type: 'button', className: prevClassName, onClick: onPreviousStep },
@@ -30902,7 +31020,7 @@ var EvaluationForm = function (_Component) {
         ),
         _react2.default.createElement(
           'button',
-          { type: 'button', className: 'ui button', onClick: onNextStep },
+          { type: 'button', className: 'ui right floated button', onClick: onNextStep },
           nextText
         )
       );
@@ -30995,6 +31113,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
@@ -31057,27 +31177,36 @@ var Question = function (_Component) {
         return _react2.default.createElement(_reduxForm.Field, { name: q.name, component: _DatePicker2.default, placeholder: q.placeHolder, type: 'date' });
       }
 
-      if (type === 'radio') {
-        return _react2.default.createElement(
-          'div',
-          null,
-          q.data.map(function (item, i) {
-            return _react2.default.createElement(
+      if (type === 'radio' || type === 'checkbox') {
+        var _ret = function () {
+
+          var divClass = type === 'radio' ? 'ui radio checkbox' : 'ui checkbox';
+
+          return {
+            v: _react2.default.createElement(
               'div',
-              { className: 'field' },
-              _react2.default.createElement(
-                'div',
-                { className: 'ui radio checkbox', key: i },
-                _react2.default.createElement(_reduxForm.Field, { name: q.name, component: 'input', type: 'radio', value: item.value }),
-                _react2.default.createElement(
-                  'label',
-                  null,
-                  item.text
-                )
-              )
-            );
-          })
-        );
+              null,
+              q.data.map(function (item, i) {
+                return _react2.default.createElement(
+                  'div',
+                  { className: 'field' },
+                  _react2.default.createElement(
+                    'div',
+                    { className: divClass, key: i },
+                    _react2.default.createElement(_reduxForm.Field, { name: type === 'radio' ? q.name : item.value, component: 'input', type: type, value: item.value }),
+                    _react2.default.createElement(
+                      'label',
+                      null,
+                      item.text
+                    )
+                  )
+                );
+              })
+            )
+          };
+        }();
+
+        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
       }
 
       if (type === 'select') {
@@ -31227,34 +31356,41 @@ var Evaluation = function (_Component) {
   }
 
   _createClass(Evaluation, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      var dispatch = this.props.dispatch;
+
+      dispatch((0, _evaluation.fetchEvaluationData)());
+    }
+  }, {
     key: 'onNextStep',
     value: function onNextStep() {
-      var _props = this.props;
-      var dispatch = _props.dispatch;
-      var isLastStep = _props.isLastStep;
+      var dispatch = this.props.dispatch;
 
-      dispatch((0, _evaluation.nextStep)());
+      dispatch((0, _evaluation.changeStep)(true));
     }
   }, {
     key: 'onPreviousStep',
     value: function onPreviousStep() {
       var dispatch = this.props.dispatch;
 
-      dispatch((0, _evaluation.previousStep)());
+      dispatch((0, _evaluation.changeStep)(false));
     }
   }, {
     key: 'render',
     value: function render() {
-      var _props2 = this.props;
-      var content = _props2.content;
-      var isLastStep = _props2.isLastStep;
-      var isFirstStep = _props2.isFirstStep;
+      var _props = this.props;
+      var question = _props.question;
+      var isLastStep = _props.isLastStep;
+      var isFirstStep = _props.isFirstStep;
 
-      var question = this.getQuestion();
+      var eStyle = {
+        marginTop: '10vh'
+      };
 
       return _react2.default.createElement(
         'div',
-        { className: 'ui container' },
+        { className: 'ui text container', style: eStyle },
         _react2.default.createElement(
           'h1',
           null,
@@ -31269,57 +31405,6 @@ var Evaluation = function (_Component) {
         })
       );
     }
-
-    // Get the question content from data
-
-  }, {
-    key: 'getQuestion',
-    value: function getQuestion() {
-      var data = this.props.content.data;
-
-      var _getIndexes = this.getIndexes();
-
-      var categoryIndex = _getIndexes.categoryIndex;
-      var questionIndex = _getIndexes.questionIndex;
-
-      // at first calculate the category and question
-
-      var category = data[categoryIndex];
-
-      // questions can be single page or spread into multiple pages
-      var question = category.page == 'single' ? category.data : category.data[questionIndex];
-
-      return question;
-    }
-
-    // get the indexes from current step and the question meta data
-
-  }, {
-    key: 'getIndexes',
-    value: function getIndexes() {
-      var _props3 = this.props;
-      var step = _props3.step;
-      var stepCounts = _props3.stepCounts;
-
-      // get question data
-
-      var count = 0;
-      var categoryIndex = 0;
-      var questionIndex = 0;
-
-      stepCounts.some(function (v, i) {
-        var prev = count;
-        count += v;
-        if (step <= count && step > prev) {
-          categoryIndex = i;
-          questionIndex = step - prev - 1;
-
-          return true;
-        }
-      });
-
-      return { categoryIndex: categoryIndex, questionIndex: questionIndex };
-    }
   }]);
 
   return Evaluation;
@@ -31330,11 +31415,12 @@ var Evaluation = function (_Component) {
 var mapStateToProps = function mapStateToProps(state) {
   var v = state.evaluation;
 
+  if (!v) return {};
+
   return {
     isLastStep: v.step === v.totalStep,
     isFirstStep: v.step === 1,
-    step: v.step,
-    stepCounts: v.stepCounts
+    question: v.question
   };
 };
 
@@ -31665,51 +31751,13 @@ if (postTarget) {
 // create evaluation page
 var evaluationTarget = document.getElementById('new_evaluation');
 
-function getEvaluationMeta(content) {
-
-  var totalStep = 0,
-      stepCounts = [];
-  content.data.forEach(function (v, i) {
-    if (v.page == 'single') {
-      totalStep += 1;
-      stepCounts.push(1);
-    } else {
-      totalStep += v.data.length;
-      stepCounts.push(v.data.length);
-    }
-  });
-
-  return {
-    totalStep: totalStep, stepCounts: stepCounts
-  };
-}
-
 function renderEvaluation() {
-
-  var content = require('../data/evaluation.json');
-
-  var _getEvaluationMeta = getEvaluationMeta(content);
-
-  var totalStep = _getEvaluationMeta.totalStep;
-  var stepCounts = _getEvaluationMeta.stepCounts;
-
-
-  var initialState = {
-    evaluation: {
-      totalStep: totalStep,
-      stepCounts: stepCounts,
-      step: 1
-    }
-  };
-
-  var evaluationStore = (0, _configureStore.configureEvaluationStore)(initialState);
+  var evaluationStore = (0, _configureStore.configureEvaluationStore)({});
 
   (0, _reactDom.render)(_react2.default.createElement(
     _reactRedux.Provider,
     { store: evaluationStore },
-    _react2.default.createElement(_Evaluation2.default, {
-      content: content
-    })
+    _react2.default.createElement(_Evaluation2.default, null)
   ), evaluationTarget);
 }
 
@@ -31717,7 +31765,7 @@ if (evaluationTarget) {
   renderEvaluation();
 }
 
-},{"../data/evaluation.json":384,"./containers/Evaluation":375,"./containers/PostComment":376,"./containers/PostMeta.js":377,"./stores/configureStore":383,"react":295,"react-dom":152,"react-redux":345}],379:[function(require,module,exports){
+},{"./containers/Evaluation":375,"./containers/PostComment":376,"./containers/PostMeta.js":377,"./stores/configureStore":383,"react":295,"react-dom":152,"react-redux":345}],379:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31730,8 +31778,19 @@ function evaluation(state, action) {
   var newState = Object.assign({}, state);
 
   switch (action.type) {
+    case _evaluation.PREPARE_EVALUATION:
+      return Object.assign({}, state, {
+        totalStep: action.totalStep,
+        stepCounts: action.stepCounts,
+        content: action.content,
+        question: action.question,
+        step: action.step
+      });
     case _evaluation.NEXT_STEP:
-      newState.step += 1;
+      return Object.assign({}, state, {
+        step: action.step,
+        question: action.question
+      });
       break;
     case _evaluation.PREVIOUS_STEP:
       if (newState.step > 1) newState.step -= 1;
@@ -31913,6 +31972,7 @@ module.exports={
   "version": "1",
   "data": [
     {
+      "name": "basicinfo",
       "text": "基本信息",
       "page": "single",
       "data": [
@@ -31986,6 +32046,7 @@ module.exports={
       ]
     },
     {
+      "name": "sleephabit",
       "text": "睡眠相关",
       "page": "multiple",
       "data": [
@@ -32092,8 +32153,507 @@ module.exports={
               "calc": "(parent.data[0] - parent.data[1]) / parent.data[2]"
             }
           ]
+        },
+        {
+          "name": "noonnap",
+          "text": "午睡时间多长？",
+          "description": "这里指的是试图午睡的时间。",
+          "type": "radio",
+          "data": [
+            {
+              "text": "半小时以内",
+              "value": "lessthanhalf"
+            },
+            {
+              "text": "多于半小时",
+              "value": "greaterthanhalf"
+            },
+            {
+              "text": "不午睡",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "noise",
+          "text": "你的睡眠环境安静吗？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "安静",
+              "value": "yes"
+            },
+            {
+              "text": "不安静",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "noisereason",
+          "text": "影响睡眠环境的因素是什么？",
+          "type": "checkbox",
+          "data": [
+            {
+              "text": "伴侣打呼噜",
+              "value": "snore"
+            },
+            {
+              "text": "邻居吵闹",
+              "value": "neighbour"
+            },
+            {
+              "text": "室友吵闹",
+              "value": "roommate"
+            },
+            {
+              "text": "其他",
+              "value": "others"
+            }
+          ]
         }
       ]
+    },
+    {
+      "name": "liftstyle",
+      "text": "生活状态",
+      "page": "multiple",
+      "data": [
+        {
+          "name": "sport",
+          "text": "你会有规律的运动吗？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "会",
+              "value": "yes"
+            },
+            {
+              "text": "不会",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "sunshine",
+          "text": "你是不是很少接触阳光？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "pressure",
+          "text": "生活很有压力吗？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "boring",
+          "text": "生活很枯燥和单调吗？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "bedroom",
+          "text": "你总是长时间呆在卧室吗？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "bed",
+          "text": "你总是长时间呆在床上吗？（比如玩手机）",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "working",
+      "text": "工作状态",
+      "page": "multiple",
+      "data": [
+        {
+          "name": "focus",
+          "text": "你是不是很难专心工作？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "effeciency",
+          "text": "你的工作效率是不是很低？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "collaboration",
+          "text": "你是不是很少和同事交流？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "shiftwork",
+          "text": "你的工作需要倒班吗？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "需要",
+              "value": "yes"
+            },
+            {
+              "text": "不需要",
+              "value": "no"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "studying",
+      "text": "学习状态",
+      "page": "multiple",
+      "data": [
+        {
+          "name": "focus",
+          "text": "你是不是很难专心学习？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "effeciency",
+          "text": "你的学习效率是不是很低？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "collaboration",
+          "text": "你是不是很少和其他同学交流？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "holiday",
+          "text": "你的失眠发生在寒暑假吗",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "bedtime",
+          "text": "你总是比室友睡得早吗？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "attitude",
+      "text": "对待失眠的方式",
+      "page": "multiple",
+      "data": [
+        {
+          "name": "irresponsible",
+          "text": "失眠后你是不是刻意减少或者放弃工作/学习？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "inactive",
+          "text": "失眠后你是不是减少或放弃很多社交活动或者运动？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "rest",
+          "text": "失眠后你是不是总是在找机会休息？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "complain",
+          "text": "你会不会总是抱怨或者哭诉失眠",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "ignore",
+          "text": "失眠后你是不是很少关心亲人和朋友？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "name": "medicine",
+          "text": "你是不是去看病或者服用了安眠的药物？",
+          "type": "radio",
+          "data": [
+            {
+              "text": "是",
+              "value": "yes"
+            },
+            {
+              "text": "不是",
+              "value": "no"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "sleep_non_efficiency",
+      "text": "睡眠效率低下"
+    },
+    {
+      "name": "getup_irregularly",
+      "text": "无规律早起"
+    },
+    {
+      "name": "sleep_exccessive",
+      "text": "睡眠时间过长"
+    },
+    {
+      "name": "neighbour_noise",
+      "text": "邻居吵闹"
+    },
+    {
+      "name": "roommate_noise",
+      "text": "室友吵闹"
+    },
+    {
+      "name": "bedmate_snore",
+      "text": "枕边人打鼾"
+    },
+    {
+      "name": "unhealthy",
+      "text": "不健康"
+    },
+    {
+      "name": "idle",
+      "text": "无所事事"
+    },
+    {
+      "name": "presure",
+      "text": "压力过大"
+    },
+    {
+      "name": "boring",
+      "text": "单调枯燥"
+    },
+    {
+      "name": "stimulation",
+      "text": "应激反应"
+    },
+    {
+      "name": "distracting",
+      "text": "散乱"
+    },
+    {
+      "name": "unsociable",
+      "text": "缺乏交流"
+    },
+    {
+      "name": "shift_work",
+      "text": "倒班"
+    },
+    {
+      "name": "holiday",
+      "text": "长假"
+    },
+    {
+      "name": "conflict_routine",
+      "text": "作息不符"
+    },
+    {
+      "name": "prenatal",
+      "text": "孕期"
+    },
+    {
+      "name": "postnatal",
+      "text": "产后"
+    },
+    {
+      "name": "irresponbile",
+      "text": "逃避责任"
+    },
+    {
+      "name": "inactive",
+      "text": "减少活动"
+    },
+    {
+      "name": "excessive_rest",
+      "text": "过多休息"
+    },
+    {
+      "name": "complain",
+      "text": "抱怨"
+    },
+    {
+      "name": "medicine",
+      "text": "药物"
+    },
+    {
+      "name": "selfish",
+      "text": "自我"
     }
   ]
 }

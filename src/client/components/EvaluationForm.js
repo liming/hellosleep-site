@@ -11,17 +11,26 @@ class EvaluationForm extends Component {
   }
 
   render() {
+
+    const formStyle = {
+      minHeight: '20rem'
+    };
+
     return (
-      <form className="ui form">
-        {this.createQuestions()}
-        {this.createNavButtons()}
-      </form>
+      <div className="ui segments">
+        <div className="ui segment" style={formStyle}>
+          <form className="ui form">
+            {this.createQuestions()}
+          </form>
+        </div>
+          {this.createNavButtons()}
+      </div>
     );
   }
 
   createQuestions() {
     const { question } = this.props;
-    const questions = question.constructor === Array ? question : [question];
+    const questions = question ? (question.constructor === Array ? question : [question]) : [];
 
     return questions.map((q, i) =>
       <Question
@@ -34,15 +43,15 @@ class EvaluationForm extends Component {
   createNavButtons() {
     const { onNextStep, onPreviousStep, isLastStep, isFirstStep } = this.props;
 
-    let prevClassName = 'ui button';
+    let prevClassName = 'ui left floated button';
     if (isFirstStep) prevClassName += ' disabled';
 
     const nextText = isLastStep ? '提交' : '下一个';
 
     return (
-      <div>
+      <div className="ui clearing segment">
         <button type="button" className={prevClassName} onClick={onPreviousStep}>上一个</button>
-        <button type="button" className="ui button" onClick={onNextStep}>{nextText}</button>
+        <button type="button" className="ui right floated button" onClick={onNextStep}>{nextText}</button>
       </div>
     );
   }
