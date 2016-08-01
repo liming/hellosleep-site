@@ -35,6 +35,34 @@ PostComment.schema.virtual('formed.data').get(function () {
   };
 });
 
+PostComment.schema.methods.replyComment = function(comment, cb) {
+
+  keystone.list('Post').model
+    .findById(comment.post, {key: 1, title: 1, author: 1, type: 1})
+    .populate('author')
+    .exec((err, post) => {
+      if (err) return cb(err);
+
+      let tos = [{email: post.author.email, name: post.author.name}];
+
+      if (comment.replyTo) tos.push({email: comment.replyTo.email, name: comment.replyTo.author});
+
+      // send the mail to the author of current post.
+      new keystone.Email('comment-reply').send({
+        title: post.title,
+        author: comment.author,
+        content: comment.content,
+        link: `/${post.type}/${post.key}`,
+        to: tos,
+        from: {
+          name: 'HelloSleep',
+          email: 'notifications@hellosleep.net'
+        },
+        subject: `回复：${comment.author}在[${post.title}]中的回复`
+      }, cb);
+  });
+};
+
 PostComment.track = true;
 PostComment.defaultSort = '-publishedDate';
 PostComment.defaultColumns = 'author, post, email, replyTo';
