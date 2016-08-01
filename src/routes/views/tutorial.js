@@ -23,7 +23,10 @@ exports = module.exports = function (req, res) {
   // load posts in indices
   view.on('init', function(next) {
 
-    Post.model.find({type: 'tutorial'}, {'title': 1, 'key': 1})
+    Post.model.find({
+      type: 'tutorial',
+      state: 'published'
+    }, {'title': 1, 'key': 1})
       .where('categories', {$size: 0})
       .sort('weight')
       .exec((err, results) => {

@@ -34,7 +34,13 @@ keystone.init({
   // editor configuration
   'wysiwyg additional buttons': 'styleselect',
 
-  'basedir': __dirname
+  'basedir': __dirname,
+
+  // using mailgun as the mail service. visit mail gun dashboard for mailgun api
+  // information: https://mailgun.com/app/dashboard
+  'email transport': 'mailgun',
+
+  'emails': 'templates/emails'
 });
 
 keystone.import('models');
@@ -46,7 +52,16 @@ keystone.set('locals', {
     property: process.env.GA_SITE_PROPERTY,
     domain: process.env.GA_SITE_DOMAIN
   },
-  env: process.env.NODE_ENV || "development"
+  env: process.env.NODE_ENV || "development",
+  host: (function() {
+		return (keystone.get('host') || 'http://localhost:') + (keystone.get('port') || '3000');
+	})()
 });
+
+// setup emails
+if (process.env.MAILGUN_API_KEY) {
+  keystone.set('mailgun api key', process.env.MAILGUN_API_KEY);
+  keystone.set('mailgun domain', process.env.MAILGUN_DOMAIN);
+}
 
 keystone.start();

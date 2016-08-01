@@ -17,6 +17,10 @@ mixin post-meta(post, page)
       span
         a(href='/' + post.type)
           =post.typename
+    if user && user.canAccessKeystone
+      i.icon.edit
+      span
+        a(href="/keystone/posts/" + post.key) 编辑
           
 mixin post-nav(post)
   if post.prev || post.next
