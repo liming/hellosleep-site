@@ -63,6 +63,6 @@ EvaluationForm.propTypes = {
 };
 
 export default reduxForm({
-  form: 'evaluation',
+  form: 'answers',
   destroyOnUnmount: false
 })(EvaluationForm);

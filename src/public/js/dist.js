@@ -30228,32 +30228,106 @@ function getIndexes(step, stepCounts) {
   return { categoryIndex: categoryIndex, questionIndex: questionIndex };
 }
 
+function checkValid(data, depends, answers) {
+
+  // no dependancy needed
+  if (!depends || !answers) return true;
+
+  // find out dependent category and question
+  // const category = data.find(cat => cat.name === depends.category);
+  // const question = category.data.find(q => q.name === depends.question);
+
+  var result = answers.values[depends.question];
+
+  // check the condition of answer and needed input
+  if (result === depends.value) return true;
+
+  return false;
+}
+
 // Get the question content from data
-function getQuestion(data, step, stepCounts) {
-  var _getIndexes = getIndexes(step, stepCounts);
+function getQuestion(evaluation, answers, inc) {
 
-  var categoryIndex = _getIndexes.categoryIndex;
-  var questionIndex = _getIndexes.questionIndex;
+  var _tracks = evaluation.tracks || [];
+  var tracks = _tracks.slice();
 
-  // at first calculate the category and question
+  function getStep(orig) {
+    var step = orig;
+    if (inc === true) step = orig + 1;
+    if (inc === false) {
+      tracks.pop();
+      step = !tracks.length ? 1 : tracks[tracks.length - 1];
+    }
 
-  var category = data[categoryIndex];
+    return step;
+  }
 
-  // questions can be single page or spread into multiple pages
-  var question = category.page == 'single' ? category.data : category.data[questionIndex];
+  var data = evaluation.content.data,
+      _step = getStep(evaluation.step),
+      stepCounts = evaluation.stepCounts;
 
-  return question;
+  var isValid = false,
+      step = _step,
+      question = void 0,
+      category = void 0;
+
+  while (!isValid) {
+    var _getIndexes = getIndexes(step, stepCounts);
+
+    var categoryIndex = _getIndexes.categoryIndex;
+    var questionIndex = _getIndexes.questionIndex;
+
+    // at first calculate the category and question
+
+    category = data[categoryIndex];
+
+    isValid = checkValid(data, category.depends, answers);
+
+    if (!isValid) {
+      inc && (step += stepCounts[categoryIndex]);
+      !inc && (step = tracks.pop());
+      continue;
+    }
+
+    // questions can be single page or spread into multiple pages
+    question = category.page == 'single' ? category.data : category.data[questionIndex];
+
+    if (category.page == 'single') {
+      isValid = true;
+      continue;
+    };
+
+    isValid = checkValid(data, question.depends, answers);
+    if (!isValid) {
+      step = getStep(step);
+      continue;
+    }
+  }
+
+  if (inc !== false) tracks.push(step);
+
+  return { question: question, step: step, tracks: tracks };
 }
 
 function changeStep(inc) {
   return function (dispatch, getState) {
-    var evalData = getState().evaluation;
-    var step = evalData.step + (inc ? 1 : -1);
+    var _getState = getState();
+
+    var evaluation = _getState.evaluation;
+    var form = _getState.form;
+
+    var _getQuestion = getQuestion(evaluation, form.answers, inc);
+
+    var step = _getQuestion.step;
+    var question = _getQuestion.question;
+    var tracks = _getQuestion.tracks;
+
 
     dispatch({
       type: NEXT_STEP,
       step: step,
-      question: getQuestion(evalData.content.data, step, evalData.stepCounts)
+      tracks: tracks,
+      question: question
     });
   };
 }
@@ -30278,15 +30352,21 @@ function prepareEvaluationData(content) {
     step: 1
   };
 
-  var question = getQuestion(evalData.content.data, 1, stepCounts);
+  var _getQuestion2 = getQuestion(evalData);
+
+  var question = _getQuestion2.question;
+  var step = _getQuestion2.step;
+  var tracks = _getQuestion2.tracks;
+
 
   return {
     totalStep: totalStep,
     stepCounts: stepCounts,
     content: content,
     question: question,
-    type: PREPARE_EVALUATION,
-    step: 1
+    step: step,
+    tracks: tracks,
+    type: PREPARE_EVALUATION
   };
 }
 
@@ -31036,7 +31116,7 @@ EvaluationForm.propTypes = {
 };
 
 exports.default = (0, _reduxForm.reduxForm)({
-  form: 'evaluation',
+  form: 'answers',
   destroyOnUnmount: false
 })(EvaluationForm);
 
@@ -31784,16 +31864,16 @@ function evaluation(state, action) {
         stepCounts: action.stepCounts,
         content: action.content,
         question: action.question,
-        step: action.step
+        step: action.step,
+        tracks: action.tracks
       });
     case _evaluation.NEXT_STEP:
+    case _evaluation.PREVIOUS_STEP:
       return Object.assign({}, state, {
         step: action.step,
-        question: action.question
+        question: action.question,
+        tracks: action.tracks
       });
-      break;
-    case _evaluation.PREVIOUS_STEP:
-      if (newState.step > 1) newState.step -= 1;
       break;
     default:
       break;
@@ -32191,6 +32271,11 @@ module.exports={
         },
         {
           "name": "noisereason",
+          "depends": {
+            "category": "sleephabit",
+            "question": "noise",
+            "value": "no"
+          },
           "text": "影响睡眠环境的因素是什么？",
           "type": "checkbox",
           "data": [

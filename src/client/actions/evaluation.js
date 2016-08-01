@@ -44,28 +44,94 @@ function getIndexes(step, stepCounts) {
   return {categoryIndex, questionIndex};
 }
 
+function checkValid(data, depends, answers) {
+
+  // no dependancy needed
+  if (!depends || !answers) return true;
+
+  // find out dependent category and question
+  // const category = data.find(cat => cat.name === depends.category);
+  // const question = category.data.find(q => q.name === depends.question);
+
+  const result = answers.values[depends.question];
+
+  // check the condition of answer and needed input
+  if (result === depends.value) return true;
+
+  return false;
+}
+
 // Get the question content from data
-function getQuestion(data, step, stepCounts) {
-  const { categoryIndex, questionIndex } = getIndexes(step, stepCounts);
+function getQuestion(evaluation, answers, inc) {
 
-  // at first calculate the category and question
-  const category = data[categoryIndex];
+  const _tracks = evaluation.tracks || [];
+  let tracks = _tracks.slice();
 
-  // questions can be single page or spread into multiple pages
-  const question = category.page == 'single' ? category.data : category.data[questionIndex];
+  function getStep(orig) {
+    let step = orig;
+    if (inc === true) step = orig + 1;
+    if (inc === false) {
+      tracks.pop();
+      step = !tracks.length ? 1 : tracks[tracks.length - 1];
+    }
 
-  return question;
+    return step;
+  }
+
+  const data = evaluation.content.data,
+        _step = getStep(evaluation.step),
+        stepCounts = evaluation.stepCounts;
+
+  let isValid = false,
+      step = _step,
+      question,
+      category;
+
+  while(!isValid) {
+    const { categoryIndex, questionIndex } = getIndexes(step, stepCounts);
+
+    // at first calculate the category and question
+    category = data[categoryIndex];
+
+    isValid = checkValid(data, category.depends, answers);
+
+    if (!isValid) {
+      inc && (step += stepCounts[categoryIndex]);
+      !inc && (step = tracks.pop());
+      continue;
+    }
+
+    // questions can be single page or spread into multiple pages
+    question = category.page == 'single' ? category.data : category.data[questionIndex];
+
+    if (category.page == 'single') {
+      isValid = true;
+      continue;
+    };
+
+    isValid = checkValid(data, question.depends, answers);
+    if (!isValid) {
+      step = getStep(step);
+      continue;
+    }
+  }
+
+  if (inc !== false) tracks.push(step);
+
+  return {question, step, tracks};
 }
 
 export function changeStep(inc) {
   return (dispatch, getState) => {
-    const evalData = getState().evaluation;
-    const step = evalData.step + (inc ? 1 : -1);
+    const {evaluation, form} = getState();
+
+    const { step, question, tracks } = getQuestion(evaluation, form.answers, inc);
 
     dispatch({
       type: NEXT_STEP,
       step: step,
-      question: getQuestion(evalData.content.data, step, evalData.stepCounts)
+      tracks: tracks,
+      question: question
     });
   };
 }
@@ -86,15 +152,16 @@ function prepareEvaluationData(content) {
     step: 1
   };
 
-  const question = getQuestion(evalData.content.data, 1, stepCounts);
+  const {question, step, tracks} = getQuestion(evalData);
 
   return {
     totalStep,
     stepCounts,
     content,
     question,
-    type: PREPARE_EVALUATION,
-    step: 1
+    step,
+    tracks,
+    type: PREPARE_EVALUATION
   };
 }
 

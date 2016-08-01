@@ -15,16 +15,16 @@ function evaluation(state, action) {
       stepCounts: action.stepCounts,
       content: action.content,
       question: action.question,
-      step: action.step
+      step: action.step,
+      tracks: action.tracks
     });
   case NEXT_STEP:
+  case PREVIOUS_STEP:
     return Object.assign({}, state, {
       step: action.step,
-      question: action.question
+      question: action.question,
+      tracks: action.tracks
     });
-    break;
-  case PREVIOUS_STEP:
-    if (newState.step > 1) newState.step -= 1;
     break;
   default:
     break;

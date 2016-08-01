@@ -221,6 +221,11 @@
         },
         {
           "name": "noisereason",
+          "depends": {
+            "category": "sleephabit",
+            "question": "noise",
+            "value": "no"
+          },
           "text": "影响睡眠环境的因素是什么？",
           "type": "checkbox",
           "data": [
