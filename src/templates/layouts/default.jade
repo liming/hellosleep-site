@@ -36,7 +36,10 @@ html(style="position: relative;min-height: 100%;")
       include ../includes/footer
       
     script(src='/js/libs/jquery-1.12.2.min.js')
-    script(src='/semantic/semantic.min.js')
+    if env == 'production'
+      script(src='/semantic/semantic.min.js')
+    else
+      script(src='/semantic/semantic.js')
     script(src='/js/main.js')
     
     if user && user.canAccessKeystone

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 
 import DatePicker from './DatePicker';
+import Ranger from './Ranger';
 
 class Question extends Component {
   constructor(props) {
@@ -14,9 +15,13 @@ class Question extends Component {
     let fieldClass = 'field';
     if (question.type === 'radio') fieldClass = 'grouped fields';
 
+    const labelStyle = {
+      fontSize: "1rem"
+    };
+
     return (
       <div className={fieldClass}>
-        <label>{question.text}</label>
+        <label style={labelStyle}>{question.text}</label>
         {this.renderField(question)}
       </div>
     );
@@ -30,7 +35,11 @@ class Question extends Component {
     }
 
     if (type === 'date') {
-      return (<Field name={q.name} component={DatePicker} placeholder={q.placeHolder} type='date' />);
+      return (<Field name={q.name} component={DatePicker} placeholder={q.placeHolder} type={type} options={q.options} />);
+    }
+
+    if (type === 'range') {
+      return (<Field name={q.name} component={Ranger} options={q.options} />);
     }
 
     if (type === 'radio' || type === 'checkbox') {

@@ -15,7 +15,12 @@
         {
           "text": "生日",
           "name": "birthday",
-          "type": "date"
+          "type": "date",
+          "options": {
+            "type": "date",
+            "start": "year",
+            "initialDate": "1990"
+          }
         },
         {
           "text": "性别",
@@ -43,7 +48,7 @@
             },
             {
               "text": "上学",
-              "value": "student"
+              "value": "study"
             },
             {
               "text": "待业",
@@ -61,16 +66,6 @@
               "text": "退休",
               "value": "retire"
             }
-          ],
-          "results": [
-            {
-              "calc": "this.selected == 2",
-              "tagId": "无所事事"
-            },
-            {
-              "calc": "this.selected == 4",
-              "tagId": "产后"
-            }
           ]
         }
       ]
@@ -81,128 +76,84 @@
       "page": "multiple",
       "data": [
         {
-          "name": "sleeptime",
-          "text": "通常几点睡觉？",
+          "name": "sleepregular",
+          "text": "你的作息时间规律吗？",
           "type": "radio",
           "data": [
             {
-              "text": "9点之前",
-              "value": "after9"
+              "text": "规律",
+              "value": "yes"
             },
             {
-              "text": "9点 ~ 10点",
-              "value": "9to10"
-            },
-            {
-              "text": "10点 ~ 11点",
-              "value": "10to11"
-            },
-            {
-              "text": "11点 ~ 12点",
-              "value": "11to12"
-            },
-            {
-              "text": "12点以后",
-              "value": "after12"
-            },
-            {
-              "text": "不固定",
-              "value": "unstable"
+              "text": "不规律",
+              "value": "no"
             }
           ]
+        },
+        {
+          "name": "sleeptime",
+          "text": "通常几点睡觉？",
+          "placeHolder": "睡觉时间",
+          "depends": {
+            "question": "sleepregular",
+            "value": "yes"
+          },
+          "type": "date",
+          "options": {
+            "type": "time"
+          }
         },
         {
           "name": "getuptime",
           "text": "通常几点起床？",
-          "type": "radio",
-          "data": [
-            {
-              "text": "6点之前",
-              "value": "before6"
-            },
-            {
-              "text": "6点 ~ 7点",
-              "value": "6to7"
-            },
-            {
-              "text": "7点 ~ 8点",
-              "value": "7to8"
-            },
-            {
-              "text": "8点 ~ 9点",
-              "value": "8to9"
-            },
-            {
-              "text": "9点以后",
-              "value": "after9"
-            },
-            {
-              "text": "不固定",
-              "value": "unstable"
-            }
-          ],
-          "results": [
-            {
-              "calc": "this.selected == 1",
-              "tagId": "赖床"
-            }
-          ]
+          "placeHolder": "起床时间",
+          "depends": {
+            "question": "sleepregular",
+            "value": "yes"
+          },
+          "type": "date",
+          "options": {
+            "type": "time"
+          }
         },
         {
-          "name": "howlong",
+          "name": "howlongtosleep",
+          "text": "晚上试图睡觉时间有多少？",
+          "depends": {
+            "question": "sleepregular",
+            "value": "no"
+          },
+          "type": "range",
+          "options": {
+            "min": 0,
+            "max": 15,
+            "start": 7,
+            "unit": "小时"
+          }
+        },
+        {
+          "name": "howlongtofallinsleep",
           "text": "晚上的实际睡眠时间有多少？",
-          "type": "radio",
-          "data": [
-            {
-              "text": "少于3个小时",
-              "value": "lessthan3"
-            },
-            {
-              "text": "3到4个小时",
-              "value": "3to4"
-            },
-            {
-              "text": "4到5个小时",
-              "value": "4to5"
-            },
-            {
-              "text": "5到6个小时",
-              "value": "5to6"
-            },
-            {
-              "text": "6个小时以上",
-              "value": "greaterthan6"
-            },
-            {
-              "text": "不固定",
-              "value": "unstable"
-            }
-          ],
-          "results": [
-            {
-              "calc": "(parent.data[0] - parent.data[1]) / parent.data[2]"
-            }
-          ]
+          "type": "range",
+          "options": {
+            "min": 0,
+            "max": 10,
+            "start": 5,
+            "unit": "小时"
+          }
         },
         {
           "name": "noonnap",
           "text": "午睡时间多长？",
           "description": "这里指的是试图午睡的时间。",
-          "type": "radio",
-          "data": [
-            {
-              "text": "半小时以内",
-              "value": "lessthanhalf"
-            },
-            {
-              "text": "多于半小时",
-              "value": "greaterthanhalf"
-            },
-            {
-              "text": "不午睡",
-              "value": "no"
-            }
-          ]
+          "type": "range",
+          "options": {
+            "min": 0,
+            "max": 3,
+            "start": 0,
+            "step": 0.5,
+            "unit": "小时"
+          }
         },
         {
           "name": "noise",
@@ -290,12 +241,16 @@
           "type": "radio",
           "data": [
             {
-              "text": "是",
-              "value": "yes"
+              "text": "很大",
+              "value": "very"
             },
             {
-              "text": "不是",
-              "value": "no"
+              "text": "一般",
+              "value": "normal"
+            },
+            {
+              "text": "完全没有",
+              "value": "none"
             }
           ]
         },
@@ -349,6 +304,10 @@
     {
       "name": "working",
       "text": "工作状态",
+      "depends": {
+        "question": "status",
+        "value": "work"
+      },
       "page": "multiple",
       "data": [
         {
@@ -416,6 +375,10 @@
     {
       "name": "studying",
       "text": "学习状态",
+      "depends": {
+        "question": "status",
+        "value": "study"
+      },
       "page": "multiple",
       "data": [
         {
@@ -596,7 +559,12 @@
   "tags": [
     {
       "name": "sleep_non_efficiency",
-      "text": "睡眠效率低下"
+      "text": "睡眠效率低下",
+      "calc": {
+        "func": "calcSleepEfficiency",
+        "input": ["sleeptime", "getuptime", "howlong"],
+        "threshold": 0.7
+      }
     },
     {
       "name": "getup_irregularly",
