@@ -5,6 +5,8 @@ export const NEXT_STEP = 'NEXT_STEP';
 export const PREVIOUS_STEP = 'PREVIOUS_STEP';
 export const PREPARE_EVALUATION = 'PREPARE_EVALUATION';
 export const SUBMIT_RESULT = "SUBMIT_RESULT";
+export const SHOW_CONFIRM_DIALOG = "SHOW_CONFIRM_DIALOG";
+export const CLOSE_CONFIRM_DIALOG = "CLOSE_CONFIRM_DIALOG";
 
 function getEvaluationMeta(content) {
 
@@ -223,5 +225,17 @@ export function submitEvaluation() {
     const results = calcResult(state.evaluation.content, values);
 
     dispatch(submitResult(results));
+  };
+}
+
+export function showConfirmDialog() {
+  return {
+    type: SHOW_CONFIRM_DIALOG
+  };
+}
+
+export function closeConfimDialog() {
+  return {
+    type: CLOSE_CONFIRM_DIALOG
   };
 }

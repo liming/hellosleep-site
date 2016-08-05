@@ -31330,11 +31330,13 @@ module.exports = function symbolObservablePonyfill(root) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SUBMIT_RESULT = exports.PREPARE_EVALUATION = exports.PREVIOUS_STEP = exports.NEXT_STEP = undefined;
+exports.CLOSE_CONFIRM_DIALOG = exports.SHOW_CONFIRM_DIALOG = exports.SUBMIT_RESULT = exports.PREPARE_EVALUATION = exports.PREVIOUS_STEP = exports.NEXT_STEP = undefined;
 exports.changeStep = changeStep;
 exports.previousStep = previousStep;
 exports.fetchEvaluationData = fetchEvaluationData;
 exports.submitEvaluation = submitEvaluation;
+exports.showConfirmDialog = showConfirmDialog;
+exports.closeConfimDialog = closeConfimDialog;
 
 var _superagent = require('superagent');
 
@@ -31350,6 +31352,8 @@ var NEXT_STEP = exports.NEXT_STEP = 'NEXT_STEP';
 var PREVIOUS_STEP = exports.PREVIOUS_STEP = 'PREVIOUS_STEP';
 var PREPARE_EVALUATION = exports.PREPARE_EVALUATION = 'PREPARE_EVALUATION';
 var SUBMIT_RESULT = exports.SUBMIT_RESULT = "SUBMIT_RESULT";
+var SHOW_CONFIRM_DIALOG = exports.SHOW_CONFIRM_DIALOG = "SHOW_CONFIRM_DIALOG";
+var CLOSE_CONFIRM_DIALOG = exports.CLOSE_CONFIRM_DIALOG = "CLOSE_CONFIRM_DIALOG";
 
 function getEvaluationMeta(content) {
 
@@ -31596,7 +31600,19 @@ function submitEvaluation() {
   };
 }
 
-},{"../../../test/eva1.json":393,"../../data/calculation":391,"../../data/evaluation.json":392,"superagent":365}],372:[function(require,module,exports){
+function showConfirmDialog() {
+  return {
+    type: SHOW_CONFIRM_DIALOG
+  };
+}
+
+function closeConfimDialog() {
+  return {
+    type: CLOSE_CONFIRM_DIALOG
+  };
+}
+
+},{"../../../test/eva1.json":394,"../../data/calculation":392,"../../data/evaluation.json":393,"superagent":365}],372:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32143,7 +32159,7 @@ CommentForm.propTypes = {
   onToggleSubmit: _react.PropTypes.func.isRequired
 };
 
-},{"./ReplyTo":380,"react":308,"react-dom":159}],375:[function(require,module,exports){
+},{"./ReplyTo":381,"react":308,"react-dom":159}],375:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32427,7 +32443,7 @@ exports.default = (0, _reduxForm.reduxForm)({
   destroyOnUnmount: false
 })(EvaluationForm);
 
-},{"./Question":378,"./ResultTable":381,"react":308,"redux-form":336}],377:[function(require,module,exports){
+},{"./Question":379,"./ResultTable":382,"react":308,"redux-form":336}],377:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32494,6 +32510,110 @@ LikeButton.propTypes = {
 };
 
 },{"react":308}],378:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ModalDialog = function (_Component) {
+  _inherits(ModalDialog, _Component);
+
+  function ModalDialog(props) {
+    _classCallCheck(this, ModalDialog);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(ModalDialog).call(this, props));
+  }
+
+  _createClass(ModalDialog, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {}
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(newProps) {
+      var _props = this.props;
+      var isShow = _props.isShow;
+      var onCancel = _props.onCancel;
+      var onSubmit = _props.onSubmit;
+
+
+      if (newProps.isShow && !isShow) {
+
+        $(this.refs.modal).modal({
+          closable: false,
+          onDeny: onCancel,
+          onApprove: onSubmit
+        }).modal('show');
+      } else if (!newProps.isShow && isShow) {
+
+        $(this.refs.modal).modal('hide');
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props2 = this.props;
+      var isShow = _props2.isShow;
+      var title = _props2.title;
+      var description = _props2.description;
+
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'ui modal', ref: 'modal' },
+        _react2.default.createElement('i', { className: 'close icon' }),
+        _react2.default.createElement(
+          'div',
+          { className: 'header' },
+          title
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'content' },
+          _react2.default.createElement(
+            'div',
+            { className: 'description' },
+            description
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'actions' },
+          _react2.default.createElement(
+            'div',
+            { className: 'ui cancel button' },
+            '取消'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'ui approve button' },
+            '确认'
+          )
+        )
+      );
+    }
+  }]);
+
+  return ModalDialog;
+}(_react.Component);
+
+exports.default = ModalDialog;
+
+},{"react":308}],379:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32636,7 +32756,7 @@ var Question = function (_Component) {
 
 exports.default = Question;
 
-},{"./DatePicker":375,"./Ranger":379,"react":308,"redux-form":336}],379:[function(require,module,exports){
+},{"./DatePicker":375,"./Ranger":380,"react":308,"redux-form":336}],380:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32716,7 +32836,7 @@ var Ranger = function (_Component) {
 
 exports.default = Ranger;
 
-},{"react":308}],380:[function(require,module,exports){
+},{"react":308}],381:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32792,7 +32912,7 @@ var ReplyTo = function (_Component) {
 
 exports.default = ReplyTo;
 
-},{"react":308}],381:[function(require,module,exports){
+},{"react":308}],382:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32878,7 +32998,7 @@ var ResultTable = function (_Component) {
 
 exports.default = ResultTable;
 
-},{"react":308}],382:[function(require,module,exports){
+},{"react":308}],383:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32896,6 +33016,10 @@ var _reactRedux = require('react-redux');
 var _EvaluationForm = require('../components/EvaluationForm');
 
 var _EvaluationForm2 = _interopRequireDefault(_EvaluationForm);
+
+var _ModalDialog = require('../components/ModalDialog');
+
+var _ModalDialog2 = _interopRequireDefault(_ModalDialog);
 
 var _evaluation = require('../actions/evaluation');
 
@@ -32917,6 +33041,8 @@ var Evaluation = function (_Component) {
 
     _this.onNextStep = _this.onNextStep.bind(_this);
     _this.onPreviousStep = _this.onPreviousStep.bind(_this);
+    _this.onCloseConfirmDialog = _this.onCloseConfirmDialog.bind(_this);
+    _this.onSubmit = _this.onSubmit.bind(_this);
     return _this;
   }
 
@@ -32935,7 +33061,7 @@ var Evaluation = function (_Component) {
       var isLastStep = _props.isLastStep;
 
 
-      if (isLastStep) dispatch((0, _evaluation.submitEvaluation)());else dispatch((0, _evaluation.changeStep)(true));
+      if (isLastStep) dispatch((0, _evaluation.showConfirmDialog)());else dispatch((0, _evaluation.changeStep)(true));
     }
   }, {
     key: 'onPreviousStep',
@@ -32945,14 +33071,23 @@ var Evaluation = function (_Component) {
       dispatch((0, _evaluation.changeStep)(false));
     }
   }, {
+    key: 'onCloseConfirmDialog',
+    value: function onCloseConfirmDialog() {
+      var dispatch = this.props.dispatch;
+
+      dispatch((0, _evaluation.closeConfimDialog)());
+    }
+  }, {
+    key: 'onSubmit',
+    value: function onSubmit() {
+      var dispatch = this.props.dispatch;
+
+      dispatch((0, _evaluation.submitEvaluation)());
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _props2 = this.props;
-      var question = _props2.question;
-      var isLastStep = _props2.isLastStep;
-      var isFirstStep = _props2.isFirstStep;
-      var results = _props2.results;
-      var initialValues = _props2.initialValues;
+      var showConfirmDialog = this.props.showConfirmDialog;
 
       var eStyle = {
         marginTop: '10vh'
@@ -32961,6 +33096,25 @@ var Evaluation = function (_Component) {
       return _react2.default.createElement(
         'div',
         { className: 'ui text container', style: eStyle },
+        this.createConfirmDialog(),
+        this.createEvaluationForm()
+      );
+    }
+  }, {
+    key: 'createEvaluationForm',
+    value: function createEvaluationForm() {
+      var _props2 = this.props;
+      var question = _props2.question;
+      var isLastStep = _props2.isLastStep;
+      var isFirstStep = _props2.isFirstStep;
+      var results = _props2.results;
+      var initialValues = _props2.initialValues;
+      var showConfirmDialog = _props2.showConfirmDialog;
+
+
+      return _react2.default.createElement(
+        'div',
+        null,
         _react2.default.createElement(
           'h1',
           null,
@@ -32976,6 +33130,17 @@ var Evaluation = function (_Component) {
           initialValues: initialValues
         })
       );
+    }
+  }, {
+    key: 'createConfirmDialog',
+    value: function createConfirmDialog() {
+      return _react2.default.createElement(_ModalDialog2.default, {
+        title: '完成评估',
+        description: '你想要提交自己的评估吗？',
+        onCancel: this.onCloseConfirmDialog,
+        isShow: this.props.showConfirmDialog,
+        onSubmit: this.onSubmit
+      });
     }
   }]);
 
@@ -32994,13 +33159,14 @@ var mapStateToProps = function mapStateToProps(state) {
     isFirstStep: v.step === 1,
     question: v.question,
     results: v.results,
-    initialValues: v.initialValues
+    initialValues: v.initialValues,
+    showConfirmDialog: v.showConfirmDialog || false
   };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(Evaluation);
 
-},{"../actions/evaluation":371,"../components/EvaluationForm":376,"react":308,"react-redux":162}],383:[function(require,module,exports){
+},{"../actions/evaluation":371,"../components/EvaluationForm":376,"../components/ModalDialog":378,"react":308,"react-redux":162}],384:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33145,7 +33311,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostComment);
 
-},{"../actions/post":372,"../components/Comment":373,"../components/CommentForm":374,"react":308,"react-redux":162}],384:[function(require,module,exports){
+},{"../actions/post":372,"../components/Comment":373,"../components/CommentForm":374,"react":308,"react-redux":162}],385:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33242,7 +33408,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostMeta);
 
-},{"../actions/post":372,"../components/LikeButton":377,"react":308,"react-redux":162}],385:[function(require,module,exports){
+},{"../actions/post":372,"../components/LikeButton":377,"react":308,"react-redux":162}],386:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -33339,7 +33505,7 @@ if (evaluationTarget) {
   renderEvaluation();
 }
 
-},{"./containers/Evaluation":382,"./containers/PostComment":383,"./containers/PostMeta.js":384,"./stores/configureStore":390,"react":308,"react-dom":159,"react-redux":162}],386:[function(require,module,exports){
+},{"./containers/Evaluation":383,"./containers/PostComment":384,"./containers/PostMeta.js":385,"./stores/configureStore":391,"react":308,"react-dom":159,"react-redux":162}],387:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33375,6 +33541,14 @@ function evaluation() {
       return Object.assign({}, state, {
         results: action.results
       });
+    case _evaluation.SHOW_CONFIRM_DIALOG:
+      return Object.assign({}, state, {
+        showConfirmDialog: true
+      });
+    case _evaluation.CLOSE_CONFIRM_DIALOG:
+      return Object.assign({}, state, {
+        showConfirmDialog: false
+      });
     default:
       break;
   }
@@ -33384,7 +33558,7 @@ function evaluation() {
 
 exports.default = evaluation;
 
-},{"../actions/evaluation":371}],387:[function(require,module,exports){
+},{"../actions/evaluation":371}],388:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33423,7 +33597,7 @@ var evaluationReducers = (0, _redux.combineReducers)({
 exports.postReducers = postReducers;
 exports.evaluationReducers = evaluationReducers;
 
-},{"./evaluation":386,"./post_comment":388,"./post_meta":389,"redux":362,"redux-form":336}],388:[function(require,module,exports){
+},{"./evaluation":387,"./post_comment":389,"./post_meta":390,"redux":362,"redux-form":336}],389:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33478,7 +33652,7 @@ function postComment() {
 
 exports.default = postComment;
 
-},{"../actions/post":372}],389:[function(require,module,exports){
+},{"../actions/post":372}],390:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33510,7 +33684,7 @@ function postMeta() {
 
 exports.default = postMeta;
 
-},{"../actions/post":372}],390:[function(require,module,exports){
+},{"../actions/post":372}],391:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33547,7 +33721,7 @@ function configureEvaluationStore(initialState) {
 exports.configureStore = configureStore;
 exports.configureEvaluationStore = configureEvaluationStore;
 
-},{"../reducers":387,"redux":362,"redux-logger":355,"redux-thunk":356}],391:[function(require,module,exports){
+},{"../reducers":388,"redux":362,"redux-logger":355,"redux-thunk":356}],392:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33643,7 +33817,7 @@ exports.default = {
   isAffected: isAffected
 };
 
-},{}],392:[function(require,module,exports){
+},{}],393:[function(require,module,exports){
 module.exports={
   "version": "1",
   "data": [
@@ -34362,7 +34536,7 @@ module.exports={
   ]
 }
 
-},{}],393:[function(require,module,exports){
+},{}],394:[function(require,module,exports){
 module.exports={
     "email": "liming.dl@gmail.com",
     "birthday": "1981-03-17T00:00:00.000Z",
@@ -34392,6 +34566,6 @@ module.exports={
     "medicine": "no"
 }
 
-},{}]},{},[385]);
+},{}]},{},[386]);
 
 //# sourceMappingURL=dist.js.map

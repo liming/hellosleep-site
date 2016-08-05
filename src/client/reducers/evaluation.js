@@ -3,7 +3,9 @@ import {
   NEXT_STEP,
   PREVIOUS_STEP,
   PREPARE_EVALUATION,
-  SUBMIT_RESULT
+  SUBMIT_RESULT,
+  SHOW_CONFIRM_DIALOG,
+  CLOSE_CONFIRM_DIALOG
 } from '../actions/evaluation';
 
 function evaluation(state = {}, action) {
@@ -29,6 +31,14 @@ function evaluation(state = {}, action) {
   case SUBMIT_RESULT:
     return Object.assign({}, state, {
       results: action.results
+    });
+  case SHOW_CONFIRM_DIALOG:
+    return Object.assign({}, state, {
+      showConfirmDialog: true
+    });
+  case CLOSE_CONFIRM_DIALOG:
+    return Object.assign({}, state, {
+      showConfirmDialog: false
     });
   default:
     break;
