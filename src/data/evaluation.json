@@ -7,6 +7,12 @@
       "page": "single",
       "data": [
         {
+          "name": "name",
+          "text": "昵称",
+          "type": "input",
+          "placeHolder": "输入你的昵称"
+        },
+        {
           "name": "email",
           "text": "邮箱",
           "type": "input",

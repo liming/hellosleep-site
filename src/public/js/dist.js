@@ -31596,6 +31596,8 @@ function submitEvaluation() {
 
     var results = calcResult(state.evaluation.content, values);
 
+    // going to save the result to server
+
     dispatch(submitResult(results));
   };
 }
@@ -33826,6 +33828,12 @@ module.exports={
       "text": "基本信息",
       "page": "single",
       "data": [
+        {
+          "name": "name",
+          "text": "昵称",
+          "type": "input",
+          "placeHolder": "输入你的昵称"
+        },
         {
           "name": "email",
           "text": "邮箱",

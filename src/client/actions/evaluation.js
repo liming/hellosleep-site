@@ -224,6 +224,8 @@ export function submitEvaluation() {
 
     const results = calcResult(state.evaluation.content, values);
 
+    // going to save the result to server
+
     dispatch(submitResult(results));
   };
 }

@@ -1,6 +1,6 @@
 {
   "name": "hellosleep",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "The Hello Sleep website",
   "main": "app.js",
   "dependencies": {
