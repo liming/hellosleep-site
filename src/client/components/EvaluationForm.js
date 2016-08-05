@@ -4,6 +4,7 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import Question from './Question';
+import ResultTable from './ResultTable';
 
 class EvaluationForm extends Component {
   constructor(props) {
@@ -16,12 +17,15 @@ class EvaluationForm extends Component {
       minHeight: '20rem'
     };
 
+    const { results } = this.props;
+
     return (
       <div className="ui segments">
         <div className="ui segment" style={formStyle}>
           <form className="ui form">
             {this.createQuestions()}
           </form>
+          {results && <ResultTable results={results} />}
         </div>
           {this.createNavButtons()}
       </div>

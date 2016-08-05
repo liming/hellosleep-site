@@ -117,7 +117,7 @@
           }
         },
         {
-          "name": "howlongtosleep",
+          "name": "hourstosleep",
           "text": "晚上试图睡觉时间有多少？",
           "depends": {
             "question": "sleepregular",
@@ -132,7 +132,7 @@
           }
         },
         {
-          "name": "howlongtofallinsleep",
+          "name": "hourstofallinsleep",
           "text": "晚上的实际睡眠时间有多少？",
           "type": "range",
           "options": {
@@ -143,7 +143,7 @@
           }
         },
         {
-          "name": "noonnap",
+          "name": "hourstonoonnap",
           "text": "午睡时间多长？",
           "description": "这里指的是试图午睡的时间。",
           "type": "range",
@@ -211,12 +211,20 @@
           "type": "radio",
           "data": [
             {
-              "text": "会",
-              "value": "yes"
+              "text": "有规律",
+              "value": "best"
+            },
+            {
+              "text": "正常",
+              "value": "normal"
+            },
+            {
+              "text": "不多",
+              "value": "little"
             },
             {
               "text": "不会",
-              "value": "no"
+              "value": "none"
             }
           ]
         },
@@ -226,12 +234,20 @@
           "type": "radio",
           "data": [
             {
-              "text": "是",
-              "value": "yes"
+              "text": "很多",
+              "value": "best"
             },
             {
-              "text": "不是",
-              "value": "no"
+              "text": "正常",
+              "value": "normal"
+            },
+            {
+              "text": "不多",
+              "value": "little"
+            },
+            {
+              "text": "几乎没有",
+              "value": "none"
             }
           ]
         },
@@ -241,31 +257,43 @@
           "type": "radio",
           "data": [
             {
-              "text": "很大",
-              "value": "very"
+              "text": "很大压力",
+              "value": "best"
             },
             {
-              "text": "一般",
+              "text": "正常",
               "value": "normal"
             },
             {
-              "text": "完全没有",
+              "text": "很少",
+              "value": "little"
+            },
+            {
+              "text": "几乎没有",
               "value": "none"
             }
           ]
         },
         {
-          "name": "boring",
-          "text": "生活很枯燥和单调吗？",
+          "name": "lively",
+          "text": "生活很丰富活跃吗？",
           "type": "radio",
           "data": [
             {
-              "text": "是",
-              "value": "yes"
+              "text": "非常",
+              "value": "best"
             },
             {
-              "text": "不是",
-              "value": "no"
+              "text": "正常",
+              "value": "normal"
+            },
+            {
+              "text": "不太丰富",
+              "value": "little"
+            },
+            {
+              "text": "很枯燥",
+              "value": "none"
             }
           ]
         },
@@ -302,17 +330,13 @@
       ]
     },
     {
-      "name": "working",
+      "name": "working_study",
       "text": "工作状态",
-      "depends": {
-        "question": "status",
-        "value": "work"
-      },
       "page": "multiple",
       "data": [
         {
-          "name": "focus",
-          "text": "你是不是很难专心工作？",
+          "name": "distraction",
+          "text": "你是不是很难专心工作（或学习）？",
           "type": "radio",
           "data": [
             {
@@ -327,7 +351,7 @@
         },
         {
           "name": "effeciency",
-          "text": "你的工作效率是不是很低？",
+          "text": "你的工作（或学习）效率是不是很低？",
           "type": "radio",
           "data": [
             {
@@ -341,8 +365,8 @@
           ]
         },
         {
-          "name": "collaboration",
-          "text": "你是不是很少和同事交流？",
+          "name": "unsociable",
+          "text": "你是不是很少和同事（或同学）交流？",
           "type": "radio",
           "data": [
             {
@@ -358,6 +382,10 @@
         {
           "name": "shiftwork",
           "text": "你的工作需要倒班吗？",
+          "depends": {
+            "question": "status",
+            "value": "work"
+          },
           "type": "radio",
           "data": [
             {
@@ -369,66 +397,14 @@
               "value": "no"
             }
           ]
-        }
-      ]
-    },
-    {
-      "name": "studying",
-      "text": "学习状态",
-      "depends": {
-        "question": "status",
-        "value": "study"
-      },
-      "page": "multiple",
-      "data": [
-        {
-          "name": "focus",
-          "text": "你是不是很难专心学习？",
-          "type": "radio",
-          "data": [
-            {
-              "text": "是",
-              "value": "yes"
-            },
-            {
-              "text": "不是",
-              "value": "no"
-            }
-          ]
-        },
-        {
-          "name": "effeciency",
-          "text": "你的学习效率是不是很低？",
-          "type": "radio",
-          "data": [
-            {
-              "text": "是",
-              "value": "yes"
-            },
-            {
-              "text": "不是",
-              "value": "no"
-            }
-          ]
-        },
-        {
-          "name": "collaboration",
-          "text": "你是不是很少和其他同学交流？",
-          "type": "radio",
-          "data": [
-            {
-              "text": "是",
-              "value": "yes"
-            },
-            {
-              "text": "不是",
-              "value": "no"
-            }
-          ]
         },
         {
           "name": "holiday",
           "text": "你的失眠发生在寒暑假吗",
+          "depends": {
+            "question": "status",
+            "value": "study"
+          },
           "type": "radio",
           "data": [
             {
@@ -442,8 +418,12 @@
           ]
         },
         {
-          "name": "bedtime",
+          "name": "bedtimeearly",
           "text": "你总是比室友睡得早吗？",
+          "depends": {
+            "question": "status",
+            "value": "study"
+          },
           "type": "radio",
           "data": [
             {
@@ -494,7 +474,7 @@
           ]
         },
         {
-          "name": "rest",
+          "name": "excessive_rest",
           "text": "失眠后你是不是总是在找机会休息？",
           "type": "radio",
           "data": [
@@ -562,101 +542,176 @@
       "text": "睡眠效率低下",
       "calc": {
         "func": "calcSleepEfficiency",
-        "input": ["sleeptime", "getuptime", "howlong"],
-        "threshold": 0.7
+        "input": ["sleeptime", "getuptime", "hourstosleep", "hourstofallinsleep"]
       }
     },
     {
       "name": "getup_irregularly",
-      "text": "无规律早起"
+      "text": "无规律早起",
+      "calc": {
+        "question": "sleepregular",
+        "value": "no"
+      }
     },
     {
       "name": "sleep_exccessive",
-      "text": "睡眠时间过长"
+      "text": "睡眠时间过长",
+      "calc": {
+        "func": "isSleepTooLong",
+        "input": ["sleeptime", "getuptime", "hourstosleep", "hourstonoonnap"]
+      }
     },
     {
       "name": "neighbour_noise",
-      "text": "邻居吵闹"
+      "text": "邻居吵闹",
+      "calc": {
+        "question": "noisereason",
+        "value": "neighbour"
+      }
     },
     {
       "name": "roommate_noise",
-      "text": "室友吵闹"
+      "text": "室友吵闹",
+      "calc": {
+        "question": "noisereason",
+        "value": "roommate"
+      }
     },
     {
       "name": "bedmate_snore",
-      "text": "枕边人打鼾"
+      "text": "枕边人打鼾",
+      "calc": {
+        "question": "noisereason",
+        "value": "snore"
+      }
     },
     {
       "name": "unhealthy",
-      "text": "不健康"
+      "text": "不健康",
+      "calc": {
+        "func": "isHealthy",
+        "input": ["sport", "sunshine"]
+      }
     },
     {
       "name": "idle",
-      "text": "无所事事"
+      "text": "无所事事",
+      "calc": {
+        "func": "isIdle",
+        "input": ["pressure", "lively"]
+      }
     },
     {
       "name": "presure",
-      "text": "压力过大"
+      "text": "压力过大",
+      "calc": {
+        "question": "pressure",
+        "value": "best"
+      }
     },
     {
       "name": "boring",
-      "text": "单调枯燥"
+      "text": "单调枯燥",
+      "calc": {
+        "question": "lively",
+        "value": "none"
+      }
     },
     {
       "name": "stimulation",
-      "text": "应激反应"
+      "text": "应激反应",
+      "calc": {
+        "func": "isStimuli",
+        "input": ["bedroom", "bed"]
+      }
     },
     {
-      "name": "distracting",
-      "text": "散乱"
+      "name": "distraction",
+      "text": "散乱",
+      "calc": {
+        "question": "distraction",
+        "value": "yes"
+      }
     },
     {
       "name": "unsociable",
-      "text": "缺乏交流"
+      "text": "缺乏交流",
+      "calc": {
+        "question": "unsociable",
+        "value": "yes"
+      }
     },
     {
-      "name": "shift_work",
-      "text": "倒班"
+      "name": "shiftwork",
+      "text": "倒班",
+      "calc": {
+        "question": "shiftwork",
+        "value": "yes"
+      }
     },
     {
       "name": "holiday",
-      "text": "长假"
+      "text": "长假",
+      "calc": {
+        "question": "holiday",
+        "value": "yes"
+      }
     },
     {
       "name": "conflict_routine",
-      "text": "作息不符"
+      "text": "作息不符",
+      "calc": {
+        "question": "bedtimeearly",
+        "value": "yes"
+      }
     },
     {
       "name": "prenatal",
-      "text": "孕期"
+      "text": "孕期",
+      "calc": {
+        "question": "prenatal",
+        "value": "yes"
+      }
     },
     {
       "name": "postnatal",
-      "text": "产后"
-    },
-    {
-      "name": "irresponbile",
-      "text": "逃避责任"
-    },
-    {
-      "name": "inactive",
-      "text": "减少活动"
-    },
-    {
-      "name": "excessive_rest",
-      "text": "过多休息"
+      "text": "产后",
+      "calc": {
+        "question": "postnatal",
+        "value": "yes"
+      }
     },
     {
       "name": "complain",
-      "text": "抱怨"
+      "text": "抱怨",
+      "calc": {
+        "question": "complain",
+        "value": "yes"
+      }
+    },
+    {
+      "name": "affectbyinsomnia",
+      "text": "被失眠左右",
+      "calc": {
+        "func": "isAffected",
+        "input": ["irresponsible", "inactive", "excessive_rest", "complain", "ignore", "medicine"]
+      }
     },
     {
       "name": "medicine",
-      "text": "药物"
+      "text": "药物",
+      "calc": {
+        "question": "medicine",
+        "value": "yes"
+      }
     },
     {
       "name": "selfish",
-      "text": "自我"
+      "text": "自我",
+      "calc": {
+        "question": "ignore",
+        "value": "yes"
+      }
     }
   ]
 }

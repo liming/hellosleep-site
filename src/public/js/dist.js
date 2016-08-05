@@ -31330,20 +31330,26 @@ module.exports = function symbolObservablePonyfill(root) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PREPARE_EVALUATION = exports.PREVIOUS_STEP = exports.NEXT_STEP = undefined;
+exports.SUBMIT_RESULT = exports.PREPARE_EVALUATION = exports.PREVIOUS_STEP = exports.NEXT_STEP = undefined;
 exports.changeStep = changeStep;
 exports.previousStep = previousStep;
 exports.fetchEvaluationData = fetchEvaluationData;
+exports.submitEvaluation = submitEvaluation;
 
 var _superagent = require('superagent');
 
 var _superagent2 = _interopRequireDefault(_superagent);
+
+var _calculation = require('../../data/calculation');
+
+var _calculation2 = _interopRequireDefault(_calculation);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var NEXT_STEP = exports.NEXT_STEP = 'NEXT_STEP';
 var PREVIOUS_STEP = exports.PREVIOUS_STEP = 'PREVIOUS_STEP';
 var PREPARE_EVALUATION = exports.PREPARE_EVALUATION = 'PREPARE_EVALUATION';
+var SUBMIT_RESULT = exports.SUBMIT_RESULT = "SUBMIT_RESULT";
 
 function getEvaluationMeta(content) {
 
@@ -31466,6 +31472,34 @@ function getQuestion(evaluation, answers, inc) {
   return { question: question, step: step, tracks: tracks };
 }
 
+/**
+ * Get the finnal evaluation result
+ */
+function calcResult(content, values) {
+  var _this = this;
+
+  var tags = content.tags;
+  var outTags = [];
+
+  tags.forEach(function (tag) {
+    var calc = tag.calc;
+    var isValid = false;
+
+    if (calc.question && calc.value === values[calc.question]) isValid = true;
+
+    if (calc.func) {
+      var args = calc.input.map(function (arg) {
+        return values[arg];
+      });
+      isValid = _calculation2.default[calc.func].apply(_this, args);
+    }
+
+    if (isValid) outTags.push({ name: tag.name, text: tag.text });
+  });
+
+  return { tags: outTags };
+}
+
 function changeStep(inc) {
   return function (dispatch, getState) {
     var _getState = getState();
@@ -31495,7 +31529,7 @@ function previousStep() {
   };
 }
 
-function prepareEvaluationData(content) {
+function prepareEvaluationData(content, initValues) {
   var _getEvaluationMeta = getEvaluationMeta(content);
 
   var totalStep = _getEvaluationMeta.totalStep;
@@ -31523,6 +31557,7 @@ function prepareEvaluationData(content) {
     question: question,
     step: step,
     tracks: tracks,
+    initValues: initValues,
     type: PREPARE_EVALUATION
   };
 }
@@ -31535,12 +31570,33 @@ function fetchEvaluationData() {
       // this might come from server side
       var content = require('../../data/evaluation.json');
 
-      dispatch(prepareEvaluationData(content));
+      // this is for test
+      var initValues = require('../../../test/eva1.json');
+
+      dispatch(prepareEvaluationData(content, initValues));
     }
   };
 }
 
-},{"../../data/evaluation.json":390,"superagent":365}],372:[function(require,module,exports){
+function submitResult(results) {
+  return {
+    results: results,
+    type: SUBMIT_RESULT
+  };
+}
+
+function submitEvaluation() {
+  return function (dispatch, getState) {
+    var state = getState();
+    var values = state.form.answers.values;
+
+    var results = calcResult(state.evaluation.content, values);
+
+    dispatch(submitResult(results));
+  };
+}
+
+},{"../../../test/eva1.json":393,"../../data/calculation":391,"../../data/evaluation.json":392,"superagent":365}],372:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32164,7 +32220,10 @@ var DatePicker = function (_Component) {
       var _props2 = this.props;
       var placeholder = _props2.placeholder;
       var options = _props2.options;
+      var input = _props2.input;
 
+
+      var value = input.value ? new Date(input.value).toString() : undefined;
 
       var fieldStyle = {
         marginTop: "2rem"
@@ -32226,7 +32285,7 @@ var DatePicker = function (_Component) {
           'div',
           { className: 'ui input left icon' },
           _react2.default.createElement('i', { className: 'calendar icon' }),
-          _react2.default.createElement('input', { type: 'text', placeholder: placeholder })
+          _react2.default.createElement('input', { type: 'text', placeholder: placeholder, value: value })
         )
       );
     }
@@ -32258,6 +32317,10 @@ var _Question = require('./Question');
 
 var _Question2 = _interopRequireDefault(_Question);
 
+var _ResultTable = require('./ResultTable');
+
+var _ResultTable2 = _interopRequireDefault(_ResultTable);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32286,6 +32349,9 @@ var EvaluationForm = function (_Component) {
         minHeight: '20rem'
       };
 
+      var results = this.props.results;
+
+
       return _react2.default.createElement(
         'div',
         { className: 'ui segments' },
@@ -32296,7 +32362,8 @@ var EvaluationForm = function (_Component) {
             'form',
             { className: 'ui form' },
             this.createQuestions()
-          )
+          ),
+          results && _react2.default.createElement(_ResultTable2.default, { results: results })
         ),
         this.createNavButtons()
       );
@@ -32360,7 +32427,7 @@ exports.default = (0, _reduxForm.reduxForm)({
   destroyOnUnmount: false
 })(EvaluationForm);
 
-},{"./Question":378,"react":308,"redux-form":336}],377:[function(require,module,exports){
+},{"./Question":378,"./ResultTable":381,"react":308,"redux-form":336}],377:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32521,10 +32588,10 @@ var Question = function (_Component) {
               q.data.map(function (item, i) {
                 return _react2.default.createElement(
                   'div',
-                  { className: 'field' },
+                  { className: 'field', key: i },
                   _react2.default.createElement(
                     'div',
-                    { className: divClass, key: i },
+                    { className: divClass },
                     _react2.default.createElement(_reduxForm.Field, { name: type === 'radio' ? q.name : item.value, component: 'input', type: type, value: item.value }),
                     _react2.default.createElement(
                       'label',
@@ -32613,11 +32680,14 @@ var Ranger = function (_Component) {
       $(this.refs.ranger).range({
         min: options.min,
         max: options.max,
-        start: options.start,
+        start: input.value || options.start,
         step: options.step || 1,
         onChange: function onChange(value) {
           _this2.refs.preview.innerHTML = value.toString();
           input.onChange(value);
+        },
+        onMove: function onMove(value) {
+          _this2.refs.preview.innerHTML = value.toString();
         }
       });
     }
@@ -32723,6 +32793,92 @@ var ReplyTo = function (_Component) {
 exports.default = ReplyTo;
 
 },{"react":308}],381:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ResultTable = function (_Component) {
+  _inherits(ResultTable, _Component);
+
+  function ResultTable(props) {
+    _classCallCheck(this, ResultTable);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(ResultTable).call(this, props));
+  }
+
+  _createClass(ResultTable, [{
+    key: "render",
+    value: function render() {
+      var results = this.props.results;
+
+
+      return _react2.default.createElement(
+        "table",
+        { className: "ui celled table" },
+        _react2.default.createElement(
+          "thead",
+          null,
+          _react2.default.createElement(
+            "tr",
+            null,
+            _react2.default.createElement(
+              "th",
+              null,
+              "name"
+            ),
+            _react2.default.createElement(
+              "th",
+              null,
+              "text"
+            )
+          )
+        ),
+        _react2.default.createElement(
+          "tbody",
+          null,
+          results.tags.map(function (tag, i) {
+            return _react2.default.createElement(
+              "tr",
+              { key: i },
+              _react2.default.createElement(
+                "td",
+                null,
+                tag.name
+              ),
+              _react2.default.createElement(
+                "td",
+                null,
+                tag.text
+              )
+            );
+          })
+        )
+      );
+    }
+  }]);
+
+  return ResultTable;
+}(_react.Component);
+
+exports.default = ResultTable;
+
+},{"react":308}],382:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32774,9 +32930,12 @@ var Evaluation = function (_Component) {
   }, {
     key: 'onNextStep',
     value: function onNextStep() {
-      var dispatch = this.props.dispatch;
+      var _props = this.props;
+      var dispatch = _props.dispatch;
+      var isLastStep = _props.isLastStep;
 
-      dispatch((0, _evaluation.changeStep)(true));
+
+      if (isLastStep) dispatch((0, _evaluation.submitEvaluation)());else dispatch((0, _evaluation.changeStep)(true));
     }
   }, {
     key: 'onPreviousStep',
@@ -32788,10 +32947,12 @@ var Evaluation = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props = this.props;
-      var question = _props.question;
-      var isLastStep = _props.isLastStep;
-      var isFirstStep = _props.isFirstStep;
+      var _props2 = this.props;
+      var question = _props2.question;
+      var isLastStep = _props2.isLastStep;
+      var isFirstStep = _props2.isFirstStep;
+      var results = _props2.results;
+      var initialValues = _props2.initialValues;
 
       var eStyle = {
         marginTop: '10vh'
@@ -32810,7 +32971,9 @@ var Evaluation = function (_Component) {
           onPreviousStep: this.onPreviousStep,
           question: question,
           isLastStep: isLastStep,
-          isFirstStep: isFirstStep
+          isFirstStep: isFirstStep,
+          results: results,
+          initialValues: initialValues
         })
       );
     }
@@ -32829,13 +32992,15 @@ var mapStateToProps = function mapStateToProps(state) {
   return {
     isLastStep: v.step === v.totalStep,
     isFirstStep: v.step === 1,
-    question: v.question
+    question: v.question,
+    results: v.results,
+    initialValues: v.initialValues
   };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(Evaluation);
 
-},{"../actions/evaluation":371,"../components/EvaluationForm":376,"react":308,"react-redux":162}],382:[function(require,module,exports){
+},{"../actions/evaluation":371,"../components/EvaluationForm":376,"react":308,"react-redux":162}],383:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32980,7 +33145,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostComment);
 
-},{"../actions/post":372,"../components/Comment":373,"../components/CommentForm":374,"react":308,"react-redux":162}],383:[function(require,module,exports){
+},{"../actions/post":372,"../components/Comment":373,"../components/CommentForm":374,"react":308,"react-redux":162}],384:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33077,7 +33242,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(PostMeta);
 
-},{"../actions/post":372,"../components/LikeButton":377,"react":308,"react-redux":162}],384:[function(require,module,exports){
+},{"../actions/post":372,"../components/LikeButton":377,"react":308,"react-redux":162}],385:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -33174,7 +33339,7 @@ if (evaluationTarget) {
   renderEvaluation();
 }
 
-},{"./containers/Evaluation":381,"./containers/PostComment":382,"./containers/PostMeta.js":383,"./stores/configureStore":389,"react":308,"react-dom":159,"react-redux":162}],385:[function(require,module,exports){
+},{"./containers/Evaluation":382,"./containers/PostComment":383,"./containers/PostMeta.js":384,"./stores/configureStore":390,"react":308,"react-dom":159,"react-redux":162}],386:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33183,8 +33348,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _evaluation = require('../actions/evaluation');
 
-function evaluation(state, action) {
-  var newState = Object.assign({}, state);
+function evaluation() {
+  var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+  var action = arguments[1];
+
 
   switch (action.type) {
     case _evaluation.PREPARE_EVALUATION:
@@ -33194,7 +33361,8 @@ function evaluation(state, action) {
         content: action.content,
         question: action.question,
         step: action.step,
-        tracks: action.tracks
+        tracks: action.tracks,
+        initialValues: action.initValues || {}
       });
     case _evaluation.NEXT_STEP:
     case _evaluation.PREVIOUS_STEP:
@@ -33203,17 +33371,20 @@ function evaluation(state, action) {
         question: action.question,
         tracks: action.tracks
       });
-      break;
+    case _evaluation.SUBMIT_RESULT:
+      return Object.assign({}, state, {
+        results: action.results
+      });
     default:
       break;
   }
 
-  return newState;
+  return state;
 }
 
 exports.default = evaluation;
 
-},{"../actions/evaluation":371}],386:[function(require,module,exports){
+},{"../actions/evaluation":371}],387:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33252,7 +33423,7 @@ var evaluationReducers = (0, _redux.combineReducers)({
 exports.postReducers = postReducers;
 exports.evaluationReducers = evaluationReducers;
 
-},{"./evaluation":385,"./post_comment":387,"./post_meta":388,"redux":362,"redux-form":336}],387:[function(require,module,exports){
+},{"./evaluation":386,"./post_comment":388,"./post_meta":389,"redux":362,"redux-form":336}],388:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33307,7 +33478,7 @@ function postComment() {
 
 exports.default = postComment;
 
-},{"../actions/post":372}],388:[function(require,module,exports){
+},{"../actions/post":372}],389:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33339,7 +33510,7 @@ function postMeta() {
 
 exports.default = postMeta;
 
-},{"../actions/post":372}],389:[function(require,module,exports){
+},{"../actions/post":372}],390:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33376,7 +33547,103 @@ function configureEvaluationStore(initialState) {
 exports.configureStore = configureStore;
 exports.configureEvaluationStore = configureEvaluationStore;
 
-},{"../reducers":386,"redux":362,"redux-logger":355,"redux-thunk":356}],390:[function(require,module,exports){
+},{"../reducers":387,"redux":362,"redux-logger":355,"redux-thunk":356}],391:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var HOURS_THRESHOLD = 0.7;
+var NORMAL_SLEEP_HOURS = 7;
+var UNHEALTH_THRESHOLD = 5;
+var IDLE_THRESHOLD = 5;
+var AFFECT_THRESHOLD = 3;
+
+var PointMap = {
+  best: 5,
+  normal: 3,
+  little: 1,
+  none: 0
+};
+
+var YesNo = {
+  yes: true,
+  no: false
+};
+
+function getSleepHours(sleeptime, getuptime, hourstosleep) {
+  var hours = void 0;
+
+  if (sleeptime && getuptime) {
+    // calculate the hours trying to sleep
+    var sleep = new Date(sleeptime);
+    var getup = new Date(getuptime);
+
+    // make sure getup is tomorrow
+    getup.setDate(getup.getDate() + 1);
+
+    hours = Math.abs(getup - sleep) / 36e5;
+  }
+
+  if (hourstosleep) hours = hourstosleep;
+
+  return hours;
+}
+
+function calcSleepEfficiency(sleeptime, getuptime, hourstosleep, hourstofallinsleep) {
+
+  var hours = getSleepHours(sleeptime, getuptime, hourstosleep);
+
+  return hourstofallinsleep / hours < HOURS_THRESHOLD;
+}
+
+function isSleepTooLong(sleeptime, getuptime, hourstosleep, hourstonoonnap) {
+  var hours = getSleepHours(sleeptime, getuptime, hourstosleep);
+
+  if (hourstonoonnap) hours += hourstonoonnap;
+
+  return hours > NORMAL_SLEEP_HOURS + 2;
+}
+
+function isHealthy(sport, sunshine) {
+  var totalPoint = PointMap[sport] + PointMap[sunshine];
+
+  return totalPoint < UNHEALTH_THRESHOLD;
+}
+
+function isIdle(pressure, lively) {
+  var totalPoint = PointMap[pressure] + PointMap[lively];
+
+  return totalPoint < IDLE_THRESHOLD;
+}
+
+function isStimuli(bedroom, bed) {
+  return YesNo[bedroom] || YesNo[bed];
+}
+
+function isAffected() {
+  var count = 0;
+  var args = Array.prototype.slice.call(arguments);
+
+  args.forEach(function (value) {
+    if (YesNo[value]) count++;
+  });
+
+  return count >= AFFECT_THRESHOLD;
+}
+
+exports.default = {
+  getSleepHours: getSleepHours,
+  calcSleepEfficiency: calcSleepEfficiency,
+  isSleepTooLong: isSleepTooLong,
+  isHealthy: isHealthy,
+  isIdle: isIdle,
+  isStimuli: isStimuli,
+  isAffected: isAffected
+};
+
+},{}],392:[function(require,module,exports){
 module.exports={
   "version": "1",
   "data": [
@@ -33496,7 +33763,7 @@ module.exports={
           }
         },
         {
-          "name": "howlongtosleep",
+          "name": "hourstosleep",
           "text": "晚上试图睡觉时间有多少？",
           "depends": {
             "question": "sleepregular",
@@ -33511,7 +33778,7 @@ module.exports={
           }
         },
         {
-          "name": "howlongtofallinsleep",
+          "name": "hourstofallinsleep",
           "text": "晚上的实际睡眠时间有多少？",
           "type": "range",
           "options": {
@@ -33522,7 +33789,7 @@ module.exports={
           }
         },
         {
-          "name": "noonnap",
+          "name": "hourstonoonnap",
           "text": "午睡时间多长？",
           "description": "这里指的是试图午睡的时间。",
           "type": "range",
@@ -33590,12 +33857,20 @@ module.exports={
           "type": "radio",
           "data": [
             {
-              "text": "会",
-              "value": "yes"
+              "text": "有规律",
+              "value": "best"
+            },
+            {
+              "text": "正常",
+              "value": "normal"
+            },
+            {
+              "text": "不多",
+              "value": "little"
             },
             {
               "text": "不会",
-              "value": "no"
+              "value": "none"
             }
           ]
         },
@@ -33605,12 +33880,20 @@ module.exports={
           "type": "radio",
           "data": [
             {
-              "text": "是",
-              "value": "yes"
+              "text": "很多",
+              "value": "best"
             },
             {
-              "text": "不是",
-              "value": "no"
+              "text": "正常",
+              "value": "normal"
+            },
+            {
+              "text": "不多",
+              "value": "little"
+            },
+            {
+              "text": "几乎没有",
+              "value": "none"
             }
           ]
         },
@@ -33620,31 +33903,43 @@ module.exports={
           "type": "radio",
           "data": [
             {
-              "text": "很大",
-              "value": "very"
+              "text": "很大压力",
+              "value": "best"
             },
             {
-              "text": "一般",
+              "text": "正常",
               "value": "normal"
             },
             {
-              "text": "完全没有",
+              "text": "很少",
+              "value": "little"
+            },
+            {
+              "text": "几乎没有",
               "value": "none"
             }
           ]
         },
         {
-          "name": "boring",
-          "text": "生活很枯燥和单调吗？",
+          "name": "lively",
+          "text": "生活很丰富活跃吗？",
           "type": "radio",
           "data": [
             {
-              "text": "是",
-              "value": "yes"
+              "text": "非常",
+              "value": "best"
             },
             {
-              "text": "不是",
-              "value": "no"
+              "text": "正常",
+              "value": "normal"
+            },
+            {
+              "text": "不太丰富",
+              "value": "little"
+            },
+            {
+              "text": "很枯燥",
+              "value": "none"
             }
           ]
         },
@@ -33681,17 +33976,13 @@ module.exports={
       ]
     },
     {
-      "name": "working",
+      "name": "working_study",
       "text": "工作状态",
-      "depends": {
-        "question": "status",
-        "value": "work"
-      },
       "page": "multiple",
       "data": [
         {
-          "name": "focus",
-          "text": "你是不是很难专心工作？",
+          "name": "distraction",
+          "text": "你是不是很难专心工作（或学习）？",
           "type": "radio",
           "data": [
             {
@@ -33706,7 +33997,7 @@ module.exports={
         },
         {
           "name": "effeciency",
-          "text": "你的工作效率是不是很低？",
+          "text": "你的工作（或学习）效率是不是很低？",
           "type": "radio",
           "data": [
             {
@@ -33720,8 +34011,8 @@ module.exports={
           ]
         },
         {
-          "name": "collaboration",
-          "text": "你是不是很少和同事交流？",
+          "name": "unsociable",
+          "text": "你是不是很少和同事（或同学）交流？",
           "type": "radio",
           "data": [
             {
@@ -33737,6 +34028,10 @@ module.exports={
         {
           "name": "shiftwork",
           "text": "你的工作需要倒班吗？",
+          "depends": {
+            "question": "status",
+            "value": "work"
+          },
           "type": "radio",
           "data": [
             {
@@ -33748,66 +34043,14 @@ module.exports={
               "value": "no"
             }
           ]
-        }
-      ]
-    },
-    {
-      "name": "studying",
-      "text": "学习状态",
-      "depends": {
-        "question": "status",
-        "value": "study"
-      },
-      "page": "multiple",
-      "data": [
-        {
-          "name": "focus",
-          "text": "你是不是很难专心学习？",
-          "type": "radio",
-          "data": [
-            {
-              "text": "是",
-              "value": "yes"
-            },
-            {
-              "text": "不是",
-              "value": "no"
-            }
-          ]
-        },
-        {
-          "name": "effeciency",
-          "text": "你的学习效率是不是很低？",
-          "type": "radio",
-          "data": [
-            {
-              "text": "是",
-              "value": "yes"
-            },
-            {
-              "text": "不是",
-              "value": "no"
-            }
-          ]
-        },
-        {
-          "name": "collaboration",
-          "text": "你是不是很少和其他同学交流？",
-          "type": "radio",
-          "data": [
-            {
-              "text": "是",
-              "value": "yes"
-            },
-            {
-              "text": "不是",
-              "value": "no"
-            }
-          ]
         },
         {
           "name": "holiday",
           "text": "你的失眠发生在寒暑假吗",
+          "depends": {
+            "question": "status",
+            "value": "study"
+          },
           "type": "radio",
           "data": [
             {
@@ -33821,8 +34064,12 @@ module.exports={
           ]
         },
         {
-          "name": "bedtime",
+          "name": "bedtimeearly",
           "text": "你总是比室友睡得早吗？",
+          "depends": {
+            "question": "status",
+            "value": "study"
+          },
           "type": "radio",
           "data": [
             {
@@ -33873,7 +34120,7 @@ module.exports={
           ]
         },
         {
-          "name": "rest",
+          "name": "excessive_rest",
           "text": "失眠后你是不是总是在找机会休息？",
           "type": "radio",
           "data": [
@@ -33941,105 +34188,210 @@ module.exports={
       "text": "睡眠效率低下",
       "calc": {
         "func": "calcSleepEfficiency",
-        "input": ["sleeptime", "getuptime", "howlong"],
-        "threshold": 0.7
+        "input": ["sleeptime", "getuptime", "hourstosleep", "hourstofallinsleep"]
       }
     },
     {
       "name": "getup_irregularly",
-      "text": "无规律早起"
+      "text": "无规律早起",
+      "calc": {
+        "question": "sleepregular",
+        "value": "no"
+      }
     },
     {
       "name": "sleep_exccessive",
-      "text": "睡眠时间过长"
+      "text": "睡眠时间过长",
+      "calc": {
+        "func": "isSleepTooLong",
+        "input": ["sleeptime", "getuptime", "hourstosleep", "hourstonoonnap"]
+      }
     },
     {
       "name": "neighbour_noise",
-      "text": "邻居吵闹"
+      "text": "邻居吵闹",
+      "calc": {
+        "question": "noisereason",
+        "value": "neighbour"
+      }
     },
     {
       "name": "roommate_noise",
-      "text": "室友吵闹"
+      "text": "室友吵闹",
+      "calc": {
+        "question": "noisereason",
+        "value": "roommate"
+      }
     },
     {
       "name": "bedmate_snore",
-      "text": "枕边人打鼾"
+      "text": "枕边人打鼾",
+      "calc": {
+        "question": "noisereason",
+        "value": "snore"
+      }
     },
     {
       "name": "unhealthy",
-      "text": "不健康"
+      "text": "不健康",
+      "calc": {
+        "func": "isHealthy",
+        "input": ["sport", "sunshine"]
+      }
     },
     {
       "name": "idle",
-      "text": "无所事事"
+      "text": "无所事事",
+      "calc": {
+        "func": "isIdle",
+        "input": ["pressure", "lively"]
+      }
     },
     {
       "name": "presure",
-      "text": "压力过大"
+      "text": "压力过大",
+      "calc": {
+        "question": "pressure",
+        "value": "best"
+      }
     },
     {
       "name": "boring",
-      "text": "单调枯燥"
+      "text": "单调枯燥",
+      "calc": {
+        "question": "lively",
+        "value": "none"
+      }
     },
     {
       "name": "stimulation",
-      "text": "应激反应"
+      "text": "应激反应",
+      "calc": {
+        "func": "isStimuli",
+        "input": ["bedroom", "bed"]
+      }
     },
     {
-      "name": "distracting",
-      "text": "散乱"
+      "name": "distraction",
+      "text": "散乱",
+      "calc": {
+        "question": "distraction",
+        "value": "yes"
+      }
     },
     {
       "name": "unsociable",
-      "text": "缺乏交流"
+      "text": "缺乏交流",
+      "calc": {
+        "question": "unsociable",
+        "value": "yes"
+      }
     },
     {
-      "name": "shift_work",
-      "text": "倒班"
+      "name": "shiftwork",
+      "text": "倒班",
+      "calc": {
+        "question": "shiftwork",
+        "value": "yes"
+      }
     },
     {
       "name": "holiday",
-      "text": "长假"
+      "text": "长假",
+      "calc": {
+        "question": "holiday",
+        "value": "yes"
+      }
     },
     {
       "name": "conflict_routine",
-      "text": "作息不符"
+      "text": "作息不符",
+      "calc": {
+        "question": "bedtimeearly",
+        "value": "yes"
+      }
     },
     {
       "name": "prenatal",
-      "text": "孕期"
+      "text": "孕期",
+      "calc": {
+        "question": "prenatal",
+        "value": "yes"
+      }
     },
     {
       "name": "postnatal",
-      "text": "产后"
-    },
-    {
-      "name": "irresponbile",
-      "text": "逃避责任"
-    },
-    {
-      "name": "inactive",
-      "text": "减少活动"
-    },
-    {
-      "name": "excessive_rest",
-      "text": "过多休息"
+      "text": "产后",
+      "calc": {
+        "question": "postnatal",
+        "value": "yes"
+      }
     },
     {
       "name": "complain",
-      "text": "抱怨"
+      "text": "抱怨",
+      "calc": {
+        "question": "complain",
+        "value": "yes"
+      }
+    },
+    {
+      "name": "affectbyinsomnia",
+      "text": "被失眠左右",
+      "calc": {
+        "func": "isAffected",
+        "input": ["irresponsible", "inactive", "excessive_rest", "complain", "ignore", "medicine"]
+      }
     },
     {
       "name": "medicine",
-      "text": "药物"
+      "text": "药物",
+      "calc": {
+        "question": "medicine",
+        "value": "yes"
+      }
     },
     {
       "name": "selfish",
-      "text": "自我"
+      "text": "自我",
+      "calc": {
+        "question": "ignore",
+        "value": "yes"
+      }
     }
   ]
 }
 
-},{}]},{},[384]);
+},{}],393:[function(require,module,exports){
+module.exports={
+    "email": "liming.dl@gmail.com",
+    "birthday": "1981-03-17T00:00:00.000Z",
+    "sex": "male",
+    "status": "work",
+    "sleepregular": "yes",
+    "sleeptime": "2016-08-05T15:00:00.000Z",
+    "getuptime": "2016-08-04T21:00:00.000Z",
+    "hourstofallinsleep": 5,
+    "hourstonoonnap": 0,
+    "noise": "yes",
+    "sport": "little",
+    "sunshine": "little",
+    "pressure": "normal",
+    "lively": "best",
+    "bedroom": "no",
+    "bed": "no",
+    "distraction": "no",
+    "effeciency": "no",
+    "unsociable": "no",
+    "shiftwork": "no",
+    "irresponsible": "no",
+    "inactive": "no",
+    "excessive_rest": "no",
+    "complain": "no",
+    "ignore": "yes",
+    "medicine": "no"
+}
+
+},{}]},{},[385]);
 
 //# sourceMappingURL=dist.js.map

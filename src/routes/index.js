@@ -54,4 +54,7 @@ exports = module.exports = function (app) {
   app.post('/api/posts/:id/like', routes.api.posts.likePost);
   app.get('/api/posts/:id/comments', routes.api.posts.listComments);
   app.post('/api/posts/:id/comments', routes.api.posts.postComment);
+
+  // evaluation api
+  
 }

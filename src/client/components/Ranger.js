@@ -13,11 +13,14 @@ class Ranger extends Component {
     $(this.refs.ranger).range({
       min: options.min,
       max: options.max,
-      start: options.start,
+      start: input.value || options.start,
       step: options.step || 1,
       onChange: value => {
         this.refs.preview.innerHTML = value.toString();
         input.onChange(value);
+      },
+      onMove: value => {
+        this.refs.preview.innerHTML = value.toString();
       }
     });
   }

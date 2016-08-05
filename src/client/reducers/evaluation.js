@@ -2,11 +2,11 @@
 import {
   NEXT_STEP,
   PREVIOUS_STEP,
-  PREPARE_EVALUATION
+  PREPARE_EVALUATION,
+  SUBMIT_RESULT
 } from '../actions/evaluation';
 
-function evaluation(state, action) {
-  let newState = Object.assign({}, state);
+function evaluation(state = {}, action) {
 
   switch(action.type) {
   case PREPARE_EVALUATION:
@@ -16,7 +16,8 @@ function evaluation(state, action) {
       content: action.content,
       question: action.question,
       step: action.step,
-      tracks: action.tracks
+      tracks: action.tracks,
+      initialValues: action.initValues || {}
     });
   case NEXT_STEP:
   case PREVIOUS_STEP:
@@ -25,12 +26,15 @@ function evaluation(state, action) {
       question: action.question,
       tracks: action.tracks
     });
-    break;
+  case SUBMIT_RESULT:
+    return Object.assign({}, state, {
+      results: action.results
+    });
   default:
     break;
   }
 
-  return newState;
+  return state;
 }
 
 export default evaluation;

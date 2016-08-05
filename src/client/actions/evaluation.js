@@ -1,8 +1,10 @@
 import request from 'superagent';
+import calculator from '../../data/calculation';
 
 export const NEXT_STEP = 'NEXT_STEP';
 export const PREVIOUS_STEP = 'PREVIOUS_STEP';
 export const PREPARE_EVALUATION = 'PREPARE_EVALUATION';
+export const SUBMIT_RESULT = "SUBMIT_RESULT";
 
 function getEvaluationMeta(content) {
 
@@ -121,6 +123,30 @@ function getQuestion(evaluation, answers, inc) {
   return {question, step, tracks};
 }
 
+/**
+ * Get the finnal evaluation result
+ */
+function calcResult(content, values) {
+  const tags = content.tags;
+  let outTags = [];
+
+  tags.forEach(tag => {
+    const calc = tag.calc;
+    let isValid = false;
+
+    if (calc.question && calc.value === values[calc.question]) isValid = true;
+
+    if (calc.func) {
+      const args = calc.input.map(arg => values[arg]);
+      isValid = calculator[calc.func].apply(this, args);
+    }
+
+    if (isValid) outTags.push({name: tag.name, text: tag.text});
+  });
+
+  return {tags: outTags};
+}
+
 export function changeStep(inc) {
   return (dispatch, getState) => {
     const {evaluation, form} = getState();
@@ -142,7 +168,7 @@ export function previousStep() {
   };
 }
 
-function prepareEvaluationData(content) {
+function prepareEvaluationData(content, initValues) {
   const { totalStep, stepCounts } = getEvaluationMeta(content);
 
   const evalData = {
@@ -161,6 +187,7 @@ function prepareEvaluationData(content) {
     question,
     step,
     tracks,
+    initValues,
     type: PREPARE_EVALUATION
   };
 }
@@ -173,7 +200,28 @@ export function fetchEvaluationData() {
       // this might come from server side
       const content = require('../../data/evaluation.json');
 
-      dispatch(prepareEvaluationData(content));
+      // this is for test
+      const initValues = require('../../../test/eva1.json');
+
+      dispatch(prepareEvaluationData(content, initValues));
     }
+  };
+}
+
+function submitResult(results) {
+  return {
+    results,
+    type: SUBMIT_RESULT
+  };
+}
+
+export function submitEvaluation() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const values = state.form.answers.values;
+
+    const results = calcResult(state.evaluation.content, values);
+
+    dispatch(submitResult(results));
   };
 }

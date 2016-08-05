@@ -49,8 +49,8 @@ class Question extends Component {
       return (
         <div>
           {q.data.map((item, i) =>
-            <div className="field">
-              <div className={divClass} key={i}>
+            <div className="field" key={i}>
+              <div className={divClass}>
                 <Field name={type === 'radio' ? q.name : item.value} component="input" type={type} value={item.value}/>
                 <label>{item.text}</label>
               </div>

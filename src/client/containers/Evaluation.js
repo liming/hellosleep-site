@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import EvaluationForm from '../components/EvaluationForm';
 
-import { changeStep, fetchEvaluationData } from '../actions/evaluation';
+import { changeStep, fetchEvaluationData, submitEvaluation } from '../actions/evaluation';
 
 class Evaluation extends Component {
 
@@ -20,8 +20,10 @@ class Evaluation extends Component {
   }
 
   onNextStep() {
-    const { dispatch } = this.props;
-    dispatch(changeStep(true));
+    const { dispatch, isLastStep } = this.props;
+
+    if (isLastStep) dispatch(submitEvaluation());
+    else dispatch(changeStep(true));
   }
 
   onPreviousStep() {
@@ -31,7 +33,7 @@ class Evaluation extends Component {
 
   render() {
 
-    const { question, isLastStep, isFirstStep } = this.props;
+    const { question, isLastStep, isFirstStep, results, initialValues } = this.props;
     const eStyle = {
       marginTop: '10vh'
     };
@@ -47,6 +49,8 @@ class Evaluation extends Component {
           question={question}
           isLastStep={isLastStep}
           isFirstStep={isFirstStep}
+          results={results}
+          initialValues={initialValues}
         />
       </div>
     );
@@ -61,7 +65,9 @@ const mapStateToProps = (state) => {
   return {
     isLastStep: v.step === v.totalStep,
     isFirstStep: v.step === 1,
-    question: v.question
+    question: v.question,
+    results: v.results,
+    initialValues: v.initialValues
   };
 };
 

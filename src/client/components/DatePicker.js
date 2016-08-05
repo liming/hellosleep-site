@@ -42,7 +42,9 @@ class DatePicker extends Component {
   }
 
   render() {
-    const { placeholder, options } = this.props;
+    const { placeholder, options, input } = this.props;
+
+    const value = input.value ? new Date(input.value).toString() : undefined;
 
     const fieldStyle = {
       marginTop: "2rem"
@@ -79,7 +81,7 @@ class DatePicker extends Component {
       <div className="ui calendar" ref="datepicker">
         <div className="ui input left icon">
           <i className="calendar icon"></i>
-          <input type="text" placeholder={placeholder} />
+          <input type="text" placeholder={placeholder} value={value}/>
         </div>
       </div>
     );
