@@ -1,0 +1,8 @@
+
+// display an evaluation
+mixin show-eval(data)
+  .eval-result
+    h1.ui.header #{data.name}的睡眠评估
+      .sub.header 于#{data.formattedDate}创建
+    each t in data.tags
+      p 标签: #{t.text}

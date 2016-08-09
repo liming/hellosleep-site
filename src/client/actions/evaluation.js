@@ -226,7 +226,32 @@ export function submitEvaluation() {
 
     // going to save the result to server
 
-    dispatch(submitResult(results));
+    const data = {
+      name: values.name,
+      email: values.email,
+      sex: values.sex,
+      birthday: values.birthday,
+      status: values.status,
+      answers: values,
+      tags: results.tags
+    };
+
+    return request
+      .post('/api/evaluations')
+      .send(data)
+      .end((err, res) => {
+        if (err) {
+          // TODO: this is going to open modal dialog prompt the error and then
+          // ask user submit again
+          return console.error(err);
+        }
+
+        // redirect to evaluation page
+        window.location.href = `/evaluation/${res.body.id}`;
+
+        // this is for debugging the results
+        // dispatch(submitResult(results));
+      });
   };
 }
 

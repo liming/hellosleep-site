@@ -31598,7 +31598,29 @@ function submitEvaluation() {
 
     // going to save the result to server
 
-    dispatch(submitResult(results));
+    var data = {
+      name: values.name,
+      email: values.email,
+      sex: values.sex,
+      birthday: values.birthday,
+      status: values.status,
+      answers: values,
+      tags: results.tags
+    };
+
+    return _superagent2.default.post('/api/evaluations').send(data).end(function (err, res) {
+      if (err) {
+        // TODO: this is going to open modal dialog prompt the error and then
+        // ask user submit again
+        return console.error(err);
+      }
+
+      // redirect to evaluation page
+      window.location.href = '/evaluation/' + res.body.id;
+
+      // this is for debugging the results
+      // dispatch(submitResult(results));
+    });
   };
 }
 
@@ -34546,32 +34568,33 @@ module.exports={
 
 },{}],394:[function(require,module,exports){
 module.exports={
-    "email": "liming.dl@gmail.com",
-    "birthday": "1981-03-17T00:00:00.000Z",
-    "sex": "male",
-    "status": "work",
-    "sleepregular": "yes",
-    "sleeptime": "2016-08-05T15:00:00.000Z",
-    "getuptime": "2016-08-04T21:00:00.000Z",
-    "hourstofallinsleep": 5,
-    "hourstonoonnap": 0,
-    "noise": "yes",
-    "sport": "little",
-    "sunshine": "little",
-    "pressure": "normal",
-    "lively": "best",
-    "bedroom": "no",
-    "bed": "no",
-    "distraction": "no",
-    "effeciency": "no",
-    "unsociable": "no",
-    "shiftwork": "no",
-    "irresponsible": "no",
-    "inactive": "no",
-    "excessive_rest": "no",
-    "complain": "no",
-    "ignore": "yes",
-    "medicine": "no"
+  "name": "match",
+  "email": "liming.dl@gmail.com",
+  "birthday": "1981-03-17T00:00:00.000Z",
+  "sex": "male",
+  "status": "work",
+  "sleepregular": "yes",
+  "sleeptime": "2016-08-05T15:00:00.000Z",
+  "getuptime": "2016-08-04T21:00:00.000Z",
+  "hourstofallinsleep": 5,
+  "hourstonoonnap": 0,
+  "noise": "yes",
+  "sport": "little",
+  "sunshine": "little",
+  "pressure": "normal",
+  "lively": "best",
+  "bedroom": "no",
+  "bed": "no",
+  "distraction": "no",
+  "effeciency": "no",
+  "unsociable": "no",
+  "shiftwork": "no",
+  "irresponsible": "no",
+  "inactive": "no",
+  "excessive_rest": "no",
+  "complain": "no",
+  "ignore": "yes",
+  "medicine": "no"
 }
 
 },{}]},{},[386]);

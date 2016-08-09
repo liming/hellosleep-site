@@ -56,5 +56,5 @@ exports = module.exports = function (app) {
   app.post('/api/posts/:id/comments', routes.api.posts.postComment);
 
   // evaluation api
-  
+  app.post('/api/evaluations', routes.api.evaluations.create);
 }

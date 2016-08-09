@@ -2,6 +2,7 @@
 
 const keystone = require('keystone');
 const Types = keystone.Field.Types;
+const moment = require('moment');
 
 var Evaluation = new keystone.List('Evaluation', {
 	map: { name: 'name' },
@@ -14,6 +15,7 @@ Evaluation.add({
   name: { type: String, required: true },
   email: { type: Types.Email, initial: true, required: true, index: true },
   sex: { type: String, required: true, initial: false },
+  birthday: { type: Types.Date },
   status: { type: String, required: true, initial: false },
   submitDate: { type: Types.Date, index: true },
 
@@ -23,6 +25,10 @@ Evaluation.add({
   answers: { type: String },
 
   tags: { type: Types.Relationship, ref: 'Tag', many: true }
+});
+
+Evaluation.schema.virtual('formattedDate').get(function () {
+  return moment(this.submitDate).locale('zh-cn').format('ll');
 });
 
 Evaluation.defaultSort = '-submitDate';
