@@ -7,17 +7,17 @@ class Ranger extends Component {
 
   componentDidMount() {
 
-    const { input, options } = this.props;
+    const { onChange, value, options } = this.props;
 
     // Semantic UI Range
     $(this.refs.ranger).range({
       min: options.min,
       max: options.max,
-      start: input.value || options.start,
+      start: value || options.start,
       step: options.step || 1,
       onChange: value => {
         this.refs.preview.innerHTML = value.toString();
-        input.onChange(value);
+        onChange(value);
       },
       onMove: value => {
         this.refs.preview.innerHTML = value.toString();

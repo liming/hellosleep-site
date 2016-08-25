@@ -68,13 +68,13 @@ class Evaluation extends Component {
           睡眠评估
         </h1>
         <EvaluationForm
-          onNextStep={this.onNextStep}
+          onSubmit={this.onNextStep}
           onPreviousStep={this.onPreviousStep}
           question={question}
           isLastStep={isLastStep}
           isFirstStep={isFirstStep}
           results={results}
-          initialValues={initialValues}
+//          initialValues={initialValues}
         />
       </div>
     );

@@ -32,12 +32,24 @@ exports.create = function(req, res) {
       answers: JSON.stringify(body.answers),
       tags: tags.map(tag => tag._id)
     }).save((err, result) => {
-      if (err) return res.apiError('Create evaluation error', err);
+      if (err) return res.apiError('Create evaluation error: ', err);
 
       res.apiResponse({
-			  success: true,
         id: result._id
 		  });
     });
+  });
+};
+
+exports.find = function(req, res) {
+
+  Evaluation.model.find(req.query).exec((err, evaluations) => {
+    if (err) return res.apiError('Find evaluations error: ', err);
+
+    if (!evaluations.length) return res.apiError(404, 'Evaluation not exist.');
+
+    res.apiResponse({
+      evaluations: evaluations
+		});
   });
 };

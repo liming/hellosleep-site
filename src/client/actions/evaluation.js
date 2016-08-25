@@ -203,9 +203,9 @@ export function fetchEvaluationData() {
       const content = require('../../data/evaluation.json');
 
       // this is for test
-      const initValues = require('../../../test/eva1.json');
+      // const initValues = require('../../../test/eva1.json');
 
-      dispatch(prepareEvaluationData(content, initValues));
+      dispatch(prepareEvaluationData(content));
     }
   };
 }

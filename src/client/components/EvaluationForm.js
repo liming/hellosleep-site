@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import Question from './Question';
 import ResultTable from './ResultTable';
+import { validate, asyncValidate, asyncBlurFields } from '../../data/validation';
 
 class EvaluationForm extends Component {
   constructor(props) {
@@ -17,18 +18,14 @@ class EvaluationForm extends Component {
       minHeight: '20rem'
     };
 
-    const { results } = this.props;
+    const { results, handleSubmit } = this.props;
 
     return (
-      <div className="ui segments">
-        <div className="ui segment" style={formStyle}>
-          <form className="ui form">
-            {this.createQuestions()}
-          </form>
-          {results && <ResultTable results={results} />}
-        </div>
-          {this.createNavButtons()}
-      </div>
+      <form onSubmit={handleSubmit} className="ui form">
+        {this.createQuestions()}
+        {results && <ResultTable results={results} />}
+        {this.createNavButtons()}
+      </form>
     );
   }
 
@@ -45,7 +42,7 @@ class EvaluationForm extends Component {
   }
 
   createNavButtons() {
-    const { onNextStep, onPreviousStep, isLastStep, isFirstStep } = this.props;
+    const { onPreviousStep, isLastStep, isFirstStep } = this.props;
 
     let prevClassName = 'ui left floated button';
     if (isFirstStep) prevClassName += ' disabled';
@@ -53,20 +50,22 @@ class EvaluationForm extends Component {
     const nextText = isLastStep ? '提交' : '下一个';
 
     return (
-      <div className="ui clearing segment">
+      <div className="ui basic segment">
         <button type="button" className={prevClassName} onClick={onPreviousStep}>上一个</button>
-        <button type="button" className="ui right floated button" onClick={onNextStep}>{nextText}</button>
+        <button type="submit" className="ui right floated button">{nextText}</button>
       </div>
     );
   }
 }
 
 EvaluationForm.propTypes = {
-  onPreviousStep: PropTypes.func.isRequired,
-  onNextStep: PropTypes.func.isRequired
+  onPreviousStep: PropTypes.func.isRequired
 };
 
 export default reduxForm({
   form: 'answers',
-  destroyOnUnmount: false
+  destroyOnUnmount: false,
+  validate,
+  asyncValidate,
+  asyncBlurFields
 })(EvaluationForm);

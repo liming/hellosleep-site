@@ -10,13 +10,12 @@ const sass = require('gulp-sass');
 const nodemon = require('gulp-nodemon');
 const env = require('gulp-env');
 const cleanCSS = require('gulp-clean-css');
-const browserify = require('browserify');
-const watchify = require('watchify');
-const babelify = require('babelify');
 const gutil = require('gulp-util');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
-const sourcemaps = require('gulp-sourcemaps');
+const webpack = require("webpack");
+const webpackConfig = require("./webpack.config.js");
+const WebpackDevServer = require("webpack-dev-server");
 
 const filePath = {
   main: './src/app.js',
@@ -29,7 +28,7 @@ const filePath = {
     dest: './src/public/css/dist'
   },
   js: {
-    src: './src/client/index.js',
+    src: './src/client/**/*',
     destFile: 'dist.js',
     destFolder: './src/public/js'
   }
@@ -88,43 +87,77 @@ gulp.task('set-env', function () {
   });
 });
 
-// add custom browserify options here
-var customOpts = {
-  entries: [filePath.js.src],
-  debug: false
-};
-var opts = Object.assign({}, watchify.args, customOpts);
-var b = watchify(browserify(opts)); 
-
-// add transformations here
-// i.e. b.transform(coffeeify);
-b.transform(babelify.configure({
-	presets: ['es2015', 'react']
-}));
-
-gulp.task('js', bundle); // so you can run `gulp js` to build the file
-b.on('update', bundle); // on any dep update, runs the bundler
-b.on('log', gutil.log); // output build logs to terminal
-
-function bundle() {
-  return b.bundle()
-  // log errors if they happen
-    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-    .pipe(source(filePath.js.destFile))
-    .pipe(buffer())
-  // optional, remove if you dont want sourcemaps
-    .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
-  // Add transformation tasks to the pipeline here.
-    .pipe(sourcemaps.write('./')) // writes .map file
-    .pipe(gulp.dest(filePath.js.destFolder));
-}
-
 gulp.task('watchcss', function() {
   gulp.watch(filePath.sass.src, ['build']).on('change', file => {
     console.log(`The ${file.path} changed. Rebuild`);
   });
 });
 
-gulp.task('default', ['set-env', 'watchcss', 'js', 'nodemon']);
+// configure webpack
+gulp.task("webpack-dev-server", function(callback) {
+	// modify some webpack config options
+	var myConfig = Object.create(webpackConfig);
+	myConfig.devtool = "eval";
+	myConfig.debug = true;
 
-gulp.task('build', ['sass', 'minify-css']);
+	// Start a webpack-dev-server
+	new WebpackDevServer(webpack(myConfig), {
+		publicPath: "/" + myConfig.output.publicPath,
+		stats: {
+			colors: true
+		}
+	}).listen(8080, "localhost", function(err) {
+		if(err) throw new gutil.PluginError("webpack-dev-server", err);
+		gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/index.html");
+	});
+});
+
+// modify some webpack config options
+const myDevConfig = Object.create(webpackConfig);
+myDevConfig.debug = true;
+
+const devCompiler = webpack(myDevConfig);
+
+gulp.task("webpack:build-dev", function(callback) {
+	// run webpack
+	devCompiler.run(function(err, stats) {
+		if(err) throw new gutil.PluginError("webpack:build-dev", err);
+		gutil.log("[webpack:build-dev]", stats.toString({
+			colors: true
+		}));
+		callback();
+	});
+});
+
+gulp.task("build-dev", ["webpack:build-dev"], function() {
+	gulp.watch([filePath.js.src], ["webpack:build-dev"]);
+});
+
+
+gulp.task("webpack:build", function(callback) {
+	// modify some webpack config options
+	var myConfig = Object.create(webpackConfig);
+	myConfig.plugins = myConfig.plugins.concat(
+		new webpack.DefinePlugin({
+			"process.env": {
+				// This has effect on the react lib size
+				"NODE_ENV": JSON.stringify("production")
+			}
+		}),
+		new webpack.optimize.DedupePlugin(),
+		new webpack.optimize.UglifyJsPlugin()
+	);
+
+	// run webpack
+	webpack(myConfig, function(err, stats) {
+		if(err) throw new gutil.PluginError("webpack:build", err);
+		gutil.log("[webpack:build]", stats.toString({
+			colors: true
+		}));
+		callback();
+	});
+});
+
+gulp.task('default', ['set-env', 'watchcss', 'build-dev', 'nodemon']);
+
+gulp.task('build', ['sass', 'minify-css', 'webpack:build']);

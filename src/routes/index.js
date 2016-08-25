@@ -7,7 +7,6 @@
 const keystone = require('keystone');
 const middleware = require('./middleware');
 const importRoutes = keystone.importer(__dirname);
-const babelify = require('babelify');
 
 keystone.pre('routes', middleware.initLocals);
 keystone.pre('render', middleware.flashMessages);
@@ -57,4 +56,5 @@ exports = module.exports = function (app) {
 
   // evaluation api
   app.post('/api/evaluations', routes.api.evaluations.create);
+  app.get('/api/evaluations', routes.api.evaluations.find);
 }

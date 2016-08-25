@@ -1,5 +1,5 @@
 {
-  "version": "1",
+  "version": 1,
   "data": [
     {
       "name": "basicinfo",
@@ -9,13 +9,13 @@
         {
           "name": "name",
           "text": "昵称",
-          "type": "input",
+          "type": "text",
           "placeHolder": "输入你的昵称"
         },
         {
           "name": "email",
           "text": "邮箱",
-          "type": "input",
+          "type": "email",
           "placeHolder": "输入你的邮箱"
         },
         {

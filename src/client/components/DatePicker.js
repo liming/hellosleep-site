@@ -6,14 +6,14 @@ class DatePicker extends Component {
   }
 
   componentDidMount() {
-    const { type, input, options } = this.props;
+    const { type, onChange, options } = this.props;
     const calType = options.type || 'date';
 
     let config = {
       type: calType,
       ampm: false,
       initialDate: options.initialDate ? new Date(options.initialDate) : null,
-      onChange: input.onChange
+      onChange: onChange
     };
 
     if (calType === 'date') {
@@ -42,9 +42,9 @@ class DatePicker extends Component {
   }
 
   render() {
-    const { placeholder, options, input } = this.props;
+    const { placeholder, options, value } = this.props;
 
-    const value = input.value ? new Date(input.value).toString() : undefined;
+    const v = value ? new Date(value).toString() : undefined;
 
     const fieldStyle = {
       marginTop: "2rem"
@@ -81,7 +81,7 @@ class DatePicker extends Component {
       <div className="ui calendar" ref="datepicker">
         <div className="ui input left icon">
           <i className="calendar icon"></i>
-          <input type="text" placeholder={placeholder} value={value}/>
+          <input type="text" placeholder={placeholder} value={v}/>
         </div>
       </div>
     );

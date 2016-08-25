@@ -12,7 +12,7 @@ var Evaluation = new keystone.List('Evaluation', {
 
 Evaluation.add({
 
-  name: { type: String, required: true },
+  name: { type: String, required: true, index: true },
   email: { type: Types.Email, initial: true, required: true, index: true },
   sex: { type: String, required: true, initial: false },
   birthday: { type: Types.Date },
