@@ -4,6 +4,7 @@ const keystone = require('keystone');
 const Evaluation = keystone.list('Evaluation');
 const evalContent = require('../../data/evaluation.json');
 const Tag = keystone.list('Tag');
+const qs = require('querystring');
 
 /**
  * Submit to create an evaluation.
@@ -43,10 +44,15 @@ exports.create = function(req, res) {
 
 exports.find = function(req, res) {
 
-  Evaluation.model.find(req.query).exec((err, evaluations) => {
+  const query = {};
+  for(let key in req.query) {
+    query[key] = qs.unescape(req.query[key]);
+  }
+
+  Evaluation.model.find(query).exec((err, evaluations) => {
     if (err) return res.apiError('Find evaluations error: ', err);
 
-    if (!evaluations.length) return res.apiError(404, 'Evaluation not exist.');
+    if (!evaluations.length) return res.apiNotFound(new Error('Evaluation does not exist.'), 'Evaluation does not exist.');
 
     res.apiResponse({
       evaluations: evaluations

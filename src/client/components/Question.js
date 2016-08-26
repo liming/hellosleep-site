@@ -72,7 +72,7 @@ const renderQuestion = ({input, meta, data }) => {
   return (
     <div className={fieldClass}>
       <label style={labelStyle}>{data.text}</label>
-      {renderField(data, input)}
+      {renderField(data, meta, input)}
       {touched && error && <span style={errorStyle}>{error}</span>}
     </div>
   )

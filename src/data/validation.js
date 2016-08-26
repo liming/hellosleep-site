@@ -17,42 +17,38 @@ export function validate(values) {
     errors.email = '无效的邮箱地址';
   }
 
+  if (!values.birthday) errors.birthday = '请选择出生日期';
+
+  if (!values.sex) errors.sex = '请选择性别';
+
+  if (!values.status) errors.status = '请选择性别';
+
   return errors;
 }
 
 export function asyncValidate(values) {
   // send to server the values for validation
 
-  const fields = [];
-  if (values.name) fields.push({key: 'name', value: values.name});
-  if (values.email) fields.push({key: 'email', value: values.email});
+  // get the field name
+  const name = arguments[3];
+  const query = {};
+  query[name] = values[name];
 
-  const requests = [];
+  const findEva = key => new Promise((resolve, reject) => {
 
-  fields.forEach(field => {
-    requests.push(
-      new Promise((resolve, reject) => {
+    return request
+      .get('/api/evaluations')
+      .query(query)
+      .end((err, res) => {
+        if (res.statusCode !== 404) return resolve(key);
 
-        const query = {};
-        query[field.key] = field.value;
-
-        return request
-          .get('/api/evaluations')
-          .query(query)
-          .end((err, res) => {
-
-            if (res.statusCode !== 404) {
-              if (field.key === 'name') return resolve({name: '此昵称已经存在'});
-              if (field.key === 'email') return resolve({email: '此邮箱已经存在'});
-            }
-
-            return resolve(null);
-          });
-      }));
+        return resolve();
+      });
   });
 
-  return Promise.all(requests).then(result => {
-    if (result && result[0]) throw result[0];
+  return findEva(name).then(key => {
+    if (key === 'name') throw {name: '此昵称已经存在'};
+    else if (key === 'email') throw {email: '此邮箱已经存在'};
   });
 }
 

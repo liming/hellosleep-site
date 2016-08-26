@@ -66,6 +66,5 @@ export default reduxForm({
   form: 'answers',
   destroyOnUnmount: false,
   validate,
-  asyncValidate,
-  asyncBlurFields
+  asyncValidate
 })(EvaluationForm);

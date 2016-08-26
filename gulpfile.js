@@ -28,7 +28,7 @@ const filePath = {
     dest: './src/public/css/dist'
   },
   js: {
-    src: './src/client/**/*',
+    src: ['./src/client/**/*', './src/data/*'],
     destFile: 'dist.js',
     destFolder: './src/public/js'
   }
@@ -130,7 +130,7 @@ gulp.task("webpack:build-dev", function(callback) {
 });
 
 gulp.task("build-dev", ["webpack:build-dev"], function() {
-	gulp.watch([filePath.js.src], ["webpack:build-dev"]);
+	gulp.watch(filePath.js.src, ["webpack:build-dev"]);
 });
 
 

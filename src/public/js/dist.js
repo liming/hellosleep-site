@@ -15807,8 +15807,7 @@
 	  form: 'answers',
 	  destroyOnUnmount: false,
 	  validate: _validation.validate,
-	  asyncValidate: _validation.asyncValidate,
-	  asyncBlurFields: _validation.asyncBlurFields
+	  asyncValidate: _validation.asyncValidate
 	})(EvaluationForm);
 
 /***/ },
@@ -16127,7 +16126,7 @@
 	      { style: labelStyle },
 	      data.text
 	    ),
-	    renderField(data, input),
+	    renderField(data, meta, input),
 	    touched && error && _react2.default.createElement(
 	      'span',
 	      { style: errorStyle },
@@ -17375,38 +17374,36 @@
 	    errors.email = '无效的邮箱地址';
 	  }
 	
+	  if (!values.birthday) errors.birthday = '请选择出生日期';
+	
+	  if (!values.sex) errors.sex = '请选择性别';
+	
+	  if (!values.status) errors.status = '请选择性别';
+	
 	  return errors;
 	}
 	
 	function asyncValidate(values) {
 	  // send to server the values for validation
 	
-	  var fields = [];
-	  if (values.name) fields.push({ key: 'name', value: values.name });
-	  if (values.email) fields.push({ key: 'email', value: values.email });
+	  // get the field name
+	  var name = arguments[3];
+	  var query = {};
+	  query[name] = values[name];
 	
-	  var requests = [];
-	
-	  fields.forEach(function (field) {
-	    requests.push(new Promise(function (resolve, reject) {
-	
-	      var query = {};
-	      query[field.key] = field.value;
+	  var findEva = function findEva(key) {
+	    return new Promise(function (resolve, reject) {
 	
 	      return _superagent2.default.get('/api/evaluations').query(query).end(function (err, res) {
+	        if (res.statusCode !== 404) return resolve(key);
 	
-	        if (res.statusCode !== 404) {
-	          if (field.key === 'name') return resolve({ name: '此昵称已经存在' });
-	          if (field.key === 'email') return resolve({ email: '此邮箱已经存在' });
-	        }
-	
-	        return resolve(null);
+	        return resolve();
 	      });
-	    }));
-	  });
+	    });
+	  };
 	
-	  return Promise.all(requests).then(function (result) {
-	    if (result && result[0]) throw result[0];
+	  return findEva(name).then(function (key) {
+	    if (key === 'name') throw { name: '此昵称已经存在' };else if (key === 'email') throw { email: '此邮箱已经存在' };
 	  });
 	}
 	
