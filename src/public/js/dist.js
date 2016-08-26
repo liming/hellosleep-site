@@ -16059,7 +16059,7 @@
 	              _react2.default.createElement(
 	                'div',
 	                { className: divClass },
-	                _react2.default.createElement('input', _extends({}, input, { name: type === 'radio' ? q.name : item.value, type: type })),
+	                _react2.default.createElement('input', _extends({}, input, { name: type === 'radio' ? q.name : item.value, value: item.value, type: type })),
 	                _react2.default.createElement(
 	                  'label',
 	                  null,
@@ -16081,7 +16081,7 @@
 	      null,
 	      _react2.default.createElement(
 	        'select',
-	        { name: q.name, className: 'ui selection dropdown' },
+	        _extends({}, input, { name: q.name, className: 'ui selection dropdown' }),
 	        _react2.default.createElement('option', null),
 	        q.data.map(function (item, i) {
 	          return _react2.default.createElement(
@@ -16159,74 +16159,6 @@
 	        data: question,
 	        component: renderQuestion
 	      });
-	    }
-	  }, {
-	    key: 'renderField',
-	    value: function renderField(q) {
-	      var type = q.type;
-	
-	      if (type === 'input') {
-	        return _react2.default.createElement(_reduxForm.Field, { name: q.name, component: 'input', placeholder: q.placeHolder });
-	      }
-	
-	      if (type === 'date') {
-	        return _react2.default.createElement(_reduxForm.Field, { name: q.name, component: _DatePicker2.default, placeholder: q.placeHolder, type: type, options: q.options });
-	      }
-	
-	      if (type === 'range') {
-	        return _react2.default.createElement(_reduxForm.Field, { name: q.name, component: _Ranger2.default, options: q.options });
-	      }
-	
-	      if (type === 'radio' || type === 'checkbox') {
-	        var _ret2 = function () {
-	
-	          var divClass = type === 'radio' ? 'ui radio checkbox' : 'ui checkbox';
-	
-	          return {
-	            v: _react2.default.createElement(
-	              'div',
-	              null,
-	              q.data.map(function (item, i) {
-	                return _react2.default.createElement(
-	                  'div',
-	                  { className: 'field', key: i },
-	                  _react2.default.createElement(
-	                    'div',
-	                    { className: divClass },
-	                    _react2.default.createElement(_reduxForm.Field, { name: type === 'radio' ? q.name : item.value, component: 'input', type: type, value: item.value }),
-	                    _react2.default.createElement(
-	                      'label',
-	                      null,
-	                      item.text
-	                    )
-	                  )
-	                );
-	              })
-	            )
-	          };
-	        }();
-	
-	        if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
-	      }
-	
-	      if (type === 'select') {
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(
-	            _reduxForm.Field,
-	            { name: q.name, className: 'ui selection dropdown', component: 'select' },
-	            _react2.default.createElement('option', null),
-	            q.data.map(function (item, i) {
-	              return _react2.default.createElement(
-	                'option',
-	                { value: item.value, key: i },
-	                item.text
-	              );
-	            })
-	          )
-	        );
-	      }
 	    }
 	  }]);
 	
@@ -17388,6 +17320,9 @@
 	
 	  // get the field name
 	  var name = arguments[3];
+	
+	  if (['name', 'email'].indexOf(name) === -1) return Promise.resolve();
+	
 	  var query = {};
 	  query[name] = values[name];
 	

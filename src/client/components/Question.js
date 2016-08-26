@@ -28,7 +28,7 @@ function renderField(q, meta, input) {
         {q.data.map((item, i) =>
           <div key={i} className="field">
             <div className={divClass}>
-              <input {...input} name={type === 'radio' ? q.name : item.value} type={type} />
+              <input {...input} name={type === 'radio' ? q.name : item.value} value={item.value} type={type} />
               <label>{item.text}</label>
             </div>
           </div>
@@ -40,7 +40,7 @@ function renderField(q, meta, input) {
   if (type === 'select') {
     return (
       <div>
-        <select name={q.name} className="ui selection dropdown">
+        <select {...input} name={q.name} className="ui selection dropdown">
           <option></option>
           {q.data.map((item, i) =>
             <option value={item.value} key={i}>{item.text}</option>
@@ -97,53 +97,6 @@ class Question extends Component {
         component={renderQuestion}
       />
     );
-  }
-
-  renderField(q) {
-    const type = q.type;
-
-    if (type === 'input') {
-      return (<Field name={q.name} component="input" placeholder={q.placeHolder} />);
-    }
-
-    if (type === 'date') {
-      return (<Field name={q.name} component={DatePicker} placeholder={q.placeHolder} type={type} options={q.options} />);
-    }
-
-    if (type === 'range') {
-      return (<Field name={q.name} component={Ranger} options={q.options} />);
-    }
-
-    if (type === 'radio' || type === 'checkbox') {
-
-      const divClass = type === 'radio' ? 'ui radio checkbox' : 'ui checkbox';
-
-      return (
-        <div>
-          {q.data.map((item, i) =>
-            <div className="field" key={i}>
-              <div className={divClass}>
-                <Field name={type === 'radio' ? q.name : item.value} component="input" type={type} value={item.value}/>
-                <label>{item.text}</label>
-              </div>
-            </div>
-           )}
-        </div>
-      );
-    }
-
-    if (type === 'select') {
-      return (
-        <div>
-          <Field name={q.name} className="ui selection dropdown" component="select">
-            <option></option>
-            {q.data.map((item, i) =>
-              <option value={item.value} key={i}>{item.text}</option>
-             )}
-          </Field>
-        </div>
-      );
-    }
   }
 };
 

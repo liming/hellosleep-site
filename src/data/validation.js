@@ -31,6 +31,9 @@ export function asyncValidate(values) {
 
   // get the field name
   const name = arguments[3];
+
+  if (['name', 'email'].indexOf(name) === -1) return Promise.resolve();
+
   const query = {};
   query[name] = values[name];
 
