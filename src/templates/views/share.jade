@@ -1,17 +1,23 @@
 extends ../layouts/page
 
 include ../mixins/post
+include ../mixins/nav
 
 block article-nav
-  .ui.vertical.menu
-    .item
-      .header
-        i.icon.road
-        span 经验谈导航
-    each cat in categories
-      a.item(href='/share/categories/' + cat.key, class=(category && category.key == cat.key ? 'active': ''))
-        i.icon.tag
-        =cat.name
+  .desktop-nav
+    .ui.vertical.menu
+      .item
+        .header
+          i.icon.road
+          span 经验谈导航
+      +list-categories(categories, category)
+  .mobile-nav
+    .ui.teal.buttons
+      .ui.button 经验谈导航
+      .ui.combo.top.right.pointing.dropdown.icon.button
+        i.dropdown.icon
+        .menu
+          +list-categories(categories, category)
 
 block article
   if post

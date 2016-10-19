@@ -32,6 +32,10 @@
       
     }
   }
+
+  .desktop-nav {
+    display: none;
+  }
 }
 
 @media (min-width: 700px) {
@@ -55,9 +59,18 @@
       }
     }
   }
+
+  .mobile-nav {
+    display: none;
+  }
 }
 
 @media all {
+
+  .ui.breadcrumb .section {
+    margin-bottom: 0.5rem;
+  }
+
   .intro {
 
     background: linear-gradient(to bottom,#fff 10%, #F0F1F2 100%);

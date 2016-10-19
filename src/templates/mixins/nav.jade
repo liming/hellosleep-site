@@ -1,0 +1,18 @@
+
+mixin list-indices(indices, post, category)
+  each indice in indices
+    if !indice.tutorialCount
+      a.item(href='/tutorial/' + indice.key, class=(post && post.key == indice.key ? 'active': ''))
+        i.icon.file.text.outline
+        =indice.title
+    else if indice.tutorialCount > 0
+      a.item(href='/tutorial/categories/' + indice.key, class=(category && category.key == indice.key ? 'active': ''))
+        i.icon.tag
+        =indice.name
+        
+        
+mixin list-categories(categories, category)
+  each cat in categories
+    a.item(href='/share/categories/' + cat.key, class=(category && category.key == cat.key ? 'active': ''))
+      i.icon.tag
+      =cat.name

@@ -1,22 +1,23 @@
 extends ../layouts/page
 
 include ../mixins/post
+include ../mixins/nav
 
 block article-nav
-  .ui.vertical.menu
-    .item
-      .header
-        i.icon.road
-        span 睡吧指南导航
-    each indice in indices
-      if !indice.tutorialCount
-        a.item(href='/tutorial/' + indice.key, class=(post && post.key == indice.key ? 'active': ''))
-          i.icon.file.text.outline
-          =indice.title
-      else if indice.tutorialCount > 0
-        a.item(href='/tutorial/categories/' + indice.key, class=(category && category.key == indice.key ? 'active': ''))
-          i.icon.tag
-          =indice.name
+  .desktop-nav
+    .ui.vertical.menu
+      .item
+        .header
+          i.icon.road
+          span 睡吧指南导航
+      +list-indices(indices, post, category)
+  .mobile-nav
+    .ui.teal.buttons
+      .ui.button 睡吧指南导航
+      .ui.combo.top.right.pointing.dropdown.icon.button
+        i.dropdown.icon
+        .menu
+          +list-indices(indices, post, category)
 
 block article
   if post
