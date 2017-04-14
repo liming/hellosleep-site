@@ -348,6 +348,9 @@ $.fn.range = function(parameters) {
               $module.focus();
             }
           },
+          touch: function(event) {
+            return event.originalEvent.touches[0] || event.originalEvent.changedTouches[0];
+          }
         },
 
         takeStep: function(multiplier) {
@@ -573,9 +576,9 @@ $.fn.range = function(parameters) {
           },
           eventPos: function(event, originalEvent) {
             if (module.is.vertical()) {
-              return module.is.touch() ? originalEvent.originalEvent.touches[0].pageY : (typeof event.pageY != 'undefined') ? event.pageY : originalEvent.pageY;
+              return module.is.touch() ? module.event.touch(event).pageY : (typeof event.pageY != 'undefined') ? event.pageY : originalEvent.pageY;
             } else {
-              return module.is.touch() ? originalEvent.originalEvent.touches[0].pageX : (typeof event.pageX != 'undefined') ? event.pageX : originalEvent.pageX;
+              return module.is.touch() ? module.event.touch(event).pageX : (typeof event.pageX != 'undefined') ? event.pageX : originalEvent.pageX;
             }
           },
           value: function(position) {
