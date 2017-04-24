@@ -10,7 +10,7 @@ block content
     else if evaluations
       .introduction
         h1.ui.header 睡眠评估列表
-          .sub.header 已有的睡眠评估列表，如果你还没创建评估，请点击下面的按钮来创建评估。
+          .sub.header 如果你还没创建评估，请点击下面的按钮来创建评估。
         a.ui.primary.button(href='/evaluation/new') 创建睡眠评估
       .ui.divider
       .ui.three.stackable.cards
@@ -21,8 +21,6 @@ block content
               .header
                 a(href="/evaluation/" + eva._id) #{eva.name}
               .meta #{eva.formattedDate}
-              .description
-                each tag in eva.tags
-                  a.ui.tag.label #{tag.text}
+              +show-tags(eva.tags)
     else if evaluation
-      +show-eval(evaluation)
+      +show-eval(evaluation, answers)

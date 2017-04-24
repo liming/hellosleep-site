@@ -32,7 +32,9 @@ exports = module.exports = function (app) {
   app.get('/tutorial/:post?', routes.views.tutorial);
   app.get('/tutorial/categories/:category', routes.views.tutorial);
   app.get('/share/:share?', routes.views.share);
+  app.get('/blog/:blog?', routes.views.blog);
   app.get('/share/categories/:category', routes.views.share);
+  app.get('/blog/categories/:category', routes.views.blog);
   app.get('/evaluation', routes.views.evaluation);
   app.get('/evaluation/:id?', routes.views.evaluation);
 

@@ -16,3 +16,9 @@ mixin list-categories(categories, category)
     a.item(href='/share/categories/' + cat.key, class=(category && category.key == cat.key ? 'active': ''))
       i.icon.tag
       =cat.name
+
+mixin list-blog-categories(categories, category)
+  each cat in categories
+    a.item(href='/blog/categories/' + cat.key, class=(category && category.key == cat.key ? 'active': ''))
+      i.icon.tag
+      =cat.name

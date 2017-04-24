@@ -1,6 +1,7 @@
 
 const keystone = require('keystone');
 const Evaluation = keystone.list('Evaluation');
+const utils = require('../../common/eval_utils');
 
 exports = module.exports = function (req, res) {
 
@@ -36,7 +37,11 @@ exports = module.exports = function (req, res) {
       .findOne({_id: id}, {email: 0})
       .populate('tags')
       .exec((err, result) => {
+        const answers = utils.formatAnswers(JSON.parse(result.answers));
+
         locals.evaluation = result;
+        locals.answers = answers;
+
         next(err);
     });
   });

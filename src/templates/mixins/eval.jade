@@ -1,8 +1,23 @@
 
 // display an evaluation
-mixin show-eval(data)
+mixin show-eval(data, answers)
   .eval-result
-    h1.ui.header #{data.name}的睡眠评估
-      .sub.header 于#{data.formattedDate}创建
-    each t in data.tags
-      p 标签: #{t.text}
+    h2.ui.header
+      i.line.chart.icon
+      .content #{data.name}的睡眠评估
+        .sub.header 于#{data.formattedDate}创建
+
+    +show-tags(data.tags)
+
+    #answers.ui.segment
+      ul.ui.list
+        each section in answers
+          li(style="font-size:1.2em;") #{section.text}
+          ul
+            each answer in section.answers
+              li #{answer.text} - #{answer.answer}
+
+mixin show-tags(tags)
+  .description
+    each tag in tags
+      a.ui.label #{tag.text}

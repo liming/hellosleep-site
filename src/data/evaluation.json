@@ -184,7 +184,7 @@
             "value": "no"
           },
           "text": "影响睡眠环境的因素是什么？",
-          "type": "checkbox",
+          "type": "radio",
           "data": [
             {
               "text": "伴侣打呼噜",

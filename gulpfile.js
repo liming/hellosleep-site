@@ -64,7 +64,7 @@ gulp.task('nodemon', cb => {
       'src/app.js',
       'src/routes/',
       'src/models/',
-      'src/lib/'
+      'src/common/'
     ],
     ignore: [
       'src/client/**',

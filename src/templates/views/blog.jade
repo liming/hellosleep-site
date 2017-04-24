@@ -1,0 +1,30 @@
+extends ../layouts/page
+
+include ../mixins/post
+include ../mixins/nav
+
+block article-nav
+  .desktop-nav
+    .ui.vertical.menu
+      .item
+        .header
+          i.icon.road
+          span 博客分类
+      +list-blog-categories(categories, category)
+  .mobile-nav
+    .ui.teal.buttons
+      .ui.button 博客分类
+      .ui.combo.top.right.pointing.dropdown.icon.button
+        i.dropdown.icon
+        .menu
+          +list-blog-categories(categories, category)
+
+block article
+  if post
+    +content-post(post)
+  else
+    .ui.two.stackable.cards
+      each post in posts.results
+        +brief-post(post)
+    +pagination(posts)
+

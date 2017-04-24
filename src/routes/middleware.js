@@ -16,7 +16,7 @@ module.exports = {
 		  { label: '主页', key: 'home', href: '/' },
 		  { label: '指南', key: 'tutorial', href: '/tutorial' },
 		  { label: '经验谈', key: 'share', href: '/share' },
-      { label: '小提示', key: 'tip', href: '/tip' }
+      { label: '博客', key: 'blog', href: '/blog' }
 //      { label: '睡眠评估', key: 'evaluation', href: '/evaluation' }
 	  ];
 
